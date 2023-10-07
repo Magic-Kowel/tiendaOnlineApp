@@ -1,0 +1,15 @@
+{
+  "singup":"Registrarse",
+  "name":"Nombre",
+  "last-name":"Apellido",
+  "birth-date":"Fecha Nacimiento",
+  "email":"Correo electrónico",
+  "password":"Contraseña",
+  "repeat-password":"Repetir Contraseña",
+  "password-does-not-match":"las contraseñas no coinciden",
+  "fill-in-all-fields":"Rellene todos los campos",
+  "email-has-already-been-registered":"El correo electrónico ya ha sido registrado",
+  "validate-user":"Validar usuario",
+  "activate":"Activar",
+  "sended-email-validate-user":"Hemos enviado un correo electrónico de validación, por favor revisa tu bandeja de entrada."
+}
