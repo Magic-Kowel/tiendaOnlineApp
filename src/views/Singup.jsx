@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createUser,validateEmail } from "../reducers/user/user";
 import { useTranslation } from "react-i18next";
+import { isEmail } from "../tools/isEmail";
 import Swal from 'sweetalert2'
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -13,6 +14,7 @@ import {
   Button,
   Alert
 } from '@mui/material';
+import MenuWithoutSection from "../components/menu/MenuWithoutSection";
 function Singup(){
   const dispatch = useDispatch();
   const [t]= useTranslation("global");
@@ -25,6 +27,7 @@ function Singup(){
     password:"",
     repeatPassword:""
   });
+
   const validateEmailForm = async (email)=>{
     const response = await dispatch(validateEmail(email));
     return response.payload;
@@ -63,24 +66,34 @@ function Singup(){
       });
       return false;
     }
+    const emailresponse =  isEmail(user.email);
+    if(!emailresponse){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: t("please-enter-valid-email"),
+      });
+      return false;
+    }
     const response = await dispatch(createUser(user));
     if(response.payload.created){
       setMessage(true);
     }
   }
   return(<>
-       <Container  style={{ 
+      <MenuWithoutSection />
+      <Container  style={{ 
         height: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
-       }}>
+      }}>
           <Card sx={{width:"30rem"}}>
             <CardContent>
               <Typography variant="h4" align="center" gutterBottom>
                 {t("singup")}
               </Typography>
-              <form autoComplete="off" >
+              <form autoComplete="off">
                 <Grid container spacing={2} direction="column">
                   <Grid item xs={5}>
                     <TextField 

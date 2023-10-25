@@ -24,6 +24,17 @@ export const createUser = createAsyncThunk(
     }
   }
 )
+export const loginValidate = createAsyncThunk(
+  "loginValidate/user",
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login`, data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 export const getUser = createAsyncThunk(
   "get/user",
   async (uid, thunkAPI) => {
@@ -35,7 +46,27 @@ export const getUser = createAsyncThunk(
     }
   }
 )
-const initialState ={
+export const validateUser = createAsyncThunk(
+  "validate/user",async (uid, thunkAPI) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/user/validate`, {uid:uid});
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
+export const getMenuUser = createAsyncThunk(
+  "menu/user", async(uid,thunkAPI) =>{
+    try {
+      const response = await axios.post(`${API_BASE_URL}/user/menu`,{idUser:uid});
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
+const initialState = {
   users: [],
   loading: false,
   error: null,
