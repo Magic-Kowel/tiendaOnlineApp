@@ -33,10 +33,19 @@
   "successfully-removed":"Eliminado con éxito",
   "edit-category":"Editar categoria",
   "successfully-updated":"Actualisado con éxito",
-  "create":"crear",
-  "edit":"editar",
+  "create":"Cear",
+  "edit":"Editar",
   "search":"Buscar",
   "create-subcategory":"Crear subcategoría",
   "want-to-delete-subcategory":"Desea eliminar subcategoría",
-  "edit-subcategory":"Editar subcategoría"
+  "edit-subcategory":"Editar subcategoría",
+  "satus":"Estado",
+  "edit-menu":"Editar menú",
+  "user-permissions":"Permisos de usuario",
+  "type-user":"Tipo usuario",
+  "permissions":"Permisos",
+  "submenu":"Submenú",
+  "url":"Url",
+  "edit-submenu":"Editar submenú",
+  "menu":"Menu"
 }

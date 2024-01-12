@@ -133,6 +133,9 @@ function Singup(){
                       type="date"
                       label={t("birth-date")}
                       fullWidth
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     />
                   </Grid>
                   <Grid item xs={5}>

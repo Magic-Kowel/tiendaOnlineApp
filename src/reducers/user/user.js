@@ -46,6 +46,17 @@ export const getUser = createAsyncThunk(
     }
   }
 )
+export const getUsers = createAsyncThunk(
+  "get/users",
+  async (thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/users`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 export const validateUser = createAsyncThunk(
   "validate/user",async (uid, thunkAPI) => {
     try {
@@ -72,7 +83,7 @@ const initialState = {
   error: null,
 }
 const productSlice = createSlice({
-    name: "product",
+    name: "user",
     initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -85,6 +96,19 @@ const productSlice = createSlice({
           state.loading = false;
         })
         .addCase(createUser.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        });
+      builder
+        .addCase(getUsers.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(getUsers.fulfilled, (state, action) => {
+          state.loading = false;
+          state.users = action.payload.length > 0 ? action.payload : [];
+        })
+        .addCase(getUsers.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload;
         });

@@ -12,6 +12,13 @@ const UpdateCategory = lazy(()=>import("./views/category/UpdateCategory.jsx"));
 const Subcategory = lazy(()=> import("./views/subcategory/Subcategory.jsx"));
 const UpdateSubcategory = lazy(()=>import("./views/subcategory/UpdateSubcategory.jsx"));
 const CreateSubcategory = lazy(()=> import("./views/subcategory/CreateSubcategory.jsx"))
+const Menu = lazy(()=>import("./views/security/menu/Menu.jsx"));
+const UpdateMenu = lazy(()=>import("./views/security/menu/UpdateMenu.jsx"));
+
+const SubMenu = lazy(()=>import("./views/security/subMenu/SubMenu.jsx"));
+const UpdateSubMenu = lazy(()=>import("./views/security/subMenu/UpdateSubMenu.jsx"));
+const PermisosUser = lazy(()=>import("./views/security/permisosUser/PermisosUser.jsx"));
+const AddPermissions = lazy(()=>import("./views/security/permisosUser/AddPermissions.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -88,6 +95,49 @@ function App() {
           <Suspense fallback={<Loader />}>
             <MenuAdmin>
               <UpdateSubcategory />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/security/menu" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <Menu />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/security/menu/edit/:id" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <UpdateMenu />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/security/submenu" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <SubMenu />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/security/submenu/edit/:id" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <UpdateSubMenu />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        { /*relusuariomenusubmenucontroller */} 
+        <Route path="/security/permissions" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <PermisosUser />
+            </MenuAdmin>
+          </Suspense>
+        } />
+         <Route path="/security/permissions/:idUser" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <AddPermissions />
             </MenuAdmin>
           </Suspense>
         } />
