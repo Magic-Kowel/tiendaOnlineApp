@@ -76,7 +76,7 @@ function PermisosUser(){
                                         {t("type-user")}
                                     </TableCell>
                                     <TableCell>
-                                        {t("satus")}
+                                        {t("status")}
                                     </TableCell>
                                     <TableCell>
                                         {t("permissions")}

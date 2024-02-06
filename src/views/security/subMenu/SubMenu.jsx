@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
-import { getSubMenus,createSubMenu,getStatus } from "../../../reducers/security/security";
+import { getSubMenus,getMenus,createSubMenu,getStatus } from "../../../reducers/security/security";
 import TitlePage from "../../../components/TitlePage";
 import getIdUser from "../../../tools/getIdUser";
 import { useTranslation } from 'react-i18next';
@@ -29,16 +29,21 @@ function SubMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [subMenuData, setSubmenuData] = useState([]);
-    const {status, submenu } = useSelector((state)=>state.security)
+    const {status, submenu,menu } = useSelector((state)=>state.security)
     const [statusData,setStatusData] = useState([]);
+    const [menuData,setMenuData] = useState([]);
     const [submenuForm,setSubmenuForm] = useState({
         name:"",
         url:"",
         idUser:"",
-        status:""
+        status:"",
+        idMenu:""
     });
     const handleGetSubMenu = async () =>{
         await dispatch(getSubMenus())
+    }
+    const handleGetMenu = async () =>{
+        await dispatch(getMenus());
     }
     const handleGeStatus = async () => {
         await dispatch(getStatus());
@@ -61,6 +66,7 @@ function SubMenu(){
         const response = await dispatch(createSubMenu(submenuForm));
         if(response.payload.created){
             handleGetSubMenu();
+            handleGetMenu();
             Swal.fire({
                 title:t("successfully-created"),
                 icon:'success',
@@ -84,6 +90,7 @@ function SubMenu(){
         navigate(`/security/submenu/edit/${id}`)
     }
     useEffect(()=>{
+        handleGetMenu();
         handleGetSubMenu();
         handleGeStatus();
     },[])
@@ -91,9 +98,10 @@ function SubMenu(){
         setSubmenuForm((prevState) => ({
             ...prevState,
             idUser:getIdUser(),
-            status: statusData[0]?.id
+            status: statusData[0]?.id,
+            idMenu:menuData[0]?.id
         }));
-    },[statusData])
+    },[statusData,menuData])
     const [t] = useTranslation("global");
     return(
         <>
@@ -118,7 +126,15 @@ function SubMenu(){
                                                 data={status}
                                                 getData={setStatusData}
                                                 getOptionSearch={(item)=>item.name}
-                                                title={t("satus")}
+                                                title={t("status")}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <SearchAutoComplete
+                                                data={menu}
+                                                getData={setMenuData}
+                                                getOptionSearch={(item)=>item.name}
+                                                title={t("menu")}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -190,7 +206,10 @@ function SubMenu(){
                                                 {t("url")}
                                             </TableCell>
                                             <TableCell>
-                                                {t("satus")}
+                                                {t("status")}
+                                            </TableCell>
+                                            <TableCell>
+                                                {t("menu")}
                                             </TableCell>
                                             <TableCell>
                                                 {t("edit")}
@@ -210,6 +229,9 @@ function SubMenu(){
                                                     </TableCell>
                                                     <TableCell>
                                                         {row.status}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {row.nameMenu}
                                                     </TableCell>
                                                     <TableCell>
                                                         <Tooltip title={t("edit")}>

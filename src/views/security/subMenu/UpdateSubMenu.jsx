@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getStatus, getSubMenu, updateSubMenu } from '../../../reducers/security/security';
+import { getStatus, getSubMenu, updateSubMenu,getMenus } from '../../../reducers/security/security';
 import { useParams, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import {
@@ -11,7 +11,7 @@ import {
     Button
 } from '@mui/material';
 import TitlePage from '../../../components/TitlePage';
-import Autocomplete from '@mui/material/Autocomplete';
+import SearchAutoComplete from '../../../components/SearchAutoComplete';
 import GoBack from '../../../components/goBack';
 import {colors } from '../../../stylesConfig';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +21,16 @@ function UpdateSubMenu(){
     const {id} = useParams();
     const [t] = useTranslation("global");
     const [statusData,setStatusData] = useState([]);
+    const [menuData,setMenuData] = useState([]);
     const [submenu,setSubmenu] = useState({
         idSubMenu:id,
         name:"",
         status:"",
+        idMenu:"",
         url:""
     });
     const [selectStatu,setSelectStatu] = useState([]);
+    const [selectMenu,setSelectMenu] = useState([]);
     const handleGeStatus = async () => {
         const response = await dispatch(getStatus());
         setStatusData(response.payload);
@@ -35,6 +38,10 @@ function UpdateSubMenu(){
     const handleGetSubmenu = async () =>{
         const response = await dispatch(getSubMenu(id));
         setSubmenu(response.payload[0]);
+    }
+    const handleGetMenu = async () =>{
+        const response = await dispatch(getMenus());
+        setMenuData(response.payload);
     }
     const handleUpdateSubmenu = async (e) =>{
         e.preventDefault();
@@ -67,12 +74,20 @@ function UpdateSubMenu(){
     }
     useEffect(() => {
         if (statusData.length > 0 && submenu) {
-            setSelectStatu(statusData.find((item) => item?.id === submenu?.status));
+            setSelectStatu(statusData.find((item) => item?.id === submenu.status));
         }
-    }, [statusData, submenu]);
+    }, [statusData,submenu]);
+    useEffect(() => {
+        if (menuData.length > 0 && submenu) {
+            setSelectMenu(menuData.find((item) => item?.id === submenu.idMenu));
+        }
+        console.log("submenu2",submenu);
+    }, [menuData,submenu]);
     useEffect(()=>{
-        handleGeStatus();
-        handleGetSubmenu();
+        handleGetSubmenu().then(()=>{
+            handleGeStatus();
+            handleGetMenu();
+        })
     },[])
     return(
         <Container>
@@ -80,31 +95,34 @@ function UpdateSubMenu(){
                     title={t("edit-submenu")}
                 />
                 <GoBack />
-                <Grid container spacing={2} >
-                    <Grid item xs={12} direction="column">
-                        <Paper
-                            sx={{padding:"1rem"}}
+                
+                    <Paper
+                        sx={{padding:"1rem"}}
+                    >
+                        <form
+                            onSubmit={handleUpdateSubmenu}
+                            autoComplete="off"
                         >
-                            <form
-                                onSubmit={handleUpdateSubmenu}
-                                autoComplete="off"
-                            >
+                            <Grid container spacing={2} xs={12} direction="column">
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
-                                        <Autocomplete
-                                            value={selectStatu}
-                                            disablePortal
-                                            options={statusData}
-                                            getOptionLabel={(item) => item?.name}
-                                            renderInput={(params) => <TextField {...params} label={t("satus")} />}
-                                            onChange={(event, newValue)=>{
-                                                if (newValue) {
-                                                    setSubmenu((prevState) => ({
-                                                        ...prevState,
-                                                        status: newValue.id
-                                                    }));
-                                                }
-                                            }}
+                                        <SearchAutoComplete
+                                            valueDefault={selectStatu?selectStatu:null}
+                                            itemKey="status"
+                                            data={statusData}
+                                            getData={setSubmenu}
+                                            getOptionSearch={(item)=>item?.name || ""}
+                                            title={t("status")}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <SearchAutoComplete
+                                            valueDefault={selectMenu}
+                                            itemKey="idMenu"
+                                            data={menuData}
+                                            getData={setSubmenu}
+                                            getOptionSearch={(item)=>item?.name || ""}
+                                            title={t("menu")}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -153,10 +171,10 @@ function UpdateSubMenu(){
                                         </Button>
                                     </Grid>
                                 </Grid>
-                            </form>
-                        </Paper>
-                    </Grid>
-                </Grid>
+                            </Grid>
+                        </form>
+                    </Paper>
+
             </Container>
     )
 }

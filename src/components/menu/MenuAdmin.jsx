@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from 'react-redux';
 import getIdUser from '../../tools/getIdUser';
 import ItemMenuAdmin from './ItemMenuAdmin';
+import PropTypes from 'prop-types';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -84,14 +85,36 @@ export default function MenuAdmin({children}) {
       if(!resMenu){
         const idUser = getIdUser();
         dispatch(getMenuUser(idUser)).then((response)=>{
+          console.log(response.payload);
           setMenu(response.payload);
           const encriptMenu = JSON.stringify(response.payload);
           sessionStorage.setItem(MENU_USER,encriptMenu);
         });
       }
       setMenu(resMenu);
-      console.log(menu);
-    },[])
+    },[]);
+    const menuItems = [];
+
+    menu?.forEach(menu => {
+      // console.log("Entrada del bucle:", menu);
+
+      const existingMenu = menuItems.find(item => item.id === menu.idMenu);
+
+      if (existingMenu) {
+        // El menú ya existe, agregar submenú
+        // console.log("Agregando submenú a menú existente:", existingMenu);
+        existingMenu.submenus.push({ id: menu.idItemMenu, name: menu.itemMenu });
+      } else {
+        // Menú nuevo, crear un nuevo objeto de menú
+        // console.log("Creando nuevo menú:", menu);
+        menuItems.push({
+          id: menu.idMenu,
+          name: menu.Menu,
+          submenus: [{ id: menu.idItemMenu, name: menu.itemMenu }],
+        });
+      }
+    });
+
     function exitSistem(){
         sessionStorage.clear();
         navigate("/");
@@ -154,7 +177,7 @@ export default function MenuAdmin({children}) {
                   </ListItemButton>
                 </ListItem>
                 {
-                  menu?.map((item,index)=>(
+                  menuItems?.map((item,index)=>(
                       <ItemMenuAdmin 
                         key={index}
                         item={item}
@@ -172,3 +195,6 @@ export default function MenuAdmin({children}) {
         </Box>
     );
 }
+MenuAdmin.propTypes = {
+  children: PropTypes.node, // Propiedad children válida
+};

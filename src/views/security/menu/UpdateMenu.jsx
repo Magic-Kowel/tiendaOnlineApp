@@ -97,7 +97,7 @@ function UpdateMenu(){
                                         disablePortal
                                         options={statusData}
                                         getOptionLabel={(item) => item?.name}
-                                        renderInput={(params) => <TextField {...params} label={t("satus")} />}
+                                        renderInput={(params) => <TextField {...params} label={t("status")} />}
                                         onChange={(event, newValue)=>{
                                             if (newValue) {
                                                 setMenuData((prevState) => ({

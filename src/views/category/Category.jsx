@@ -28,7 +28,7 @@ import GoBack from '../../components/goBack';
 import { useTranslation } from 'react-i18next';
 function Category(){
     const navigate = useNavigate();
-    const {categorys} = useSelector((state)=>state.category)
+    const {categorys} = useSelector((state)=>state.category);
     const [t] = useTranslation("global");
 
     const dispatch = useDispatch();
@@ -48,7 +48,6 @@ function Category(){
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);

@@ -19,6 +19,9 @@ const SubMenu = lazy(()=>import("./views/security/subMenu/SubMenu.jsx"));
 const UpdateSubMenu = lazy(()=>import("./views/security/subMenu/UpdateSubMenu.jsx"));
 const PermisosUser = lazy(()=>import("./views/security/permisosUser/PermisosUser.jsx"));
 const AddPermissions = lazy(()=>import("./views/security/permisosUser/AddPermissions.jsx"));
+//size
+const Size = lazy(()=>import("./views/size/Size.jsx"));
+const UpdateSize = lazy(()=>import("./views/size/UpdateSize.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -134,10 +137,24 @@ function App() {
             </MenuAdmin>
           </Suspense>
         } />
-         <Route path="/security/permissions/:idUser" element={
+        <Route path="/security/permissions/:idUser" element={
           <Suspense fallback={<Loader />}>
             <MenuAdmin>
               <AddPermissions />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/size" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <Size />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/size/edit/:id" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <UpdateSize />
             </MenuAdmin>
           </Suspense>
         } />

@@ -39,7 +39,7 @@
   "create-subcategory":"Crear subcategoría",
   "want-to-delete-subcategory":"Desea eliminar subcategoría",
   "edit-subcategory":"Editar subcategoría",
-  "satus":"Estado",
+  "status":"Estado",
   "edit-menu":"Editar menú",
   "user-permissions":"Permisos de usuario",
   "type-user":"Tipo usuario",
@@ -47,5 +47,10 @@
   "submenu":"Submenú",
   "url":"Url",
   "edit-submenu":"Editar submenú",
-  "menu":"Menu"
+  "menu":"Menu",
+  "size-clothes":"Tallas",
+  "size-clothe":"Talla",
+  "create-size-clothes":"Crear talla",
+  "want-to-delete-size-clothe":"Desea eliminar talla",
+  "edit-size-clothe":"Editar categoria"
 }

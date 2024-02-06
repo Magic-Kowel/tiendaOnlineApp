@@ -3,4 +3,5 @@ export const colors = {
     secondaryColor: '#ff8aa3',
     tertiaryColor: '#fdff8a',
 };
-export const sizeTitle="5rem"
+export const sizeTitle="5rem";
+export const sizeTitleForm="2rem"

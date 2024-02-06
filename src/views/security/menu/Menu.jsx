@@ -132,7 +132,7 @@ function Menu(){
                                             data={status}
                                             getData={setStatusData}
                                             getOptionSearch={(item)=>item.name}
-                                            title={t("satus")}
+                                            title={t("status")}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -190,7 +190,7 @@ function Menu(){
                                         {t("edit")}
                                     </TableCell>
                                     <TableCell>
-                                        {t("satus")}
+                                        {t("status")}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
