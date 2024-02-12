@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-    Typography,
     Container,
     Card,
     CardContent,
@@ -11,10 +10,11 @@ import {
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import GoBack from '../../components/goBack';
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { createSubcategory } from '../../reducers/subCategory/subCategory';
+import TitlePage from '../../components/TitlePage';
 function CreateSubcategory(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,28 +52,19 @@ function CreateSubcategory(){
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1"
-                    gutterBottom
-                >
-                    {t("create-subcategory")}
-                </Typography>
+                <TitlePage 
+                    title={t("create-subcategory")}
+                />
                 <Card>
                     <CardContent>
                         <GoBack />
-                        <form
-                            autoComplete="off"
-                            onSubmit={handleCreateSubcategory}
-                        >
-                            <Grid                
+
+                            <Grid
+                            component="form"
+                            onSubmit={handleCreateSubcategory}        
                             flexDirection="column"
                             justifyContent="center"
                             alignItems="center"
-                            spacing={2}
                             mt={2}
                             >
                                 <Grid item xs={12}>
@@ -106,7 +97,6 @@ function CreateSubcategory(){
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </form>
                     </CardContent>
                 </Card>
             </Container>

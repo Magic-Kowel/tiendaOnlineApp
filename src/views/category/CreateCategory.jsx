@@ -66,11 +66,10 @@ function CreateCategory(){
                             onSubmit={createCategoryForm}
                         >
                             <Grid                
-                            flexDirection="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={2}
-                            mt={2}
+                                flexDirection="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                mt={2}
                             >
                                 <Grid item xs={12}>
                                     <TextField

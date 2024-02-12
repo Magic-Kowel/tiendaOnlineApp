@@ -118,12 +118,12 @@ function Size(){
     }
     return(
         <>
-             <Container>
+            <Container>
                 <TitlePage
                     title={t("size-clothes")}
                 />
                 <Grid container spacing={2}>
-                    <Grid item sm={12} md={8} lg={7}>
+                    <Grid item sm={12} md={7} lg={7}>
                         <SearchAutoComplete
                             data={sizes}
                             getData={setSizeList}

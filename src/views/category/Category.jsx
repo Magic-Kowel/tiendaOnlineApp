@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories, deleteCategory } from '../../reducers/category/category';
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -19,13 +19,13 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {
     Button,
     ButtonGroup,
-    Typography,
     Container,
     Tooltip
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import GoBack from '../../components/goBack';
 import { useTranslation } from 'react-i18next';
+import TitlePage from '../../components/TitlePage';
 function Category(){
     const navigate = useNavigate();
     const {categorys} = useSelector((state)=>state.category);
@@ -38,9 +38,6 @@ function Category(){
     const [categories, setCategories] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    useEffect(()=>{
-        setCategories(categorys)
-    },[categorys])
     useEffect(() => {
         getCategoryData();
     }, []);
@@ -91,16 +88,9 @@ function Category(){
     return(
         <>
         <Container>
-            <Typography
-                sx={{
-                    fontSize:sizeTitle,
-                }}
-                textAlign="center"
-                variant="h1" 
-                gutterBottom
-            >
-                {t("categories")}
-            </Typography>
+            <TitlePage 
+                title={t("categories")}
+            />
             <GoBack />
             <Button
                 variant="contained"
@@ -115,19 +105,20 @@ function Category(){
             >
                 {t("create-category")}
             </Button>
-                <Paper sx={{ 
-                    width: '100%',
-                    overflow: 'hidden',
-                    marginTop:"2rem",
-                    paddingTop:"0.5rem"
-                }}>
                 <SearchAutoComplete
                     data={categorys}
                     getData={setCategories}
                     getOptionSearch={(item)=>item.tNombre}
                 />
+                <Paper sx={{
+                    boxShadow:5, 
+                    width: '100%',
+                    overflow: 'hidden',
+                    marginTop:"2rem",
+                    paddingTop:"0.5rem"
+                }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
+                <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
                             <TableCell>
@@ -189,7 +180,7 @@ function Category(){
                             </TableRow>
                         ))}
                     </TableBody>
-                    </Table>
+                </Table>
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}

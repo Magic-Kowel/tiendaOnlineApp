@@ -30,8 +30,8 @@ function SubMenu(){
     const navigate = useNavigate();
     const [subMenuData, setSubmenuData] = useState([]);
     const {status, submenu,menu } = useSelector((state)=>state.security)
-    const [statusData,setStatusData] = useState([]);
-    const [menuData,setMenuData] = useState([]);
+    const [selectedStatus,setSelectedStatus] = useState("");
+    const [selectedMenu,setSelectedMenu] = useState("");
     const [submenuForm,setSubmenuForm] = useState({
         name:"",
         url:"",
@@ -53,6 +53,8 @@ function SubMenu(){
     const handleCreateSubmenu = async (e) =>{
         e.preventDefault();
         if(
+            submenuForm.idMenu,
+            submenuForm.status,
             submenuForm.name.trim() === "" ||
             submenuForm.url.trim() === "" ||
             !submenuForm.status
@@ -98,10 +100,13 @@ function SubMenu(){
         setSubmenuForm((prevState) => ({
             ...prevState,
             idUser:getIdUser(),
-            status: statusData[0]?.id,
-            idMenu:menuData[0]?.id
+            status: selectedStatus[0]?.id,
+            idMenu:selectedMenu[0]?.id
         }));
-    },[statusData,menuData])
+    },[selectedMenu,selectedStatus]);
+    useEffect(()=>{
+        setSubmenuData(submenu);
+    },[submenu])
     const [t] = useTranslation("global");
     return(
         <>
@@ -111,80 +116,84 @@ function SubMenu(){
                     title={t("submenu")}
                 />
                 <Grid container spacing={2} >
-                        <Grid item xs={12} md={5} direction="column">
+                        <Grid item xs={12} md={5}>
                             <GoBack />
                             <Paper
                                 sx={{padding:"1rem"}}
                             >
-                                <form
+                                <Grid
+                                    component="form"
                                     onSubmit={handleCreateSubmenu}
                                     autoComplete="off"
+                                    container 
+                                    item 
+                                    spacing={2}
                                 >
-                                    <Grid container item spacing={2}  >
-                                        <Grid item xs={12}>
-                                            <SearchAutoComplete
-                                                data={status}
-                                                getData={setStatusData}
-                                                getOptionSearch={(item)=>item.name}
-                                                title={t("status")}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <SearchAutoComplete
-                                                data={menu}
-                                                getData={setMenuData}
-                                                getOptionSearch={(item)=>item.name}
-                                                title={t("menu")}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                label={t("name")}
-                                                fullWidth
-                                                variant="outlined"
-                                                value={submenuForm.name}
-                                                onChange={(e)=>{
-                                                    setSubmenuForm({
-                                                        ...submenuForm,
-                                                        name:e.target.value
-                                                    })
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                label={t("url")}
-                                                fullWidth
-                                                variant="outlined"
-                                                value={submenuForm.url}
-                                                onChange={(e)=>{
-                                                    setSubmenuForm({
-                                                        ...submenuForm,
-                                                        url:e.target.value
-                                                    })
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Button
-                                                fullWidth
-                                                variant="contained"
-                                                type="submit"
-                                                sx={{
-                                                    backgroundColor:colors.primaryColor,
-                                                    '&:hover':{
-                                                        backgroundColor:colors.primaryColor
-                                                    }
-                                                }}
-                                            >
-                                                {t("create")}
-                                            </Button>
-                                        </Grid>
+                                    <Grid item xs={12}>
+                                        <SearchAutoComplete
+                                            data={status}
+                                            getData={setSelectedStatus}
+                                            getOptionSearch={(item)=>item.name}
+                                            title={t("status")}
+                                            isForm={true}
+                                        />
                                     </Grid>
-                                </form>
+                                    <Grid item xs={12}>
+                                        <SearchAutoComplete
+                                            data={menu}
+                                            getData={setSelectedMenu}
+                                            getOptionSearch={(item)=>item.name}
+                                            title={t("menu")}
+                                            isForm={true}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label={t("name")}
+                                            fullWidth
+                                            variant="outlined"
+                                            value={submenuForm.name}
+                                            onChange={(e)=>{
+                                                setSubmenuForm({
+                                                    ...submenuForm,
+                                                    name:e.target.value
+                                                })
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label={t("url")}
+                                            fullWidth
+                                            variant="outlined"
+                                            value={submenuForm.url}
+                                            onChange={(e)=>{
+                                                setSubmenuForm({
+                                                    ...submenuForm,
+                                                    url:e.target.value
+                                                })
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            type="submit"
+                                            sx={{
+                                                backgroundColor:colors.primaryColor,
+                                                '&:hover':{
+                                                    backgroundColor:colors.primaryColor
+                                                }
+                                            }}
+                                        >
+                                            {t("create")}
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </Paper>
                         </Grid>
-                        <Grid Grid item xs={12} md={7} direction="column">
+                        <Grid item xs={12} md={7}>
                             <Paper sx={{ 
                                     width: '100%',
                                     overflow: 'hidden',

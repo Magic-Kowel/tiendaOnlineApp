@@ -10,45 +10,47 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import PropTypes from 'prop-types';
-function ItemMenuAdmin({item}){
-    return(
-        <ListItem disablePadding>
+import { useNavigate } from 'react-router';
+function ItemMenuAdmin({ item }) {
+    const navigate = useNavigate();
+    const handleNavigateMenu = (url) =>{
+        navigate(`/${url}`)
+    }
+    return (
+        <ListItem disablePadding key={item?.name}>
             <Accordion style={{ width: '100%' }}>
                 <AccordionSummary
-                style={{ width: '100%' }}
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
+                    style={{ width: '100%' }}
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
                 >
-                {item?.name}
+                    {item?.name}
                 </AccordionSummary>
-                <AccordionDetails style={{ width: '100%' }}>
-                    {item?.submenus?.map((submenu)=>(
-                        <>
-                            <ListItemButton>
-                                <ListItemIcon>
+                <AccordionDetails sx={{ width: '100%' }}>
+                    {item?.submenus?.map((submenu) => (
+                        <ListItemButton onClick={()=>handleNavigateMenu(submenu.url)} 
+                        key={submenu.name}>
+                            <ListItemIcon>
                                 <PowerSettingsNewIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={submenu?.name}/>
-                            </ListItemButton>
-                        </>
+                            </ListItemIcon>
+                            <ListItemText primary={submenu.name} />
+                        </ListItemButton>
                     ))}
                 </AccordionDetails>
             </Accordion>
-
-            
         </ListItem>
     );
 }
+
 ItemMenuAdmin.propTypes = {
     item: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      submenus: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired,
-          name: PropTypes.string.isRequired,
-        })
-      ),
+        name: PropTypes.string.isRequired,
+        submenus: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string.isRequired,
+            })
+        ),
     }).isRequired,
-  };
+};
+
 export default ItemMenuAdmin;

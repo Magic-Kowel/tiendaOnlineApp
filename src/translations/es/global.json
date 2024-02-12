@@ -52,5 +52,13 @@
   "size-clothe":"Talla",
   "create-size-clothes":"Crear talla",
   "want-to-delete-size-clothe":"Desea eliminar talla",
-  "edit-size-clothe":"Editar categoria"
+  "edit-size-clothe":"Editar categoria",
+  "size-categories-clothe":"Categorías de Tallas",
+  "size-ranges-clothe":"Rangos de Tallas",
+  "min-age":"Edad mínima",
+  "max-age":"Edad máxima",
+  "age-range":"Rango edad",
+  "does-not-apply":"No aplica",
+  "minimum-age-cannot-be-higher-maximum-age":"La edad mínima no puede ser mayor que la edad máxima",
+  "edit-size-categorie-clothe":"Editar categoría de Talla"
 }

@@ -94,7 +94,6 @@ export default function MenuAdmin({children}) {
       setMenu(resMenu);
     },[]);
     const menuItems = [];
-
     menu?.forEach(menu => {
       // console.log("Entrada del bucle:", menu);
 
@@ -103,18 +102,25 @@ export default function MenuAdmin({children}) {
       if (existingMenu) {
         // El menú ya existe, agregar submenú
         // console.log("Agregando submenú a menú existente:", existingMenu);
-        existingMenu.submenus.push({ id: menu.idItemMenu, name: menu.itemMenu });
+        existingMenu.submenus.push({ 
+            id: menu.idItemMenu,
+            name: menu.itemMenu,
+            url: menu.url
+        });
       } else {
         // Menú nuevo, crear un nuevo objeto de menú
         // console.log("Creando nuevo menú:", menu);
         menuItems.push({
           id: menu.idMenu,
           name: menu.Menu,
-          submenus: [{ id: menu.idItemMenu, name: menu.itemMenu }],
+          submenus: [{ 
+              id: menu.idItemMenu,
+              name: menu.itemMenu,
+              url: menu.url
+          }],
         });
       }
     });
-
     function exitSistem(){
         sessionStorage.clear();
         navigate("/");

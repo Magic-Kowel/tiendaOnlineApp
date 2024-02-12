@@ -46,6 +46,8 @@ function UpdateSubMenu(){
     const handleUpdateSubmenu = async (e) =>{
         e.preventDefault();
         if(
+            selectMenu.id,
+            selectStatu.id,
             submenu.name.trim()==="" ||
             submenu.url.trim()==="" ||
             !submenu.status
@@ -81,13 +83,12 @@ function UpdateSubMenu(){
         if (menuData.length > 0 && submenu) {
             setSelectMenu(menuData.find((item) => item?.id === submenu.idMenu));
         }
-        console.log("submenu2",submenu);
     }, [menuData,submenu]);
     useEffect(()=>{
         handleGetSubmenu().then(()=>{
             handleGeStatus();
             handleGetMenu();
-        })
+        });
     },[])
     return(
         <Container>
@@ -103,26 +104,31 @@ function UpdateSubMenu(){
                             onSubmit={handleUpdateSubmenu}
                             autoComplete="off"
                         >
-                            <Grid container spacing={2} xs={12} direction="column">
+                            <Grid container spacing={2} >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
                                         <SearchAutoComplete
                                             valueDefault={selectStatu?selectStatu:null}
                                             itemKey="status"
+                                            itemKeyForId="id"
                                             data={statusData}
                                             getData={setSubmenu}
                                             getOptionSearch={(item)=>item?.name || ""}
                                             title={t("status")}
+                                            isForm={true}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <SearchAutoComplete
                                             valueDefault={selectMenu}
                                             itemKey="idMenu"
+                                            itemKeyForId="id"
+                                            isForm={true}
                                             data={menuData}
                                             getData={setSubmenu}
                                             getOptionSearch={(item)=>item?.name || ""}
                                             title={t("menu")}
+                                            
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -137,7 +143,6 @@ function UpdateSubMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
-                                            defaultValue=" "
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -152,7 +157,6 @@ function UpdateSubMenu(){
                                                     url:e.target.value
                                                 })
                                             }}
-                                            defaultValue=" "
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSubcategories, deleteCategory } from "../../reducers/subCategory/subCategory";
 import { useParams, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import Swal from 'sweetalert2';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
 import GoBack from "../../components/goBack";
@@ -21,10 +21,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import {
     Button,
     ButtonGroup,
-    Typography,
     Container,
     Tooltip
 } from '@mui/material';
+import TitlePage from "../../components/TitlePage";
 function Subcategory(){
     const dispatch = useDispatch();
     const {subcategories} = useSelector((state)=>state.subcategory);
@@ -85,30 +85,23 @@ function Subcategory(){
     return(
         <>
             <Container>
-            <Typography
-                sx={{
-                    fontSize:sizeTitle,
-                }}
-                textAlign="center"
-                variant="h1" 
-                gutterBottom
-            >
-                {t("subcategory")}
-            </Typography>
-            <GoBack />
-            <Button
-                variant="contained"
-                startIcon={<AddCircleIcon />}
-                onClick={handleCreateSubcategory}
-                sx={{
-                    backgroundColor:colors.secondaryColor,
-                    '&:hover':{
-                        backgroundColor:colors.secondaryColor
-                    }
-                }}
-            >
-                {t("create-subcategory")}
-            </Button>
+                <TitlePage
+                    title={t("subcategory")}
+                />
+                <GoBack />
+                <Button
+                    variant="contained"
+                    startIcon={<AddCircleIcon />}
+                    onClick={handleCreateSubcategory}
+                    sx={{
+                        backgroundColor:colors.secondaryColor,
+                        '&:hover':{
+                            backgroundColor:colors.secondaryColor
+                        }
+                    }}
+                >
+                    {t("create-subcategory")}
+                </Button>
                 <Paper sx={{ 
                         width: '100%',
                         overflow: 'hidden',
@@ -176,8 +169,8 @@ function Subcategory(){
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                    </Paper>
-        </Container>
+                </Paper>
+            </Container>
         </>
     )
 }

@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import TitlePage from '../../../components/TitlePage';
-import Autocomplete from '@mui/material/Autocomplete';
 import GoBack from '../../../components/goBack';
 import {colors } from '../../../stylesConfig';
 import { useTranslation } from 'react-i18next';
+import SearchAutoComplete from '../../../components/SearchAutoComplete';
 function UpdateMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ function UpdateMenu(){
                 />
                 <GoBack />
                 <Grid container spacing={2} >
-                    <Grid item xs={12} direction="column">
+                    <Grid item xs={12}>
                         <Paper
                             sx={{padding:"1rem"}}
                         >
@@ -92,21 +92,16 @@ function UpdateMenu(){
                             >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
-                                    <Autocomplete
-                                        value={selectStatu}
-                                        disablePortal
-                                        options={statusData}
-                                        getOptionLabel={(item) => item?.name}
-                                        renderInput={(params) => <TextField {...params} label={t("status")} />}
-                                        onChange={(event, newValue)=>{
-                                            if (newValue) {
-                                                setMenuData((prevState) => ({
-                                                    ...prevState,
-                                                    idStatus: newValue.id
-                                                }));
-                                            }
-                                        }}
-                                    />
+                                        <SearchAutoComplete
+                                            valueDefault={selectStatu?selectStatu:null}
+                                            itemKey="idStatus"
+                                            itemKeyForId="id"
+                                            data={statusData}
+                                            getData={setMenuData}
+                                            getOptionSearch={(item) => item?.name || ""}
+                                            title={t("status")}
+                                            isForm={true}
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField

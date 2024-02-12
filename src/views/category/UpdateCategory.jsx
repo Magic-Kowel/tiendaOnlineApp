@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-    Typography,
     Container,
     Card,
     CardContent,
@@ -10,7 +9,8 @@ import {
     Button
 } from '@mui/material';
 import GoBack from '../../components/goBack';
-import { colors, sizeTitle } from '../../stylesConfig';
+import TitlePage from '../../components/TitlePage';
+import { colors } from '../../stylesConfig';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { getCategory, updateCategory } from '../../reducers/category/category';
@@ -63,28 +63,19 @@ function UpdateCategory(){
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1"
-                    gutterBottom
-                >
-                    {t("edit-category")}
-                </Typography>
+                <TitlePage
+                    title={t("edit-category")}
+                />
                 <Card>
                     <CardContent>
                         <GoBack />
-                        <form
-                            onSubmit={handleUpdateCategory}
-                        >
-                            <Grid                
-                            flexDirection="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={2}
-                            mt={2}
+                            <Grid
+                                component="form"
+                                onSubmit={handleUpdateCategory}        
+                                flexDirection="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                mt={2}
                             >
                                 <Grid item xs={12}>
                                     <TextField
@@ -116,7 +107,6 @@ function UpdateCategory(){
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </form>
                     </CardContent>
                 </Card>
             </Container>

@@ -21,8 +21,7 @@ import {
     TableCell,
     TableBody,
     TablePagination,
-    Tooltip,
-    Typography
+    Tooltip
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {colors} from "../../../stylesConfig"
@@ -30,8 +29,8 @@ import SearchAutoComplete from '../../../components/SearchAutoComplete';
 import { useTranslation } from 'react-i18next';
 import getIdUser from '../../../tools/getIdUser';
 import Swal from 'sweetalert2';
-import { sizeTitle } from '../../../stylesConfig';
 import GoBack from '../../../components/goBack';
+import TitlePage from '../../../components/TitlePage';
 function Menu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -57,7 +56,9 @@ function Menu(){
     }
     const handleCreateMenu = async (e) =>{
         e.preventDefault();
+        console.log(statusData);
         if(
+            menuForm.status||
             menuForm.name.trim() === "" ||
             !menuForm.status
         ){
@@ -106,16 +107,9 @@ function Menu(){
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1" 
-                    gutterBottom
-                >
-                    Menu
-                </Typography>
+                <TitlePage
+                    title={t("menu")}
+                />
                 <GoBack />
                 <Grid container spacing={2} >
                     <Grid item xs={12} md={5} direction="column">
@@ -133,6 +127,7 @@ function Menu(){
                                             getData={setStatusData}
                                             getOptionSearch={(item)=>item.name}
                                             title={t("status")}
+                                            isForm={true}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

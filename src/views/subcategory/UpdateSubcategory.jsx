@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-    Typography,
     Container,
     Card,
     CardContent,
@@ -9,8 +8,9 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import TitlePage from '../../components/TitlePage';
 import GoBack from '../../components/goBack';
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { getSubcategory, updateSubcategory } from '../../reducers/subCategory/subCategory';
@@ -61,28 +61,19 @@ function UpdateSubcategory(){
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1"
-                    gutterBottom
-                >
-                    {t("edit-subcategory")}
-                </Typography>
+                <TitlePage
+                    title={t("edit-subcategory")}
+                />
                 <Card>
                     <CardContent>
                         <GoBack />
-                        <form
+                            <Grid
+                            component="form"
                             onSubmit={handleUpdateSubcategory}
                             autoComplete="off"
-                        >
-                            <Grid                
                             flexDirection="column"
                             justifyContent="center"
                             alignItems="center"
-                            spacing={2}
                             mt={2}
                             >
                                 <Grid item xs={12}>
@@ -115,7 +106,6 @@ function UpdateSubcategory(){
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </form>
                     </CardContent>
                 </Card>
             </Container>

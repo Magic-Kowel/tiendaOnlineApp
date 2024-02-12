@@ -22,6 +22,9 @@ const AddPermissions = lazy(()=>import("./views/security/permisosUser/AddPermiss
 //size
 const Size = lazy(()=>import("./views/size/Size.jsx"));
 const UpdateSize = lazy(()=>import("./views/size/UpdateSize.jsx"));
+//SizeVariation
+const SizeVariation = lazy(()=>import("./views/size/sizeVariation/SizeVariation.jsx"));
+const UpdateSizeVariation = lazy(()=>import("./views/size/sizeVariation/UpdateSizeVariation.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -155,6 +158,20 @@ function App() {
           <Suspense fallback={<Loader />}>
             <MenuAdmin>
               <UpdateSize />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/size/variation" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <SizeVariation />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/size/variation/edit/:idSizeVariation" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <UpdateSizeVariation />
             </MenuAdmin>
           </Suspense>
         } />

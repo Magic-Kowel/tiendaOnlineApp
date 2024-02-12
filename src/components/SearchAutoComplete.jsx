@@ -1,20 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 function SearchAutoComplete({
-        valueDefault,
-        itemKey,
-        data,
-        getData,
-        getOptionSearch,
-        title
+        valueDefault,//valos que se pondra por defecto selecionado
+        itemKey,//valos por cual se actualñisara 
+        itemKeyForId,//valor pior cual se selecionara 
+        data, //toda la data PARA MOSTRAR
+        getData,//STATE PARA ACTUALIZAR EL VALOR
+        getOptionSearch,//PARAMETROS PARA BUSCAR
+        title,//titulo que poner 
+        isForm//para saver si se esta usando en un foremulario
     }){
     const [t] = useTranslation("global");
+    const [isEmpty,setIsEmpty] = useState(false);
     useEffect(()=>{
-        if(!valueDefault){
+        if(!valueDefault && isEmpty){
+            getData(data);
+        }
+    },[data]);
+    useEffect(()=>{
+        if(!isForm){
             getData(data);
         }
     },[data]);
@@ -26,13 +34,16 @@ function SearchAutoComplete({
                 disablePortal
                 options={data || []}
                 getOptionLabel={getOptionSearch}
+                clearOnEscape
                 renderInput={(params) => (
                     <TextField 
                         {...params}
                         label={title || t("search")}
                         InputProps={{
                             ...params.InputProps,
-                            endAdornment: <>{data.length<=0 && <CircularProgress color="inherit" size={20} />}</>,
+                            endAdornment: <>{
+                                    data.length<=0 && <CircularProgress color="inherit" size={20} />
+                                }</>,
                         }}
                     />
                 )}
@@ -41,15 +52,20 @@ function SearchAutoComplete({
                         if (newValue) {
                             getData((prevState) => ({
                                 ...prevState,
-                                [itemKey]: newValue.id
+                                [itemKey]: newValue[itemKeyForId]
                             }));
+                            return false;
                         }
+                        setIsEmpty(true);
                         return false;
                     }
                     if(!newValue){
-                        getData(data);
+                        setIsEmpty(true);
+                        isForm ?getData(""):getData(data);  
+                       
                         return false;
                     }
+                    setIsEmpty(true);
                     getData([newValue]);
                 }}
             />
@@ -59,10 +75,12 @@ function SearchAutoComplete({
 }
 SearchAutoComplete.propTypes = {
     data: PropTypes.array.isRequired, // data debe ser un arreglo (array) y es requerido
-    valueDefault: PropTypes.array.isRequired,
-    itemKey: PropTypes.array.isRequired,
+    valueDefault: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    itemKey: PropTypes.string,
+    itemKeyForId: PropTypes.string,
     getData: PropTypes.func.isRequired, // getData debe ser una función y es requerido
     getOptionSearch:PropTypes.func.isRequired,
-    title:PropTypes.string
+    title:PropTypes.string,
+    isForm:PropTypes.bool
 };
 export default SearchAutoComplete;

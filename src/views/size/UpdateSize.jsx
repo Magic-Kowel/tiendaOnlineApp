@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getSize } from '../../reducers/size/size';
 import {
-    Typography,
     Container,
     Card,
     CardContent,
@@ -11,8 +10,9 @@ import {
     Button
 } from '@mui/material';
 import GoBack from '../../components/goBack';
+import TitlePage from '../../components/TitlePage';
 import { useTranslation } from 'react-i18next';
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSize as updateSizeForm } from '../../reducers/size/size';
 import Swal from 'sweetalert2';
@@ -39,7 +39,6 @@ function UpdateSize(){
             });
             return false;
         }
-        console.log(sizeForm);
         const response = await dispatch(updateSizeForm(sizeForm));
         if(response.payload.updated){
             Swal.fire({
@@ -67,24 +66,16 @@ function UpdateSize(){
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1"
-                    gutterBottom
-                >
-                    {t("edit-category")}
-                </Typography>
+                <TitlePage
+                    title={t("edit-category")}
+                />
                 <Card>
                     <CardContent onSubmit={handleUpdateSize} component="form">
-                        <GoBack />
+                            <GoBack />
                             <Grid                
                                 flexDirection="column"
                                 justifyContent="center"
                                 alignItems="center"
-                                spacing={2}
                                 mt={2}
                             >
                                 <Grid item xs={12}>
@@ -117,7 +108,6 @@ function UpdateSize(){
                                     </Button>
                                 </Grid>
                             </Grid>
-        
                     </CardContent>
                 </Card>
             </Container>
