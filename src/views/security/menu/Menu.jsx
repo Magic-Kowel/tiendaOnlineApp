@@ -13,16 +13,7 @@ import {
     TextField,
     Button
 } from '@mui/material';
-import {
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    TablePagination,
-    Tooltip
-} from '@mui/material';
+import DataTable from '../../../components/DataTable/DataTable';
 import EditIcon from '@mui/icons-material/Edit';
 import {colors} from "../../../stylesConfig"
 import SearchAutoComplete from '../../../components/SearchAutoComplete';
@@ -42,8 +33,6 @@ function Menu(){
         idUser:"",
         status:""
     });
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [t] = useTranslation("global");
     const handleGeStatus = async () => {
         await dispatch(getStatus());
@@ -56,11 +45,10 @@ function Menu(){
     }
     const handleCreateMenu = async (e) =>{
         e.preventDefault();
-        console.log(statusData);
+        console.log("menuForm",menuForm.status);
         if(
-            menuForm.status||
-            menuForm.name.trim() === "" ||
-            !menuForm.status
+            !menuForm.status||
+            menuForm.name.trim() === ""
         ){
             Swal.fire({
                 title:t("fill-in-all-fields"),
@@ -82,7 +70,6 @@ function Menu(){
             title:t("something-went-wrong"),
             icon:"error"
         });
-
     }
     useEffect(()=>{
         handleGetMenu();
@@ -94,16 +81,17 @@ function Menu(){
             idUser:getIdUser(),
             status: statusData[0]?.id
         }));
-    },[statusData])
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    },[statusData]);
+    const listTitles = [t("name"),t("status"),t("actions")];
+    const listKeys = ["name","status"];
+    const listButtons = [
+        {
+            tooltipTitle: t("update"),
+            onClick: (id) => handleUpdate(id),
+            icon: <EditIcon />,
+            color:"warning"
+        }
+    ];
     return(
         <>
             <Container>
@@ -112,7 +100,7 @@ function Menu(){
                 />
                 <GoBack />
                 <Grid container spacing={2} >
-                    <Grid item xs={12} md={5} direction="column">
+                    <Grid item xs={12} md={5}>
                         <Paper
                             sx={{padding:"1rem"}}
                         >
@@ -163,68 +151,19 @@ function Menu(){
                             </form>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} md={7} direction="column">
-                        <Paper sx={{ 
-                            width: '100%',
-                            overflow: 'hidden',
-                            paddingTop:"0.5rem"
-                        }}>
+                    <Grid item xs={12} md={7}>
                         <SearchAutoComplete
                             data={menu}
                             getData={setMenuData}
                             getOptionSearch={(item)=>item.name}
                         />
-                        <TableContainer sx={{ maxHeight: 440 }}>
-                            <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        {t("name")}
-                                    </TableCell>
-                                    <TableCell>
-                                        {t("edit")}
-                                    </TableCell>
-                                    <TableCell>
-                                        {t("status")}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {menuData
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row,index) => (
-                                    <TableRow hover key={index}   tabIndex={-1} >
-                                            <TableCell>
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.status}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Tooltip title={t("edit")}>
-                                                    <Button
-                                                        color="warning"
-                                                        onClick={()=>handleUpdate(row.id)}
-                                                    >
-                                                        <EditIcon />
-                                                    </Button>
-                                                </Tooltip>
-                                            </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={menu.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        <DataTable
+                            listTitles={listTitles}
+                            listKeys={listKeys}
+                            dataList={menuData}
+                            listButtons={listButtons}
+                            id="id"
                         />
-                        </Paper>
                     </Grid>
                 </Grid>
             </Container>

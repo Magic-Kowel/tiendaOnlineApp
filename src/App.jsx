@@ -25,6 +25,9 @@ const UpdateSize = lazy(()=>import("./views/size/UpdateSize.jsx"));
 //SizeVariation
 const SizeVariation = lazy(()=>import("./views/size/sizeVariation/SizeVariation.jsx"));
 const UpdateSizeVariation = lazy(()=>import("./views/size/sizeVariation/UpdateSizeVariation.jsx"));
+//material
+const Material = lazy(()=>import("./views/material/Material.jsx"));
+const UpdateMaterial = lazy(()=>import("./views/material/UpdateMaterial.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -172,6 +175,20 @@ function App() {
           <Suspense fallback={<Loader />}>
             <MenuAdmin>
               <UpdateSizeVariation />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/material" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <Material />
+            </MenuAdmin>
+          </Suspense>
+        } />
+        <Route path="/material/edit/:idMaterial" element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <UpdateMaterial />
             </MenuAdmin>
           </Suspense>
         } />

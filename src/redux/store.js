@@ -5,6 +5,7 @@ import subcategorySlice from "../reducers/subCategory/subCategory";
 import securitySlice from "../reducers/security/security";
 import sizeSlice from "../reducers/size/size";
 import ageGroupSlice from "../reducers/agegroup/agegroup";
+import materialSlice from "../reducers/material/material";
 const store = configureStore({
     reducer:{
         user:userSlice,
@@ -12,7 +13,8 @@ const store = configureStore({
         subcategory:subcategorySlice,
         security:securitySlice,
         size:sizeSlice,
-        ageGroup:ageGroupSlice
+        ageGroup:ageGroupSlice,
+        material:materialSlice
     }
 });
 export default store;

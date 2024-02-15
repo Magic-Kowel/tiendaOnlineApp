@@ -8,21 +8,9 @@ import {
 } from "../../../reducers/size/size";
 import {
     Container,
-    Paper,
     Grid,
-    ButtonGroup,
-    Button,
-    Tooltip
 } from '@mui/material';
-import {
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    TablePagination,
-} from '@mui/material';
+import DataTable from "../../../components/DataTable/DataTable";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import TitlePage from "../../../components/TitlePage";
@@ -35,15 +23,6 @@ function SizeVariation(){
     const {sizeVariation} = useSelector((state)=>state.size);
     const [t] = useTranslation("global");
     const [sizeVariationList, setSizeVariationList] = useState([]);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [page, setPage] = useState(0);
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
     const getSizeVariationData = async () =>{
         await dispatch(getSizesVariation());
     }
@@ -51,7 +30,20 @@ function SizeVariation(){
         getSizeVariationData();
     },[]);
     useEffect(()=>{
+        // const formateData = sizeVariation.map((item)=>{
+        //     if(Boolean(item.minAge) &&  Boolean(item.maxAge)){
+        //         return {
+        //             ...item,
+        //             ageRange:`${item.minAge} - ${item.maxAge}`
+        //         }
+        //     } 
+        //     return {
+        //         ...item,
+        //         ageRange:t("does-not-apply")
+        //     }
+        // });
         setSizeVariationList(sizeVariation);
+        console.log("hh");
     },[sizeVariation]);
     const handleDeleteSizeVariation =  (idSizeVariation) =>{
         Swal.fire({
@@ -83,6 +75,31 @@ function SizeVariation(){
     const handleUpdateSizeVariation = async (idSizeVariation) =>{
         await navigate(`/size/variation/edit/${idSizeVariation}`);
     }
+    const listTitles=[
+        t("size-categories-clothe"),
+        t("size-ranges-clothe"),
+        t("age-range"),
+        t("actions")
+    ];
+    const listKeys=[
+        "nameSize",
+        "ageGroup",
+        "ageRange"
+    ];
+    const listButtons = [
+        {
+            tooltipTitle: t("delete"),
+            onClick: (idSizeVariation) => handleDeleteSizeVariation(idSizeVariation),
+            icon: <DeleteIcon />,
+            color:"error"
+        },
+        {
+            tooltipTitle: t("update"),
+            onClick: (idSizeVariation) => handleUpdateSizeVariation(idSizeVariation),
+            icon: <EditIcon />,
+            color:"warning"
+        }
+    ];
     return(
         <>
             <Container>
@@ -96,81 +113,13 @@ function SizeVariation(){
                             getData={setSizeVariationList}
                             getOptionSearch={(item)=>item.nameSize}
                         />
-                        <Paper sx={{ 
-                                marginTop:'0.5rem',
-                                width: '100%',
-                                overflow: 'hidden',
-                                paddingTop:"0.5rem"
-                            }}>
-                            <TableContainer sx={{  maxHeight: 440 }}>
-                                <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            {t("size-categories-clothe")}
-                                        </TableCell>
-                                        <TableCell>
-                                            {t("size-ranges-clothe")}
-                                        </TableCell>
-                                        <TableCell>
-                                            {t("age-range")}
-                                        </TableCell>
-                                        <TableCell>
-                                            {t("actions")}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {sizeVariationList
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => (
-                                        <TableRow hover key={row.idSizeVariation} tabIndex={-1} >
-                                                <TableCell>
-                                                    {row.nameSize}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.ageGroup}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.minAge && row.maxAge ? `${row.minAge} - ${row.maxAge}`: t("does-not-apply")}
-                                                </TableCell>
-                                                <TableCell>
-                                                        <ButtonGroup 
-                                                            variant="contained"
-                                                        >
-                                                            <Tooltip title={t("update")}>
-                                                                <Button
-                                                                    color="warning"
-                                                                     onClick={()=>handleUpdateSizeVariation(row.idSizeVariation)}
-                                                                >
-                                                                    <EditIcon />
-                                                                </Button>
-                                                            </Tooltip>
-                                                            <Tooltip title={t("delete")}>
-                                                                <Button
-                                                                    color="error"
-                                                                    onClick={()=>handleDeleteSizeVariation(row.idSizeVariation)}
-                                                                >
-                                                                    <DeleteIcon />
-                                                                </Button>
-                                                            </Tooltip>
-                                                        </ButtonGroup>
-                                                </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                            </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 25, 100]}
-                                component="div"
-                                count={sizeVariationList.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </Paper>
+                        <DataTable
+                            listTitles={listTitles}
+                            listKeys={listKeys}
+                            dataList={sizeVariationList}
+                            listButtons={listButtons}
+                            id="idSizeVariation"
+                        />
                     </Grid>
                     <Grid item sm={12} md={5} lg={5}>
                         <FormSizeVariation />

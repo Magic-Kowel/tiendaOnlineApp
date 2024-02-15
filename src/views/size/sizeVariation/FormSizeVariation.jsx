@@ -3,7 +3,7 @@ import { sizeTitleForm } from "../../../stylesConfig";
 import { colors } from "../../../stylesConfig";
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSizes,createSizesVariation } from "../../../reducers/size/size";
+import { getSizes,createSizesVariation,getSizesVariation } from "../../../reducers/size/size";
 import Swal from 'sweetalert2';
 import { getAgeGroups } from "../../../reducers/agegroup/agegroup";
 import {
@@ -18,7 +18,7 @@ import TextFieldNumber from "../../../components/TextFieldNumber";
 import SearchAutoComplete from "../../../components/SearchAutoComplete";
 function FormSizeVariation(){
     const dispatch = useDispatch();
-    const {sizes,getSizesVariation} = useSelector((state)=>state.size);
+    const {sizes} = useSelector((state)=>state.size);
     const {ageGroups} = useSelector((state)=>state.ageGroup);
     const [t] = useTranslation("global");
     const [size,setSize] = useState([]);
@@ -61,7 +61,6 @@ function FormSizeVariation(){
         }else{
             setIsChildren(false)
         }
-        console.log("ageGroup",ageGroup);
         SetSizeVariation((prevState) => ({
             ...prevState,
             idAgeGroup: ageGroup[0]?.idAgeGroup || ""
@@ -73,14 +72,11 @@ function FormSizeVariation(){
     useEffect(()=>{
         dispatch(getSizes());
         dispatch(getAgeGroups());
-        handleGetAgeGroups();
     },[]);
  
     const handleSave = async (event)=>{
         event.preventDefault();
-        console.log(sizeVariation);
         const { idSize, idAgeGroup, minAge, maxAge } = sizeVariation;
-        console.log(sizeVariation);
         if (
             idSize.trim() === "" ||
             idAgeGroup.trim() === "" ||

@@ -33,7 +33,7 @@
   "successfully-removed":"Eliminado con éxito",
   "edit-category":"Editar categoria",
   "successfully-updated":"Actualisado con éxito",
-  "create":"Cear",
+  "create":"Crear",
   "edit":"Editar",
   "search":"Buscar",
   "create-subcategory":"Crear subcategoría",
@@ -60,5 +60,11 @@
   "age-range":"Rango edad",
   "does-not-apply":"No aplica",
   "minimum-age-cannot-be-higher-maximum-age":"La edad mínima no puede ser mayor que la edad máxima",
-  "edit-size-categorie-clothe":"Editar categoría de Talla"
+  "edit-size-categorie-clothe":"Editar categoría de Talla",
+  "materials":"Materiales",
+  "material":"Material",
+  "want-to-delete-material":"Desea eliminar material",
+  "create-material":"Crear material",
+  "this-field-is-required":"Este campo es requerido",
+  "edit-material":"Editar material"
 }

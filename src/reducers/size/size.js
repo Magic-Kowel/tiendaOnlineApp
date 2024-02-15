@@ -250,16 +250,19 @@ const sizeSlice = createSlice({
             state.error = action.payload;
             });
         builder
+            // ... Otros casos ...
             .addCase(createSizesVariation.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+                state.loading = true;
+                state.error = null;
             })
-            .addCase(createSizesVariation.fulfilled, (state) => {
-            state.loading = false;
+            .addCase(createSizesVariation.fulfilled, (state, action) => {
+                state.loading = false;
+                // Actualiza el estado con la nueva talla de variación creada
+                state.sizeVariation = [...state.sizeVariation, action.payload];
             })
             .addCase(createSizesVariation.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+                state.loading = false;
+                state.error = action.payload;
             });
         builder
             .addCase(deleteSizesVariation.pending, (state) => {
