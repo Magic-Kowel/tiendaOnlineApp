@@ -28,6 +28,9 @@ const UpdateSizeVariation = lazy(()=>import("./views/size/sizeVariation/UpdateSi
 //material
 const Material = lazy(()=>import("./views/material/Material.jsx"));
 const UpdateMaterial = lazy(()=>import("./views/material/UpdateMaterial.jsx"));
+// product
+const Product = lazy(()=>import("./views/product/Product.jsx"));
+const CreateProduct = lazy(()=>import("./views/product/CreateProduct.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -60,6 +63,22 @@ function App() {
           </Suspense>}
         />
         <Route path="/user/validate/:uid" element={<ValidateUser />} />
+        <Route path='/product' element={
+          <Suspense fallback={<Loader />}>
+            <MenuAdmin>
+              <Product />
+            </MenuAdmin>
+          </Suspense>
+        } 
+        />
+        <Route path='/product/create' element={
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <CreateProduct />
+              </MenuAdmin>
+            </Suspense>
+          } 
+        />
         <Route path='/product/category' element={
           <Suspense fallback={<Loader />}>
             <MenuAdmin>

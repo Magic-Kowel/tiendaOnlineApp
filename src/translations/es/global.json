@@ -66,5 +66,13 @@
   "want-to-delete-material":"Desea eliminar material",
   "create-material":"Crear material",
   "this-field-is-required":"Este campo es requerido",
-  "edit-material":"Editar material"
+  "edit-material":"Editar material",
+  "create-new-product":"Crear producto nuevo",
+  "description":"Descripción",
+  "search-category":"Buscar categoría",
+  "search-subcategory":"Buscar subcategoría",
+  "no-results-found":"No se encontró resultados",
+  "search-material":"Buscar material",
+  "search-gender":"Buscar género",
+  "combination-already-exists":"Esta combinación de alla ya existe"
 }

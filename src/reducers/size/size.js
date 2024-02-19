@@ -163,16 +163,37 @@ export const updateSizeVariation = createAsyncThunk(
       }
     }
 );
+export const sizeVariationValidate = createAsyncThunk(
+    "size/variation/validate",
+    async(data,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.post(`${API_BASE_URL}/size/variation/validate`,data,{
+                headers: {
+                    "x-access-token": token
+                }
+            })
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     sizes:[],
     sizeVariation:[],
+    variationValidate:true,
     loading:false,
     error:null
 }
 const sizeSlice = createSlice({
     name:"size",
     initialState:initialState,
-    reducers:{},
+    reducers:{
+        cancelVariationValidate: (state) => {
+            state.variationValidate = true
+        },
+    },
     extraReducers:(builder) =>{
         builder
             .addCase(getSizes.pending, (state) => {
@@ -301,6 +322,20 @@ const sizeSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
             });
+        builder
+            .addCase(sizeVariationValidate.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(sizeVariationValidate.fulfilled, (state, action) => {
+            state.loading = false;
+            state.variationValidate = action.payload.length > 0 ? action.payload : false;
+            })
+            .addCase(sizeVariationValidate.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
     }
 })
+export const { cancelVariationValidate } = sizeSlice.actions;
 export default sizeSlice.reducer;

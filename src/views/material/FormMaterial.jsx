@@ -23,7 +23,6 @@ function FormMaterial(){
         nameMaterial:""
     });
     const handleCreate = async ()  =>{
-        console.log("material",material);
         const response = await dispatch(createMaterial(material))
         if(response.payload.created){
             Swal.fire({

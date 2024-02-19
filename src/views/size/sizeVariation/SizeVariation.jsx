@@ -30,20 +30,19 @@ function SizeVariation(){
         getSizeVariationData();
     },[]);
     useEffect(()=>{
-        // const formateData = sizeVariation.map((item)=>{
-        //     if(Boolean(item.minAge) &&  Boolean(item.maxAge)){
-        //         return {
-        //             ...item,
-        //             ageRange:`${item.minAge} - ${item.maxAge}`
-        //         }
-        //     } 
-        //     return {
-        //         ...item,
-        //         ageRange:t("does-not-apply")
-        //     }
-        // });
-        setSizeVariationList(sizeVariation);
-        console.log("hh");
+        const data = sizeVariation.map((item)=>{
+            if(item.maxAge && item.minAge){
+                return {
+                    ...item,
+                    ageRange: `${item.maxAge} - ${item.minAge}`
+                }
+            } 
+            return {
+                ...item,
+                ageRange: t("does-not-apply")
+            }
+        });
+        setSizeVariationList(data);
     },[sizeVariation]);
     const handleDeleteSizeVariation =  (idSizeVariation) =>{
         Swal.fire({
