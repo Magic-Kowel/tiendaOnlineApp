@@ -18,7 +18,6 @@ function MainCard({
             <Card
                 component="form"
                 autoComplete="off"
-                onSubmit={handleSubmit}
             >
                 <CardContent>
                     {title && (
@@ -35,7 +34,7 @@ function MainCard({
                     )}
                     {children}
                 </CardContent>
-                {handleSubmit&&(
+                {(handleSubmit)&&(
                     <CardActions>
                         <Button
                             fullWidth

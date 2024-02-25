@@ -48,7 +48,7 @@ function FormProduct({
             container 
             spacing={2}
         >
-            <Grid item sm={12} sx={12}>
+            <Grid item sm={12} xs={12}>
                 <TextField
                     value={product.nameProduct}
                     onChange={(e) => {
@@ -64,7 +64,7 @@ function FormProduct({
                     variant="outlined"
                 />
             </Grid>
-            <Grid item sm={12} sx={12}>
+            <Grid item sm={12} xs={12}>
                 <TextField
                     value={product.description}
                     rows={5}
@@ -82,7 +82,7 @@ function FormProduct({
                     variant="outlined"
                 />
             </Grid>
-            <Grid item sm={12} sx={12}>
+            <Grid item sm={12} xs={12}>
                 <FormAutocomplete
                     data={categorys}
                     getOptionSearch={(option) => option.tNombre}
@@ -99,7 +99,7 @@ function FormProduct({
             </Grid>
             {
                 !!subcategories.length &&(
-                    <Grid item sm={12} sx={12}>
+                    <Grid item sm={12} xs={12}>
                         <FormAutocomplete
                             data={subcategories}
                             getOptionSearch={(option) => option.tNombre}
@@ -116,7 +116,7 @@ function FormProduct({
                     </Grid>
                 )
             }
-            <Grid item sm={12} sx={12}>
+            <Grid item sm={12} xs={12}>
                 <FormAutocomplete
                     data={materials}
                     getOptionSearch={(option) => option.nameMaterial}
@@ -131,7 +131,7 @@ function FormProduct({
                     helperText={formik.touched.idMaterial && formik.errors.idMaterial}
                 />
             </Grid>
-            <Grid item sm={12} sx={12}>
+            <Grid item sm={12} xs={12}>
                 <FormAutocomplete
                     data={genders}
                     getOptionSearch={(option) => option.nameGender}

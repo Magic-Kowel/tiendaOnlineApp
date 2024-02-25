@@ -43,16 +43,26 @@ function FormSizeVariation(){
         variationValidate: Yup.boolean().isFalse(),
         minAge: Yup.lazy(() => {
             if (sizeVariationForm.isChildren) {
-                return Yup.string().required(t("this-field-is-required"));
+              return Yup.string()
+                .required(t("this-field-is-required"))
+                .test('minAge',t( 'minimum-age-cannot-be-higher-maximum-age'), function (minAge) {
+                  const maxAge = this.parent.maxAge;
+                  return !maxAge || (minAge && parseInt(minAge, 10) <= parseInt(maxAge, 10));
+                });
             }
             return Yup.string().notRequired();
-        }),
-        maxAge: Yup.lazy(() => {
+          }),
+          maxAge: Yup.lazy(() => {
             if (sizeVariationForm.isChildren) {
-                return Yup.string().required(t("this-field-is-required"));
+              return Yup.string()
+                .required(t("this-field-is-required"))
+                .test('maxAge', t('max-age-must-be-greater-than-min-age'), function (maxAge) {
+                  const minAge = this.parent.minAge;
+                  return !minAge || (maxAge && parseInt(maxAge, 10) >= parseInt(minAge, 10));
+                });
             }
             return Yup.string().notRequired();
-        })
+          }),
     });
     const handleSave = async ()=>{
         const { idSize, idAgeGroup, minAge, maxAge } = sizeVariationForm;
@@ -84,6 +94,7 @@ function FormSizeVariation(){
             });
             dispatch(cancelVariationValidate());
             await handleGetAgeGroups();
+            formik.resetForm();
             return false;
         }
         Swal.fire({
@@ -127,11 +138,11 @@ function FormSizeVariation(){
         dispatch(getSizesVariation());
     }
     useEffect(()=>{
+        dispatch(cancelVariationValidate());
         dispatch(getSizes());
         dispatch(getAgeGroups());
     },[]);
     useEffect(()=>{
-        console.log("variationValidate",variationValidate);
         if(Boolean(sizeVariationForm.idSize) && Boolean(sizeVariationForm.idAgeGroup)){
             dispatch(sizeVariationValidate({
                 idSize:sizeVariationForm.idSize,
@@ -139,13 +150,13 @@ function FormSizeVariation(){
             }));
         }
     },[
-        sizeVariationForm?.idAgeGroup,
-        sizeVariationForm?.idSize
+        sizeVariationForm
     ]);
     return(
         <>
             <Card
                 component="form"
+                autoComplete="off"
                 onSubmit={formik.handleSubmit}
             >
                 <CardContent>
@@ -221,7 +232,7 @@ function FormSizeVariation(){
                                     )
                                 }
                             {
-                                Boolean(variationValidate)===true&&(
+                                (variationValidate)&&(
                                     <Grid item xs={12}>
                                         <Alert variant="filled" severity="error">
                                             {t("combination-already-exists")}

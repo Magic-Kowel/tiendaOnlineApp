@@ -85,14 +85,14 @@ function Material(){
             <Grid container spacing={2}>
                     <Grid item sm={12} md={7} lg={7}>
                             <SearchAutoComplete
-                                data={materialList}
+                                data={materials}
                                 getData={setMaterialList}
                                 getOptionSearch={(item)=>item.nameMaterial}
                             />
                             <DataTable
                                 listTitles={listTitles}
                                 listKeys={listKeys}
-                                dataList={materials}
+                                dataList={materialList}
                                 listButtons={listButtons}
                                 id="idMaterial"
                             />

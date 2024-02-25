@@ -6,41 +6,89 @@ import { colors } from '../../../stylesConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import TitlePage from '../../../components/TitlePage';
 import TextFieldNumber from "../../../components/TextFieldNumber";
-import SearchAutoComplete from "../../../components/SearchAutoComplete";
 import { getAgeGroups } from "../../../reducers/agegroup/agegroup";
-import { getSizes,getSizeVariation,updateSizeVariation } from "../../../reducers/size/size";
+import {
+    getSizes,
+    getSizeVariation,
+    updateSizeVariation,
+    sizeVariationValidate,
+    cancelVariationValidate
+} from "../../../reducers/size/size";
 import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import {
     Container,
     Card,
     CardContent,
     Grid,
     CardActions,
-    Button
+    Button,
+    Alert
 } from '@mui/material';
+import FormAutocomplete from "../../../components/FormAutocomplete";
 function UpdateSizeVariation(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
-    const {sizes, sizeVariation} = useSelector((state)=>state.size);
+    const {sizes, sizeVariation,variationValidate} = useSelector((state)=>state.size);
     const {ageGroups} = useSelector((state)=>state.ageGroup);
     const [t]=useTranslation("global");
-    const [size,setSize] = useState([]);
-    const [ageGroup,setAgeGroup] = useState([]);
-    const [isChildren,setIsChildren]=useState(false);
+    const [size,setSize] = useState(null);
+    const [ageGroup,setAgeGroup] = useState(null);
+    // const [isChildren,setIsChildren]=useState(false);
     const { idSizeVariation } = params;
     const [sizeVariationForm,setSizeVariationForm]=useState({
-        'idSizeVariation':'',
+        'idSizeVariation':idSizeVariation,
         'idSize':'',
         'idAgeGroup':'',
         'ageGroup':'',
         'minAge':'',
         'maxAge':'',
+        'isChildren': false
     });
+    useEffect(()=>{
+        if(sizes.length===0){
+            dispatch(getSizes());
+        }
+        if(ageGroups.length===0){
+            dispatch(getAgeGroups());
+        }
+    },[]);
+    useEffect(()=>{
+        dispatch(getSizeVariation(idSizeVariation));
+    },[]);
+    useEffect(()=>{
+        if(Boolean(sizeVariation[0])===true){
+            setSize({
+                idSize:sizeVariation[0].idSize,
+                nameSize:sizeVariation[0].nameSize
+            });
+            setAgeGroup({
+                idAgeGroup:sizeVariation[0].idAgeGroup,
+                name:sizeVariation[0].ageGroup
+            });
+            setSizeVariationForm((prev)=>({
+                ...prev,
+                idSize:sizeVariation[0].idSize,
+                idAgeGroup:sizeVariation[0].idAgeGroup
+            }));
+        }
+    },[sizeVariation]);
+    useEffect(() => {
+        setSize(() => {
+            const display = sizes.find((item) => item.idSize === sizeVariationForm?.idSize);
+            return display ? { ...display } : null;
+        });
+        setAgeGroup(() => {
+            const display = ageGroups.find((item) => item.idAgeGroup === sizeVariationForm?.idAgeGroup);
+            return display ? { ...display } :  null;
+        });
+    }, [sizeVariationForm]);
     const handleGetMinAge = (value) =>{
         setSizeVariationForm((prev)=>({
             ...prev,
-            minAge:String(value.trim())
+            minAge:value.trim()
         }));
     }
     const handleGetMaxAge = (value) =>{
@@ -49,78 +97,19 @@ function UpdateSizeVariation(){
             maxAge:value.trim()
         }));
     }
-    const handleGetSizeVariation = async () =>{
-        await dispatch(getSizeVariation(idSizeVariation));
-    }
-    useEffect(() => {
-        if (sizeVariation && sizeVariation.length > 0) {
-            const firstSizeVariation = sizeVariation[0];
-            setSizeVariationForm({
-                idSizeVariation:idSizeVariation,
-                idSize: firstSizeVariation.idSize || '',
-                idAgeGroup: firstSizeVariation.idAgeGroup || '',
-                ageGroup: firstSizeVariation.ageGroup || '',
-                minAge: String(firstSizeVariation.minAge) || '',
-                maxAge: String(firstSizeVariation.maxAge) || '',
-            });
+    const handleUpdate = async () =>{
+        if(variationValidate){
+                return
         }
-    }, [sizeVariation]);
-    useEffect(()=>{
-        handleGetSizeVariation();
-        dispatch(getSizes());
-        dispatch(getAgeGroups());
-    },[]);
-    useEffect(()=>{
-        if(ageGroup?.name==="Niño"){
-            setIsChildren(true)
-            return;
-        }else{
-            setIsChildren(false)
-        }
-        setSizeVariationForm((prevState) => ({
-            ...prevState,
-            idAgeGroup: ageGroup?.idAgeGroup || ""
-        }));
-    },[ageGroup]);
-    useEffect(() => {
-        if (sizes.length > 0 && sizeVariationForm) {
-            setSize(sizes.find((item) => item?.idSize === sizeVariationForm?.idSize));
-        }
-    }, [sizes,sizeVariationForm]);
-    useEffect(() => {
-        if (ageGroups.length > 0 && sizeVariationForm) {
-            setAgeGroup(ageGroups.find((item) => item?.idAgeGroup === sizeVariationForm?.idAgeGroup));
-        }
-    }, [ageGroups,sizeVariationForm]);
-    const handleUpdateSizeVariation = async(e)=>{
-        e.preventDefault();
-        if (
-            sizeVariationForm.idSize.trim() === "" ||
-            sizeVariationForm.idAgeGroup.trim() === "" ||
-            (isChildren && (!sizeVariationForm.minAge.trim() || !sizeVariationForm.maxAge.trim()))
-        ) {
-            Swal.fire({
-                title: t("fill-in-all-fields"),
-                icon: "error",
-            });
-            return false;
-        }
-    
-        if (isChildren && Number(sizeVariationForm.minAge) > Number(sizeVariationForm.maxAge)) {
-            Swal.fire({
-                title: t("minimum-age-cannot-be-higher-maximum-age"),
-                icon: "error",
-            });
-            return false;
-        }
+        dispatch(updateSizeVariation(sizeVariationForm));
         const response = await dispatch(updateSizeVariation(sizeVariationForm));
-        console.log("hola",response);
         if(response.payload.updated){
             Swal.fire({
-                title:t("successfully-updated"),
+                title:t("successfully-created"),
                 icon:'success',
                 timer: 1500
             });
+            await dispatch(cancelVariationValidate());
             navigate(-1);
             return false;
         }
@@ -129,6 +118,69 @@ function UpdateSizeVariation(){
             icon:"error"
         });
     }
+    const variationSchema = Yup.object().shape({
+        idSize: Yup.string().required(t("this-field-is-required")),
+        idAgeGroup: Yup.string().required(t("this-field-is-required")),
+        // variationValidate: Yup.boolean().isFalse(),
+        minAge: Yup.lazy(() => {
+          if (sizeVariationForm.isChildren) {
+            return Yup.string()
+              .required(t("this-field-is-required"))
+              .test('minAge',t( 'minimum-age-cannot-be-higher-maximum-age'), function (minAge) {
+                const maxAge = this.parent.maxAge;
+                return !maxAge || (minAge && parseInt(minAge, 10) <= parseInt(maxAge, 10));
+              });
+          }
+          return Yup.string().notRequired();
+        }),
+        maxAge: Yup.lazy(() => {
+          if (sizeVariationForm.isChildren) {
+            return Yup.string()
+              .required(t("this-field-is-required"))
+              .test('maxAge', t('max-age-must-be-greater-than-min-age'), function (maxAge) {
+                const minAge = this.parent.minAge;
+                return !minAge || (maxAge && parseInt(maxAge, 10) >= parseInt(minAge, 10));
+              });
+          }
+          return Yup.string().notRequired();
+        }),
+      });
+    const formik = useFormik({
+        initialValues: {
+            idSize: sizeVariationForm.idSize,
+            idAgeGroup: sizeVariationForm.idAgeGroup, // Corregido el nombre aquí
+            minAge: sizeVariationForm.minAge,
+            maxAge: sizeVariationForm.maxAge,
+            // variationValidate:variationValidate,
+        },
+        validationSchema: variationSchema,
+        onSubmit: handleUpdate,
+    });
+    useEffect(() => {
+        formik.setValues({
+            idSize: sizeVariationForm.idSize || "",
+            idAgeGroup: sizeVariationForm.idAgeGroup || "", // Corregido el nombre aquí
+            minAge: sizeVariationForm.minAge || "",
+            maxAge: sizeVariationForm.maxAge || "",
+            // variationValidate: variationValidate 
+        });
+    }, [sizeVariationForm]);
+    useEffect(()=>{
+        if(sizeVariation[0]?.idSize === size?.idSize && sizeVariation[0]?.idAgeGroup === ageGroup?.idAgeGroup){
+            dispatch(cancelVariationValidate());
+            return;
+        }
+        if(Boolean(size?.idSize) && Boolean(ageGroup?.idAgeGroup)){
+            dispatch(sizeVariationValidate({
+                idSize:size.idSize,
+                idAgeGroup:ageGroup.idAgeGroup
+            }));
+        }
+      
+    },[
+        size,
+        ageGroup
+    ]);
     return(
         <>
             <Container>
@@ -137,7 +189,7 @@ function UpdateSizeVariation(){
                 />
                 <Card
                     component="form"
-                    onSubmit={handleUpdateSizeVariation}
+                    onSubmit={formik.handleSubmit}
                 >
                     <CardContent>
                             <GoBack />
@@ -147,48 +199,79 @@ function UpdateSizeVariation(){
                                 mt={2}
                             >   
                                 <Grid item xs={12}>
-                                    <SearchAutoComplete
-                                        valueDefault={size?size:[]}
+                                    <FormAutocomplete
+                                        valueDefault={size}
                                         data={sizes}
-                                        getData={setSizeVariationForm}
-                                        itemKey="idSize"
-                                        itemKeyForId="idSize"
                                         getOptionSearch={(item)=>item?.nameSize  || ""}
+                                        getData={(newValue) => 
+                                            setSizeVariationForm((prev) => 
+                                            ({ ...prev,
+                                                idSize: newValue?.idSize
+                                            })
+                                        )}
                                         title={t("size-clothes")}
-                                        isForm={true}
+                                        getOptionSelected={(option, value) => option.idSize === value.idSize}
+                                        isOptionEqualToValue={(option, value) => option.idSize === value.idSize}
+                                        error={formik.touched.idSize && Boolean(formik.errors.idSize)}
+                                        helperText={formik.touched.idSize && formik.errors.idSize}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <SearchAutoComplete
-                                        valueDefault={ageGroup?ageGroup:[]}
+                                    <FormAutocomplete
+                                        valueDefault={ageGroup}
                                         data={ageGroups}
-                                        getData={setSizeVariationForm}
+                                        getOptionSearch={(item)=>item?.name  || ""}
+                                        getData={(newValue) =>
+                                            setSizeVariationForm((prev) => ({
+                                                ...prev,
+                                                minAge: newValue?.name === "Niño" ? '' : prev?.minAge,
+                                                maxAge: newValue?.name === "Niño" ? '' : prev?.maxAge,
+                                                idAgeGroup: newValue?.idAgeGroup,
+                                                isChildren: newValue?.name === "Niño"? true:false
+                                            }))
+                                        }
                                         itemKey="idAgeGroup"
                                         itemKeyForId="idAgeGroup"
-                                        getOptionSearch={(item)=>item.name || ""}
                                         title={t("size-ranges-clothe")}
-                                        isForm={true}
+                                        getOptionSelected={(option, value) => option.idAgeGroup === value.idAgeGroup}
+                                        isOptionEqualToValue={(option, value) => option.idAgeGroup === value.idAgeGroup}
+                                        error={formik.touched.idAgeGroup && Boolean(formik.errors.idAgeGroup)}
+                                        helperText={formik.touched.idAgeGroup && formik.errors.idAgeGroup}
                                     />
                                 </Grid>
-                                
-                                {isChildren&&(
-                                    <>
+                                {
+                                    variationValidate &&(
                                         <Grid item xs={12}>
-                                            <TextFieldNumber
-                                                value={sizeVariationForm?.minAge}
-                                                label={t("min-age")}
-                                                onChange={handleGetMinAge}
-                                            />
+                                            <Alert variant="filled" severity="error">
+                                                {t("combination-already-exists")}
+                                            </Alert>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <TextFieldNumber
-                                                value={sizeVariationForm?.maxAge}
-                                                label={t("max-age")}
-                                                onChange={handleGetMaxAge}
-                                            />
-                                        </Grid>
-                                    </>
-                                )}
+                                    )
+                                }
+                                {
+                                    sizeVariationForm.isChildren &&(
+                                        <>
+                                            <Grid item xs={12}>
+                                                <TextFieldNumber
+                                                    value={sizeVariationForm?.minAge}
+                                                    label={t("min-age")}
+                                                    onChange={handleGetMinAge}
+                                                    error={formik.touched.minAge && Boolean(formik.errors.minAge)}
+                                                    helperText={formik.touched.minAge && formik.errors.minAge}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextFieldNumber
+                                                    value={sizeVariationForm?.maxAge}
+                                                    label={t("max-age")}
+                                                    onChange={handleGetMaxAge}
+                                                    error={formik.touched.maxAge && Boolean(formik.errors.maxAge)}
+                                                    helperText={formik.touched.maxAge && formik.errors.maxAge}
+                                                />
+                                            </Grid>
+                                        </>
+                                    )
+                                }
                             </Grid>
                     </CardContent>
                     <CardActions>

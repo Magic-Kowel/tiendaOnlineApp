@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '../../stylesConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSize as updateSizeForm } from '../../reducers/size/size';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import Swal from 'sweetalert2';
 function UpdateSize(){
     const dispatch = useDispatch();
@@ -30,15 +32,7 @@ function UpdateSize(){
         const { id } = params;
         await dispatch(getSize(id));
     }
-    const handleUpdateSize = async (e) =>{
-        e.preventDefault();
-        if(sizeForm.nameSize.trim()===""){
-            Swal.fire({
-                title:t("fill-in-all-fields"),
-                icon:"error",
-            });
-            return false;
-        }
+    const handleUpdateSize = async () =>{
         const response = await dispatch(updateSizeForm(sizeForm));
         if(response.payload.updated){
             Swal.fire({
@@ -54,6 +48,21 @@ function UpdateSize(){
             icon:"error"
         });
     }
+    const sizeSchema = Yup.object().shape({
+        nameSize: Yup.string().required(t("this-field-is-required"))
+    });
+    const formik = useFormik({
+        initialValues: {
+            nameSize: sizeForm.nameSize ||"",
+        },
+        validationSchema: sizeSchema,
+        onSubmit: handleUpdateSize
+    });
+    useEffect(() => {
+        formik.setValues({
+            nameSize: sizeForm.nameSize || "",
+        });
+    }, [sizeForm]);
     useEffect(()=>{
         handleGetSize();
     },[])
@@ -70,7 +79,11 @@ function UpdateSize(){
                     title={t("edit-category")}
                 />
                 <Card>
-                    <CardContent onSubmit={handleUpdateSize} component="form">
+                    <CardContent 
+                        onSubmit={handleUpdateSize} 
+                        autoComplete="off" 
+                        component="form"
+                    >
                             <GoBack />
                             <Grid                
                                 flexDirection="column"
@@ -90,12 +103,15 @@ function UpdateSize(){
                                         fullWidth
                                         label={t("size-clothe")} 
                                         variant="outlined" 
+                                        error={formik.touched.nameSize && Boolean(formik.errors.nameSize)}
+                                        helperText={formik.touched.nameSize && formik.errors.nameSize}
                                     />
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
                                     <Button
                                         fullWidth
                                         variant="contained"
+                                        onClick={formik.handleSubmit}
                                         type="submit"
                                         sx={{
                                             backgroundColor:colors.primaryColor,

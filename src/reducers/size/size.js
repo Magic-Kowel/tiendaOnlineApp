@@ -179,10 +179,26 @@ export const sizeVariationValidate = createAsyncThunk(
         }
     }
 );
+export const getSizesVariationDisplay = createAsyncThunk(
+    "get/sizes/variation/display",
+    async(thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/size/opcions/variation`,{
+                headers: {
+                    "x-access-token": token
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     sizes:[],
     sizeVariation:[],
-    variationValidate:true,
+    variationValidate:false,
     loading:false,
     error:null
 }
@@ -191,7 +207,7 @@ const sizeSlice = createSlice({
     initialState:initialState,
     reducers:{
         cancelVariationValidate: (state) => {
-            state.variationValidate = true
+            state.variationValidate = false
         },
     },
     extraReducers:(builder) =>{
@@ -265,6 +281,7 @@ const sizeSlice = createSlice({
             .addCase(getSizesVariation.fulfilled, (state, action) => {
             state.loading = false;
             state.sizeVariation = action.payload.length > 0 ? action.payload : [];
+            
             })
             .addCase(getSizesVariation.rejected, (state, action) => {
             state.loading = false;
@@ -276,10 +293,8 @@ const sizeSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(createSizesVariation.fulfilled, (state, action) => {
+            .addCase(createSizesVariation.fulfilled, (state) => {
                 state.loading = false;
-                // Actualiza el estado con la nueva talla de variación creada
-                state.sizeVariation = [...state.sizeVariation, action.payload];
             })
             .addCase(createSizesVariation.rejected, (state, action) => {
                 state.loading = false;
@@ -329,9 +344,22 @@ const sizeSlice = createSlice({
             })
             .addCase(sizeVariationValidate.fulfilled, (state, action) => {
             state.loading = false;
-            state.variationValidate = action.payload.length > 0 ? action.payload : false;
+            state.variationValidate = action.payload > 0 ? true : false;
             })
             .addCase(sizeVariationValidate.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(getSizesVariationDisplay.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(getSizesVariationDisplay.fulfilled, (state, action) => {
+            state.loading = false;
+            state.sizeVariation = action.payload.length > 0 ? action.payload : false;
+            })
+            .addCase(getSizesVariationDisplay.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
             });

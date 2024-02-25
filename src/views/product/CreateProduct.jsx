@@ -10,6 +10,7 @@ import FormProduct from './FormProduct';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import MainCard from '../../components/MainCard';
+import AddSelectSize from './AddSelectSize';
 function CreateProduct(){
     const [t] = useTranslation("global");
     const [product,setProduct] = useState({
@@ -88,6 +89,18 @@ function CreateProduct(){
                                 formik={formik}
                             />
                         </MainCard>
+                    </Grid>
+                </Grid>
+                <Grid mt={2} container spacing={2}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12} 
+                        md={12} 
+                        lg={12}
+                        xl={12}
+                    >
+                        <AddSelectSize />
                     </Grid>
                 </Grid>
                 <button onClick={formik.handleSubmit}>crear </button>

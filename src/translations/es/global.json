@@ -60,6 +60,7 @@
   "age-range":"Rango edad",
   "does-not-apply":"No aplica",
   "minimum-age-cannot-be-higher-maximum-age":"La edad mínima no puede ser mayor que la edad máxima",
+  "max-age-must-be-greater-than-min-age":"La edad máxima debe ser mayor que la edad mínima",
   "edit-size-categorie-clothe":"Editar categoría de Talla",
   "materials":"Materiales",
   "material":"Material",
@@ -74,5 +75,7 @@
   "no-results-found":"No se encontró resultados",
   "search-material":"Buscar material",
   "search-gender":"Buscar género",
-  "combination-already-exists":"Esta combinación de alla ya existe"
+  "combination-already-exists":"Esta combinación de alla ya existe",
+  "select-size-clothe":"Seleccione talla",
+  "add-size-clothe":"Agregar talla"
 }

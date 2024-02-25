@@ -64,152 +64,192 @@ function App() {
         />
         <Route path="/user/validate/:uid" element={<ValidateUser />} />
         <Route path='/product' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Product />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Product />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path='/product/create' element={
+          <ProtectedRoute>
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
                 <CreateProduct />
               </MenuAdmin>
             </Suspense>
+          </ProtectedRoute>
           } 
         />
         <Route path='/product/category' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Category />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Category />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path='/product/category/create' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <CreateCategory />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <CreateCategory />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path='/product/category/edit/:id' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateCategory />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateCategory />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path='/product/category/subcategory/:idCategory' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Subcategory />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Subcategory />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path='/product/category/subcategory/create/:idCategory' element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <CreateSubcategory />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <CreateSubcategory />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } 
         />
         <Route path="/product/category/subcategory/edit/:idSubcategory" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateSubcategory />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateSubcategory />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/security/menu" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Menu />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Menu />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/security/menu/edit/:id" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateMenu />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateMenu />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/security/submenu" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <SubMenu />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <SubMenu />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/security/submenu/edit/:id" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateSubMenu />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateSubMenu />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         { /*relusuariomenusubmenucontroller */} 
         <Route path="/security/permissions" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <PermisosUser />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <PermisosUser />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/security/permissions/:idUser" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <AddPermissions />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <AddPermissions />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/size" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Size />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Size />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/size/edit/:id" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateSize />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateSize />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/size/variation" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <SizeVariation />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <SizeVariation />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/size/variation/edit/:idSizeVariation" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateSizeVariation />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateSizeVariation />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/material" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <Material />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Material />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="/material/edit/:idMaterial" element={
-          <Suspense fallback={<Loader />}>
-            <MenuAdmin>
-              <UpdateMaterial />
-            </MenuAdmin>
-          </Suspense>
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateMaterial />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
