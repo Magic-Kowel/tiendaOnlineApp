@@ -11,13 +11,22 @@ import { colors } from "../../stylesConfig";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import DeleteIcon from '@mui/icons-material/Delete';
-function AddSelectSize(){
+import TextFieldNumber from "../../components/TextFieldNumber"
+import PropTypes from 'prop-types';
+function AddSelectSize({
+    setProduct
+}){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
     const {sizeVariation} = useSelector((state)=>state.size);
     const [size,setSize] = useState(null);
     const [sizes,setSizes] = useState([])
     const [listSelectetSize,setListSelectetSize] = useState([]);
+
+    const [productVariation,setProductVariation] = useState({
+        stock:0,
+        price:0
+    });
     useEffect(()=>{
         dispatch(getSizesVariationDisplay())
     },[])
@@ -25,6 +34,16 @@ function AddSelectSize(){
         if (listSelectetSize.length) {
             const newArray = sizes.filter(obj1 => !listSelectetSize.some(obj2 => obj2.idSizeVariation === obj1.idSizeVariation));
             setSizes(newArray);
+            setProduct((prev)=>({
+                ...prev,
+                sizesList: [
+                ...prev.sizesList,
+                {
+                    idSizeVariation:listSelectetSize[0].idSizeVariation,
+                    price:productVariation.price,
+                    stock:productVariation.stock
+                }]
+            }))
         }
       }, [listSelectetSize]);
     useEffect(()=>{
@@ -39,11 +58,13 @@ function AddSelectSize(){
     const listTitles=[
         t("size-categories-clothe"),
         t("size-ranges-clothe"),
+        t("price"),
+        t("stock"),
         t("delete")
     ];
     const handleAddSizeList = ()=>{
         if(size){
-            setListSelectetSize(prevList => [...prevList, size]);
+            setListSelectetSize(prevList => [...prevList, {...size ,...productVariation}]);
             setSize(null);
             formik.resetForm();
         }
@@ -53,16 +74,23 @@ function AddSelectSize(){
         setListSelectetSize(newArray);
         const elementoEspecifico = sizeVariation.find(obj => obj.idSizeVariation === idSizeVariation);
         if (elementoEspecifico) {
-          setSizes(prevSizes => [...prevSizes, elementoEspecifico]);
+          setSizes(prevSizes => [
+            ...prevSizes,
+            elementoEspecifico
+        ]);
         }
         setSize(null);
     }
     const selectSizeSchema = Yup.object().shape({
-        sizeVariation: Yup.string().required(t("this-field-is-required"))
+        sizeVariation: Yup.string().required(t("this-field-is-required")),
+        price: Yup.number().min(1,t("the-minimum-is")+": 1").required(t("this-field-is-required")),
+        stock: Yup.number().min(1,t("the-minimum-is")+": 1").required(t("this-field-is-required"))
     });
     const formik = useFormik({
         initialValues: {
-          sizeVariation: size,
+            sizeVariation: size,
+            price:0,
+            stock:0
         },
         validationSchema: selectSizeSchema,
         onSubmit: handleAddSizeList
@@ -71,8 +99,10 @@ function AddSelectSize(){
     useEffect(() => {
         formik.setValues({
             sizeVariation: size?.idSizeVariation,
+            stock:productVariation.stock,
+            price:productVariation.price
         });
-    }, [size]);
+    }, [size,productVariation]);
 
     const listButtons = [
         {
@@ -90,8 +120,50 @@ function AddSelectSize(){
                     item 
                     spacing={2}
                 >
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
+                        <TextFieldNumber
+                            label={t('price')}
+                            value={productVariation.price}
+                            onChange={(value)=>{
+                                setProductVariation((prev)=>({
+                                    ...prev,
+                                    price:Number(value)
+                                }))
+                            }}
+                            error={formik.touched.price && Boolean(formik.errors.price)}
+                            helperText={formik.touched.price && formik.errors.price}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextFieldNumber
+                            label={t('stock')}
+                            value={productVariation.stock}
+                            onChange={(value)=>{
+                                setProductVariation((prev)=>({
+                                    ...prev,
+                                    stock:Number(value)
+                                }))
+                            }}
+                            error={formik.touched.stock && Boolean(formik.errors.stock)}
+                            helperText={formik.touched.stock && formik.errors.stock}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormAutocomplete
+                            valueDefault={size}
+                            data={sizes}
+                            getOptionSearch={(option) => option.displaySize}
+                            title={t('select-size-clothe')}
+                            getData={(newValue) =>
+                                setSize(newValue)
+                            }
+                            error={formik.touched.sizeVariation && Boolean(formik.errors.sizeVariation)}
+                            helperText={formik.touched.sizeVariation && formik.errors.sizeVariation}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <Button
+                            fullWidth
                             variant="contained"
                             onClick={formik.handleSubmit}
                             endIcon={<AddCircleIcon />}
@@ -105,24 +177,11 @@ function AddSelectSize(){
                             {t('add-size-clothe')}
                         </Button>
                     </Grid>
-                    <Grid item xs={8}>
-                        <FormAutocomplete
-                            valueDefault={size}
-                            data={sizes}
-                            getOptionSearch={(option) => option.displaySize}
-                            title={t('select-size-clothe')}
-                            getData={(newValue) =>
-                                setSize(newValue)
-                            }
-                            error={formik.touched.sizeVariation && Boolean(formik.errors.sizeVariation)}
-                            helperText={formik.touched.sizeVariation && formik.errors.sizeVariation}
-                        />
-                    </Grid>
                 </Grid>
                 <Grid item xs={12}>
                     <DataTable
                         listTitles={listTitles}
-                        listKeys={["nameSize","ageGroup"]}
+                        listKeys={["nameSize","ageGroup","price","stock"]}
                         dataList={listSelectetSize}
                         listButtons={listButtons}
                         id="idSizeVariation"
@@ -132,4 +191,7 @@ function AddSelectSize(){
         </MainCard>
     </>)
 }
+AddSelectSize.propTypes = {
+    setProduct: PropTypes.func.isRequired
+};
 export default AddSelectSize

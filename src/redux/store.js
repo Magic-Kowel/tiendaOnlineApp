@@ -7,6 +7,7 @@ import sizeSlice from "../reducers/size/size";
 import ageGroupSlice from "../reducers/agegroup/agegroup";
 import materialSlice from "../reducers/material/material";
 import genderSlice from "../reducers/gender/gender";
+import productSlice from "../reducers/product/product";
 const store = configureStore({
     reducer:{
         user:userSlice,
@@ -16,7 +17,8 @@ const store = configureStore({
         size:sizeSlice,
         ageGroup:ageGroupSlice,
         material:materialSlice,
-        gender:genderSlice
+        gender:genderSlice,
+        product:productSlice
     }
 });
 export default store;

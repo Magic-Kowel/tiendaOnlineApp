@@ -18,6 +18,7 @@ function MainCard({
             <Card
                 component="form"
                 autoComplete="off"
+                fullWidth
             >
                 <CardContent>
                     {title && (

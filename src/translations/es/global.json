@@ -77,5 +77,9 @@
   "search-gender":"Buscar género",
   "combination-already-exists":"Esta combinación de alla ya existe",
   "select-size-clothe":"Seleccione talla",
-  "add-size-clothe":"Agregar talla"
+  "add-size-clothe":"Agregar talla",
+  "price":"Precio",
+  "stock":"Existencias",
+  "the-minimum-is":"El mínimo es",
+  "select-images":"Seleccionar imágenes"
 }
