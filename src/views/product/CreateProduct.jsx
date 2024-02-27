@@ -2,7 +2,7 @@ import { useState,useEffect } from 'react';
 import {
     Container,
     Grid,
-    Button
+    Button 
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
@@ -15,11 +15,12 @@ import AddSelectSize from './AddSelectSize';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { colors } from '../../stylesConfig';
 import { createProduct } from '../../reducers/product/product';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UploadFile from '../../components/UploadFile';
 function CreateProduct(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
+    const {loadingProducts} = useSelector((state)=>state.product);
     const [product,setProduct] = useState({
         nameProduct:"",
         description:"",
@@ -27,11 +28,30 @@ function CreateProduct(){
         idSubCategory:"",
         idMaterial:"",
         idGender:"",
-        sizesList:[]
+        sizesList:[],
+        files: []
     });
     const handleCreate = async ()  =>{
         console.log(product);
-        const response = await dispatch(createProduct(product));
+        const formData = new FormData();
+
+        // Agregar campos de texto
+        formData.append("nameProduct", product.nameProduct);
+        formData.append("description", product.description);
+        formData.append("idCategory", product.idCategory);
+        formData.append("idSubCategory", product.idSubCategory);
+        formData.append("idMaterial", product.idMaterial);
+        formData.append("idGender", product.idGender);
+
+        // Agregar datos de sizesList
+        formData.append("sizesList", JSON.stringify(product.sizesList));
+
+        // Agregar archivos
+        for (let i = 0; i < product.files.length; i++) {
+            formData.append(`files`, product.files[i]);
+        }
+
+        const response = await dispatch(createProduct(formData));
         if(response.payload.created){
             Swal.fire({
                 title:t("successfully-created"),
@@ -92,7 +112,9 @@ function CreateProduct(){
                         lg={6}
                         xl={6}
                     >
-                       <UploadFile />
+                       <UploadFile
+                            setProduct={setProduct}
+                       />
                     </Grid>
                     <Grid
                         container
@@ -127,9 +149,11 @@ function CreateProduct(){
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                        <Button
+                        <Button 
                             fullWidth
                             variant="contained"
+                            disabled={loadingProducts}
+                            // loading={loadingProducts}
                             onClick={formik.handleSubmit}
                             endIcon={<AddCircleIcon />}
                             size="large"

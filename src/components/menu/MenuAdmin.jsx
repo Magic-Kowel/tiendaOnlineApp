@@ -25,11 +25,13 @@ import { useDispatch } from 'react-redux';
 import getIdUser from '../../tools/getIdUser';
 import ItemMenuAdmin from './ItemMenuAdmin';
 import PropTypes from 'prop-types';
+import Footer  from './../Footer';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
+    flex:1,
     padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -133,73 +135,79 @@ export default function MenuAdmin({children}) {
         setOpen(false);
     };
 
-    return (
-        <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar sx={{backgroundColor:colors.primaryColor}} position="fixed" open={open}>
-            <Toolbar>
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
-                <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-                {NAME_PAGE}
-            </Typography>
-            </Toolbar>
-        </AppBar>
-        <Drawer
-            sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-            },
-            }}
-            variant="persistent"
-            anchor="left"
-            open={open}
-        >
-            <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-            </DrawerHeader>
-            <Divider />
-            <List>
-                <ListItem disablePadding>
-                  <ListItemButton
-                      onClick={exitSistem}
-                  >
-                      <ListItemIcon>
-                      <PowerSettingsNewIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={t("exit")}/>
-                  </ListItemButton>
-                </ListItem>
-                {
-                  menuItems?.map((item,index)=>(
-                      <ItemMenuAdmin 
-                        key={index}
-                        item={item}
-                      />
+      return (
+        <Box sx={{ display: 'flex'}}>
+          <CssBaseline />
+          <AppBar sx={{backgroundColor:colors.primaryColor}} position="fixed" open={open}>
+              <Toolbar>
+              <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                  <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div">
+                  {NAME_PAGE}
+              </Typography>
+              </Toolbar>
+          </AppBar>
+          <Drawer
+              sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                  width: drawerWidth,
+                  boxSizing: 'border-box',
+              },
+              }}
+              variant="persistent"
+              anchor="left"
+              open={open}
+          >
+              <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+              </DrawerHeader>
+              <Divider />
+              <List>
+                  <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={exitSistem}
+                    >
+                        <ListItemIcon>
+                        <PowerSettingsNewIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={t("exit")}/>
+                    </ListItemButton>
+                  </ListItem>
+                  {
+                    menuItems?.map((item,index)=>(
+                        <ItemMenuAdmin 
+                          key={index}
+                          item={item}
+                        />
+                      )
                     )
-                  )
-                }
-                
-            </List>
-        </Drawer>
-        <Main open={open}>
-            <DrawerHeader />
-            {children}
-        </Main>
+                  }
+                  
+              </List>
+          </Drawer>
+          <Main open={open}>
+                <DrawerHeader />
+                  <Box
+                  component="main"
+                    sx={{minHeight: "100vh"}}
+                  >
+                    {children}
+                  </Box>
+                <Footer />
+          </Main>
         </Box>
-    );
+      );
 }
 MenuAdmin.propTypes = {
   children: PropTypes.node, // Propiedad children válida

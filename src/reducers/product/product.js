@@ -8,7 +8,8 @@ export const createProduct = createAsyncThunk(
             const token = sessionStorage.getItem(NAME_TOKEN);
             const response = await axios.post(`${API_BASE_URL}/product`,data,{
                 headers: {
-                    "x-access-token": token
+                    "x-access-token": token,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
             return response.data;
@@ -19,24 +20,24 @@ export const createProduct = createAsyncThunk(
 );
 const initialState = {
     products:[],
-    loading:false,
+    loadingProducts:false,
     error:null
 }
 const materialSlice = createSlice({
-    name:"materials",
+    name:"products",
     initialState:initialState,
     reducers:{},
     extraReducers:(builder) =>{
         builder
             .addCase(createProduct.pending, (state) => {
-            state.loading = true;
+            state.loadingProducts = true;
             state.error = null;
             })
             .addCase(createProduct.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingProducts = false;
             })
             .addCase(createProduct.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.error = action.payload;
             }); 
     }

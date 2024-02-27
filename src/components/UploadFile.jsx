@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useRef} from 'react';
 import {
     Button,
     Box,
@@ -6,20 +6,27 @@ import {
 } from '@mui/material';
 import { colors } from '../stylesConfig';
 import { useTranslation } from 'react-i18next';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import ImagePreviewList from './ImagePreviewList ';
+import PropTypes from 'prop-types';
 const MAX_FILE_SIZE_MB = 20;
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"]
-function UploadFile() {
+function UploadFile({
+    setProduct
+}) {
+    const fileInputRef = useRef(null);
     const [t] = useTranslation("global");
     const [selectedFiles, setSelectedFiles] = useState([]);
  
     const [error, setError] = useState(null);
   
     useEffect(() => {
-        // const list = selectedFiles.map((item)=>URL.createObjectURL(item || null))
+
         console.log(selectedFiles);
+        setProduct((prev)=>({
+            ...prev,
+            ...selectedFiles
+        }));
     }, [selectedFiles]);
   
     const handleFileChange = (event) => {
@@ -42,30 +49,15 @@ function UploadFile() {
         setSelectedFiles((prev) => ({
             ...prev,
             files: [...(prev.files ?? []), ...files],
+
         }));
-      setError(null);
+        setError(null);
     };
-  
-    const handleUpload = () => {
-      if (selectedFiles.length > 0) {
-        const formData = new FormData();
-        console.log("selectedFiles",selectedFiles);
-        selectedFiles.forEach((file, index) => {
-            console.log("file",file);
-            formData.append(`file_${index + 1}`, file);
-        });
-  
-        console.log("Uploading files...", formData);
-        // Aquí puedes enviar formData a tu servidor para manejar las imágenes.
-      } else {
-        console.error("No files selected");
-      }
-    };
-  
     return (
       <>
         <Box p={3} border="1px dashed #ccc" borderRadius={8} textAlign="center">
             <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 multiple
@@ -98,20 +90,19 @@ function UploadFile() {
                 </Typography>
             )}
         </Box>
-        <ImageList  sx={{height: 450 }} cols={3} rowHeight={164}>
-            {selectedFiles.files &&
-            selectedFiles.files.map((item, index) => (
-                <ImageListItem key={index}>
-                    <img
-                        src={URL.createObjectURL(item || null)}
-                        alt={`Blob Image ${index + 1}`}
-                        style={{ maxWidth: '100%', height: 'auto' }}
-                    />
-                </ImageListItem>
-            ))}
-        </ImageList>
+        {
+            selectedFiles.files&&(
+                <ImagePreviewList
+                    listImagens={selectedFiles.files}
+                    setSelectedFiles={setSelectedFiles}
+                    fileInputRef={fileInputRef}
+                />
+            )
+        }
       </>
     );
-  }
-  
+}
+UploadFile.propTypes = {
+    setProduct: PropTypes.func.isRequired
+};
   export default UploadFile;
