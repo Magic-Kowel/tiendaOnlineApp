@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Typography,
     Container,
     Card,
     CardContent,
@@ -9,11 +8,14 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import GoBack from '../../components/goBack';
-import { colors, sizeTitle } from '../../stylesConfig';
+import { colors } from '../../stylesConfig';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { createCategory } from '../../reducers/category/category';
+import TitlePage from '../../components/TitlePage';
 import Swal from 'sweetalert2';
 function CreateCategory(){
     const dispatch = useDispatch();
@@ -22,8 +24,7 @@ function CreateCategory(){
     const [category,setCaegory] = useState({
         name:""
     });
-    const createCategoryForm = async (e) =>{
-        e.preventDefault();
+    const createCategoryForm = async () =>{
         if(category.name.trim()===""){
             Swal.fire({
                 title:t("fill-in-all-fields"),
@@ -46,24 +47,34 @@ function CreateCategory(){
             icon:"error"
         });
     }
+    const categorySchema = Yup.object().shape({
+        name: Yup.string().required(t("this-field-is-required"))
+    });
+    const formik = useFormik({
+        initialValues: {
+            name: category.name ||"",
+        },
+        validationSchema: categorySchema,
+        onSubmit: createCategoryForm
+    });
+    useEffect(() => {
+        formik.setValues({
+            name: category.name || "",
+        });
+        console.log( category.name );
+    }, [category]);
     return(
         <>
             <Container>
-                <Typography
-                    sx={{
-                        fontSize:sizeTitle,
-                    }}
-                    textAlign="center"
-                    variant="h1"
-                    gutterBottom
-                >
-                    {t("create-category")}
-                </Typography>
+                <TitlePage 
+                    title={t("create-category")}
+                />
                 <Card>
                     <CardContent>
                         <GoBack />
                         <form
-                            onSubmit={createCategoryForm}
+                            autoComplete="off"
+                            onSubmit={formik.handleSubmit}
                         >
                             <Grid                
                                 flexDirection="column"
@@ -83,6 +94,8 @@ function CreateCategory(){
                                                 name:e.target.value.trim()
                                             })
                                         })}
+                                        error={formik.touched.name && Boolean(formik.errors.name)}
+                                        helperText={formik.touched.name && formik.errors.name}
                                     />
                                 </Grid>
                                 <Grid item xs={12} mt={2}>

@@ -117,31 +117,27 @@ function FormProduct({
                     helperText={formik.touched.idCategory && formik.errors.idCategory}
                 />
             </Grid>
-            {
-                !!subcategories.length &&(
-                    <Grid 
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                    >
-                        <FormAutocomplete
-                            data={subcategories}
-                            getOptionSearch={(option) => option.tNombre}
-                            title={t('search-subcategory')}
-                            getData={(newValue) => 
-                                setProduct((prevProduct) => 
-                                ({ ...prevProduct,
-                                    idSubCategory: newValue?.ecodsubcategoria
-                                })
-                            )}
-                            error={formik.touched.idSubCategory && Boolean(formik.errors.idSubCategory)}
-                            helperText={formik.touched.idSubCategory && formik.errors.idSubCategory}
-                        />
-                    </Grid>
-                )
-            }
+            <Grid 
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+            >
+                <FormAutocomplete
+                    data={subcategories}
+                    getOptionSearch={(option) => option.tNombre}
+                    title={t('search-subcategory')}
+                    getData={(newValue) => 
+                        setProduct((prevProduct) => 
+                        ({ ...prevProduct,
+                            idSubCategory: newValue?.ecodsubcategoria
+                        })
+                    )}
+                    error={formik.touched.idSubCategory && Boolean(formik.errors.idSubCategory)}
+                    helperText={formik.touched.idSubCategory && formik.errors.idSubCategory}
+                />
+            </Grid>
             <Grid
                 item
                 xs={12}

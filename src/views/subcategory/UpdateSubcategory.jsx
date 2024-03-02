@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { getSubcategory, updateSubcategory } from '../../reducers/subCategory/subCategory';
 import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 function UpdateSubcategory(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,8 +33,7 @@ function UpdateSubcategory(){
             name:response.payload[0].name
         })
     }
-    const handleUpdateSubcategory = async (e) =>{
-        e.preventDefault();
+    const handleUpdateSubcategory = async () =>{
         if(subcategory.name.trim()===""){
             Swal.fire({
                 title:t("fill-in-all-fields"),
@@ -55,6 +56,21 @@ function UpdateSubcategory(){
             icon:"error"
         });
     }
+    const subcategorySchema = Yup.object().shape({
+        name: Yup.string().required(t("this-field-is-required"))
+    });
+    const formik = useFormik({
+        initialValues: {
+            name: subcategory.name ||"",
+        },
+        validationSchema: subcategorySchema,
+        onSubmit: handleUpdateSubcategory
+    });
+    useEffect(() => {
+        formik.setValues({
+            name: subcategory.name || "",
+        });
+    }, [subcategory]);
     useEffect(()=>{
         handleGetCategory();
     },[])
@@ -68,13 +84,13 @@ function UpdateSubcategory(){
                     <CardContent>
                         <GoBack />
                             <Grid
-                            component="form"
-                            onSubmit={handleUpdateSubcategory}
-                            autoComplete="off"
-                            flexDirection="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            mt={2}
+                                component="form"
+                                autoComplete="off"
+                                onSubmit={formik.handleSubmit} 
+                                flexDirection="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                mt={2}
                             >
                                 <Grid item xs={12}>
                                     <TextField
@@ -88,6 +104,8 @@ function UpdateSubcategory(){
                                                 name:e.target.value
                                             })
                                         }}
+                                        error={formik.touched.name && Boolean(formik.errors.name)}
+                                        helperText={formik.touched.name && formik.errors.name}
                                     />
                                 </Grid>
                                 <Grid item xs={12} mt={2}>

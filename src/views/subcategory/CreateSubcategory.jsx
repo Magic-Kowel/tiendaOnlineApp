@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
     Container,
@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { createSubcategory } from '../../reducers/subCategory/subCategory';
 import TitlePage from '../../components/TitlePage';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 function CreateSubcategory(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,8 +27,7 @@ function CreateSubcategory(){
         idCategory:idCategory,
         name:""
     });
-    const handleCreateSubcategory = async (e) =>{
-        e.preventDefault();
+    const handleCreateSubcategory = async () =>{
         if(subcategoria.name.trim()===""){
             Swal.fire({
                 title:t("fill-in-all-fields"),
@@ -49,6 +50,21 @@ function CreateSubcategory(){
             icon:"error"
         });
     }
+    const subcategorySchema = Yup.object().shape({
+        name: Yup.string().required(t("this-field-is-required"))
+    });
+    const formik = useFormik({
+        initialValues: {
+            name: subcategoria.name ||"",
+        },
+        validationSchema: subcategorySchema,
+        onSubmit: handleCreateSubcategory
+    });
+    useEffect(() => {
+        formik.setValues({
+            name: subcategoria.name || "",
+        });
+    }, [subcategoria]);
     return(
         <>
             <Container>
@@ -60,11 +76,12 @@ function CreateSubcategory(){
                         <GoBack />
 
                             <Grid
-                            component="form"
-                            onSubmit={handleCreateSubcategory}        
-                            flexDirection="column"
-                            justifyContent="center"
-                            alignItems="center"
+                                component="form"
+                                autoComplete="off"
+                                onSubmit={formik.handleSubmit} 
+                                flexDirection="column"
+                                justifyContent="center"
+                                alignItems="center"
                             mt={2}
                             >
                                 <Grid item xs={12}>
@@ -79,6 +96,8 @@ function CreateSubcategory(){
                                                 name:e.target.value
                                             });
                                         }}
+                                        error={formik.touched.name && Boolean(formik.errors.name)}
+                                        helperText={formik.touched.name && formik.errors.name}
                                     />
                                 </Grid>
                                 <Grid item xs={12} mt={2}>

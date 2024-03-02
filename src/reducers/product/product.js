@@ -18,6 +18,22 @@ export const createProduct = createAsyncThunk(
         }
     }
 );
+export const getProducts = createAsyncThunk(
+    "get/product",
+    async(thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/products`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     products:[],
     loadingProducts:false,
@@ -39,7 +55,21 @@ const materialSlice = createSlice({
             .addCase(createProduct.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
-            }); 
+            });
+        builder
+            .addCase(getProducts.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(getProducts.fulfilled, (state, action) => {
+            state.loading = false;
+            state.products = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getProducts.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
+         
     }
 })
 export default materialSlice.reducer;

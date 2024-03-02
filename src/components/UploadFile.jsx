@@ -1,4 +1,4 @@
-import { useState,useEffect,useRef} from 'react';
+import { useState} from 'react';
 import {
     Button,
     Box,
@@ -7,42 +7,31 @@ import {
 import { colors } from '../stylesConfig';
 import { useTranslation } from 'react-i18next';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import ImagePreviewList from './ImagePreviewList ';
 import PropTypes from 'prop-types';
-const MAX_FILE_SIZE_MB = 20;
-const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"]
+const MAX_FILE_SIZE_MB = 5;
+const ALLOWED_FILE_TYPES = ["image/jpeg","image/jpg", "image/png"]
 function UploadFile({
-    setProduct
+    setSelectedFiles,
+    fileInputRef
 }) {
-    const fileInputRef = useRef(null);
-    const [t] = useTranslation("global");
-    const [selectedFiles, setSelectedFiles] = useState([]);
- 
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
 
-        console.log(selectedFiles);
-        setProduct((prev)=>({
-            ...prev,
-            ...selectedFiles
-        }));
-    }, [selectedFiles]);
-  
+    const [t] = useTranslation("global");
+
+    const [error, setError] = useState(null);
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
     
         // File type validation
         const invalidFileType = files.some(file => !ALLOWED_FILE_TYPES.includes(file.type));
         if (invalidFileType) {
-            setError("Invalid file type. Please upload JPEG, PNG, or GIF images.");
+            setError(t("invalid-file-type"));
             return;
         }
     
         // File size validation
         const invalidFileSize = files.some(file => file.size > MAX_FILE_SIZE_MB * 1024 * 1024);
         if (invalidFileSize) {
-            setError(`File size exceeds ${MAX_FILE_SIZE_MB} MB. Please choose smaller files.`);
+            setError(t("file-size-exceeds", {fileSize: MAX_FILE_SIZE_MB }));
             return;
         }
   
@@ -53,9 +42,26 @@ function UploadFile({
         }));
         setError(null);
     };
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+        // Llamando a handleFileChange para procesar los archivos soltados
+        handleFileChange({ target: { files } });
+    };
+    const preventDefault = (event) => {
+        event.preventDefault();
+    };
     return (
       <>
-        <Box p={3} border="1px dashed #ccc" borderRadius={8} textAlign="center">
+        <Box
+            p={3}
+            border="1px dashed #ccc"
+            borderRadius={8}
+            textAlign="center"
+            onDrop={handleDrop}
+            onDragOver={preventDefault}
+            onDragEnter={preventDefault}
+        >
             <input
                 ref={fileInputRef}
                 type="file"
@@ -65,9 +71,23 @@ function UploadFile({
                 style={{ display: "none" }}
                 id="image-file-input"
             />
-            <label htmlFor="image-file-input">
-                <Button 
-                    variant="outlined" 
+            <label htmlFor="image-file-input"   
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                }}
+            >
+                <FileUploadIcon
+                    sx={{
+                        color:colors.primaryColor,
+                        fontSize:'7rem',
+                    }}
+                
+                />
+                <Button
+                    variant="outlined"
                     component="span"
                     endIcon={<FileUploadIcon />}
                     sx={{
@@ -83,26 +103,18 @@ function UploadFile({
                 >
                     {t("select-images")}
                 </Button>
+                {error && (
+                    <Typography variant="body2" color="error" mt={2}>
+                        {error}
+                    </Typography>
+                )}
             </label>
-            {error && (
-                <Typography variant="body2" color="error" mt={2}>
-                {error}
-                </Typography>
-            )}
         </Box>
-        {
-            selectedFiles.files&&(
-                <ImagePreviewList
-                    listImagens={selectedFiles.files}
-                    setSelectedFiles={setSelectedFiles}
-                    fileInputRef={fileInputRef}
-                />
-            )
-        }
       </>
     );
 }
 UploadFile.propTypes = {
-    setProduct: PropTypes.func.isRequired
+    setSelectedFiles: PropTypes.func.isRequired,
+    fileInputRef: PropTypes.object.isRequired
 };
-  export default UploadFile;
+export default UploadFile;

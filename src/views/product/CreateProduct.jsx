@@ -1,9 +1,14 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useRef } from 'react';
 import {
     Container,
     Grid,
-    Button 
+    Alert,
+    TextField,
+    InputAdornment,
+    Button
 } from '@mui/material';
+import ImagePreviewList from "./../../components/ImagePreviewList "
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
 import FormProduct from './FormProduct';
@@ -13,14 +18,22 @@ import { useFormik } from 'formik';
 import MainCard from '../../components/MainCard';
 import AddSelectSize from './AddSelectSize';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { colors } from '../../stylesConfig';
 import { createProduct } from '../../reducers/product/product';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadFile from '../../components/UploadFile';
+import LoadingButton from '../../components/LoadingButton ';
+import TabHeader from '../../components/TabsSecion/TabHeader';
+import { colors } from '../../stylesConfig';
+import TabPanel from '../../components/TabsSecion/TabPanel';
+import { isValidUrl } from '../../tools/isValidUrl';
 function CreateProduct(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
+    const fileInputRef = useRef(null);
     const {loadingProducts} = useSelector((state)=>state.product);
+    const [urlImagen,setUrlImagen] = useState("");
+    const [urlError,setUrlError] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [product,setProduct] = useState({
         nameProduct:"",
         description:"",
@@ -29,12 +42,11 @@ function CreateProduct(){
         idMaterial:"",
         idGender:"",
         sizesList:[],
-        files: []
+        files: [],
+        imageUrls:[]
     });
     const handleCreate = async ()  =>{
-        console.log(product);
         const formData = new FormData();
-
         // Agregar campos de texto
         formData.append("nameProduct", product.nameProduct);
         formData.append("description", product.description);
@@ -42,15 +54,13 @@ function CreateProduct(){
         formData.append("idSubCategory", product.idSubCategory);
         formData.append("idMaterial", product.idMaterial);
         formData.append("idGender", product.idGender);
-
         // Agregar datos de sizesList
         formData.append("sizesList", JSON.stringify(product.sizesList));
-
+        formData.append("imageUrls", JSON.stringify(product.imageUrls));
         // Agregar archivos
         for (let i = 0; i < product.files.length; i++) {
             formData.append(`files`, product.files[i]);
         }
-
         const response = await dispatch(createProduct(formData));
         if(response.payload.created){
             Swal.fire({
@@ -71,7 +81,10 @@ function CreateProduct(){
         idCategory:Yup.string().required(t("this-field-is-required")),
         idSubCategory:Yup.string().required(t("this-field-is-required")),
         idMaterial:Yup.string().required(t("this-field-is-required")),
-        idGender:Yup.string().required(t("this-field-is-required"))
+        idGender:Yup.string().required(t("this-field-is-required")),
+        files:Yup.array().min(1,t("error-no-images-selected")).required(),
+        sizesList:Yup.array().min(1,t("error-no-size-selected")).required(),
+        imageUrls: Yup.array().of(Yup.string().url('invalid-url-format'))
     });
     const formik = useFormik({
         initialValues: {
@@ -80,23 +93,38 @@ function CreateProduct(){
             idCategory:product.idCategory,
             idSubCategory:product.idSubCategory,
             idMaterial:product.idMaterial,
-            idGender:product.idGender
+            idGender:product.idGender,
+            files:product.files,
+            sizesList:product.sizesList
         },
         validationSchema: createProductSchema, 
         onSubmit: handleCreate,
     });
     useEffect(()=>{
-        console.log("product",product);
         formik.setValues({
             nameProduct:product.nameProduct || "",
             description:product.description || "",
             idCategory:product.idCategory || "",
             idSubCategory:product.idSubCategory || "",
             idMaterial:product.idMaterial || "",
-            idGender:product.idGender || ""
+            idGender:product.idGender || "",
+            files:product.files || [],
+            sizesList:product.sizesList || [],
+            imageUrls:product.imageUrls || []
         });
     },[product]);
+    useEffect(() => {
+        setProduct((prev)=>({
+            ...prev,
+            ...selectedFiles
+        }));
+    }, [selectedFiles]);
+    const [valueTab, setValueTab] = useState(0);
 
+    const handleChangeTap = (event, newValue) => {
+      setValueTab(newValue);
+    };
+    
     return(
         <>
             <Container>
@@ -112,9 +140,125 @@ function CreateProduct(){
                         lg={6}
                         xl={6}
                     >
-                       <UploadFile
-                            setProduct={setProduct}
-                       />
+                        <>
+                            <TabHeader
+                                value={valueTab}
+                                handleChange={handleChangeTap}
+                                listTitles={[t("file"), "URL"]}
+                            />
+                            <TabPanel value={valueTab} index={0}>
+                                <UploadFile
+                                        setSelectedFiles={setSelectedFiles}
+                                        fileInputRef={fileInputRef}
+                                />
+                            </TabPanel>
+                            <TabPanel value={valueTab} index={1}>
+                                <Grid 
+                                    container
+                                    justifyContent="center"
+                                    alignItems="flex-start"
+                                    item
+                                    xs={12}
+                                    sm={13}
+                                    md={12}
+                                    lg={12}
+                                    spacing={1}
+                                    mt={2}
+                                >
+                                    <Grid
+                                        container
+                                        justifyContent="center"
+                                        alignItems="stretch"
+                                        item
+                                        xs={12}
+                                        sm={12}
+                                        md={9}
+                                        lg={9}
+                                    >
+                                        <TextField
+                                            label={t("imagen-url")}
+                                            error={urlError}
+                                            value={urlImagen}
+                                            autoComplete="off"
+                                            onChange={(e) => setUrlImagen(e.target.value)}
+                                            fullWidth
+                                            type="url"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <FileUploadIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                            variant="outlined"
+                                            helperText={urlError ? t("invalid-url-format") : t("upload-image-url")}
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={12}
+                                        md={3}
+                                        lg={3}
+                                        container
+                                        justifyContent="center"
+                                        alignItems="stretch"
+                                    >
+                                        <Button
+                                            fullWidth
+                                            type="submit"
+                                            variant="contained" 
+                                            endIcon={<AddCircleIcon />}
+                                            sx={{
+                                                backgroundColor:colors.primaryColor,
+                                                '&:hover':{
+                                                    backgroundColor:colors.primaryColor
+                                                },
+                                                height:"3.3rem"
+                                            }}
+                                            onClick={() => {
+                                                if (!isValidUrl(urlImagen)) {
+                                                    setUrlError(true);
+                                                    return false;
+                                                }
+                                                setProduct((prev) =>{
+                                                    return ({
+                                                 
+                                                        ...prev,
+                                                        imageUrls: [...(prev.imageUrls ?? []), urlImagen]
+                                                    })
+                                                });
+                                                setUrlError(false);
+                                                setUrlImagen("");
+                                            }}
+                                        >
+                                            {t('add')}
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </TabPanel>
+                        </>
+                        {
+                                ((formik.touched.files && product.imageUrls.length ===0 && Boolean(formik.errors.files))) && (
+                                    <Alert
+                                        variant="filled"
+                                        severity="error"
+                                        sx={{margin:2}}
+                                    >
+                                        {formik.errors.files}
+                                    </Alert>
+                                )
+                        }
+                        <>
+                        {
+                                <ImagePreviewList
+                                    files={selectedFiles?.files || []}
+                                    imageUrls={product?.imageUrls || []}
+                                    setSelectedFiles={setSelectedFiles}
+                                    fileInputRef={fileInputRef}
+                                />
+                        }
+                        </>
                     </Grid>
                     <Grid
                         container
@@ -146,26 +290,27 @@ function CreateProduct(){
                         <AddSelectSize
                             setProduct={setProduct}
                         />
+                        {
+                            formik.touched.sizesList && Boolean(formik.errors.sizesList) && (
+                                <Alert
+                                    variant="filled"
+                                    severity="error"
+                                    sx={{margin:2}}
+                                >
+                                    {formik.errors.sizesList}
+                                </Alert>
+                            )
+                       }
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                        <Button 
-                            fullWidth
-                            variant="contained"
-                            disabled={loadingProducts}
-                            // loading={loadingProducts}
-                            onClick={formik.handleSubmit}
-                            endIcon={<AddCircleIcon />}
-                            size="large"
-                            sx={{
-                                backgroundColor:colors.primaryColor,
-                                '&:hover':{
-                                    backgroundColor:colors.primaryColor
-                                }
-                            }}
+                        <LoadingButton
+                            isLoading={loadingProducts}
+                            click={formik.handleSubmit}
+                            icon={<AddCircleIcon />}
                         >
                             {t('create')}
-                        </Button>
+                        </LoadingButton>
                 </Grid>
             </Container>
         </>

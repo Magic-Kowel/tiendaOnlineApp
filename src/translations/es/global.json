@@ -81,5 +81,14 @@
   "price":"Precio",
   "stock":"Existencias",
   "the-minimum-is":"El mínimo es",
-  "select-images":"Seleccionar imágenes"
+  "select-images":"Seleccionar imágenes",
+  "invalid-file-type":"Tipo de archivo invalido. Por favor cargue JPEG, PNG",
+  "file-size-exceeds":"El tamaño del archivo supera los {{fileSize}} MB. Elija archivos más pequeños.",
+  "error-no-images-selected":"Debes agregar al menos una imagen",
+  "error-no-size-selected":"Debes seleccionar al menos una talla de ropa.",
+  "upload-image-url":"Puedes cargar la URL de la imagen",
+  "imagen-url":"Url de la imagen",
+  "add":"Agregar",
+  "invalid-url-format":"Formato de URL inválida",
+  "file":"Archivo"
 }

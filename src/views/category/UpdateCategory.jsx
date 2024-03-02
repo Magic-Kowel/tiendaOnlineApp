@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { getCategory, updateCategory } from '../../reducers/category/category';
 import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 function UpdateCategory(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,8 +34,7 @@ function UpdateCategory(){
             name: response.payload[0].name
         });
     }
-    const handleUpdateCategory = async (e) =>{
-        e.preventDefault();
+    const handleUpdateCategory = async () =>{
         if(category.name.trim()===""){
             Swal.fire({
                 title:t("fill-in-all-fields"),
@@ -56,6 +57,22 @@ function UpdateCategory(){
             icon:"error"
         });
     }
+    const categorySchema = Yup.object().shape({
+        name: Yup.string().required(t("this-field-is-required"))
+    });
+    const formik = useFormik({
+        initialValues: {
+            name: category.name ||"",
+        },
+        validationSchema: categorySchema,
+        onSubmit: handleUpdateCategory
+    });
+    useEffect(() => {
+        formik.setValues({
+            name: category.name || "",
+        });
+        console.log( category.name );
+    }, [category]);
     useEffect(()=>{
         handleGetCategory();
     },[])
@@ -71,7 +88,7 @@ function UpdateCategory(){
                         <GoBack />
                             <Grid
                                 component="form"
-                                onSubmit={handleUpdateCategory}        
+                                onSubmit={formik.handleSubmit}        
                                 flexDirection="column"
                                 justifyContent="center"
                                 alignItems="center"
@@ -89,6 +106,8 @@ function UpdateCategory(){
                                                 name:e.target.value.trim()
                                             })
                                         })}
+                                        error={formik.touched.name && Boolean(formik.errors.name)}
+                                        helperText={formik.touched.name && formik.errors.name}
                                     />
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
