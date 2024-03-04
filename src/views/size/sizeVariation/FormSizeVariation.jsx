@@ -35,6 +35,7 @@ function FormSizeVariation(){
         'idAgeGroup': '',
         'minAge': '',
         'maxAge': '',
+        'size':'',
         'isChildren': false
     });
     const variationSchema = Yup.object().shape({
@@ -108,6 +109,7 @@ function FormSizeVariation(){
             idAgeGroup: sizeVariationForm.idAgeGroup, // Corregido el nombre aquí
             minAge: sizeVariationForm.minAge,
             maxAge: sizeVariationForm.maxAge,
+            size: sizeVariationForm.size,
             variationValidate: Boolean(variationValidate),
         },
         validationSchema: variationSchema,
@@ -119,6 +121,7 @@ function FormSizeVariation(){
             idAgeGroup: sizeVariationForm.idAgeGroup || "", // Corregido el nombre aquí
             minAge: sizeVariationForm.minAge || "",
             maxAge: sizeVariationForm.maxAge || "",
+            size: sizeVariationForm.size || "",
             variationValidate:Boolean(variationValidate)
         });
     }, [sizeVariationForm,variationValidate]);
@@ -132,6 +135,12 @@ function FormSizeVariation(){
         setSizeVariationForm((prev)=>({
             ...prev,
             maxAge:value.trim()
+        }));
+    }
+    const handleGetZise = (value) =>{
+        setSizeVariationForm((prev)=>({
+            ...prev,
+            size:value.trim()
         }));
     }
     const handleGetAgeGroups = async() =>{
@@ -195,10 +204,11 @@ function FormSizeVariation(){
                                     getData={(newValue) =>
                                         setSizeVariationForm((prevProduct) => ({
                                             ...prevProduct,
-                                            minAge: newValue?.name === "Niño" ? '' : prevProduct?.minAge,
-                                            maxAge: newValue?.name === "Niño" ? '' : prevProduct?.maxAge,
+                                            minAge: newValue?.name === "Infantil" ? '' : prevProduct?.minAge,
+                                            maxAge: newValue?.name === "Infantil" ? '' : prevProduct?.maxAge,
+                                            size: newValue?.name === "Adulto" ? '' : prevProduct?.size,
                                             idAgeGroup: newValue?.idAgeGroup,
-                                            isChildren: newValue?.name === "Niño"? true:false
+                                            isChildren: newValue?.name === "Infantil"? true:false
                                         }))
                                     }
                                     getOptionSearch={(item)=>item.name}
@@ -208,7 +218,7 @@ function FormSizeVariation(){
                                 />
                             </Grid>
                                 {
-                                    sizeVariationForm.isChildren &&(
+                                    sizeVariationForm.isChildren?(
                                         <>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
@@ -229,6 +239,18 @@ function FormSizeVariation(){
                                                 />
                                             </Grid>
                                         </>  
+                                    ):(
+                                        <>
+                                            <Grid item xs={12}>
+                                                <TextFieldNumber
+                                                    value={sizeVariationForm.size}
+                                                    label={t("size-clothe")}
+                                                    onChange={handleGetZise}
+                                                    error={formik.touched.size && Boolean(formik.errors.size)}
+                                                    helperText={formik.touched.size && formik.errors.size}
+                                                />
+                                            </Grid>
+                                        </>
                                     )
                                 }
                             {

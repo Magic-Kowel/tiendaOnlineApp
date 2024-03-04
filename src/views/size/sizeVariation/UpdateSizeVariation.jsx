@@ -45,6 +45,7 @@ function UpdateSizeVariation(){
         'ageGroup':'',
         'minAge':'',
         'maxAge':'',
+        'size':'',
         'isChildren': false
     });
     useEffect(()=>{
@@ -73,6 +74,14 @@ function UpdateSizeVariation(){
                 idSize:sizeVariation[0].idSize,
                 idAgeGroup:sizeVariation[0].idAgeGroup
             }));
+            setSizeVariationForm((prev)=>({
+               ...prev,
+                isChildren:sizeVariation[0].ageGroup === "Infantil" ? true : false,
+                minAge:sizeVariation[0]?.minAge,
+                maxAge:sizeVariation[0]?.maxAge,
+                size:sizeVariation[0]?.size,
+            }));
+            console.log(sizeVariation);
         }
     },[sizeVariation]);
     useEffect(() => {
@@ -97,52 +106,71 @@ function UpdateSizeVariation(){
             maxAge:value.trim()
         }));
     }
-    const handleUpdate = async () =>{
-        if(variationValidate){
-                return
+    const handleGetsize = (value) =>{
+        setSizeVariationForm((prev)=>({
+            ...prev,
+            size:value.trim()
+        }));
+    }
+    const handleUpdate = async () => {
+        if (variationValidate) {
+            return;
         }
-        dispatch(updateSizeVariation(sizeVariationForm));
-        const response = await dispatch(updateSizeVariation(sizeVariationForm));
-        if(response.payload.updated){
+        console.log(sizeVariationForm);
+        let response;
+
+        if (sizeVariationForm.isChildren) {
+            response = await dispatch(updateSizeVariation({ ...sizeVariationForm, size: null }));
+        } else {
+            response = await dispatch(updateSizeVariation({ ...sizeVariationForm, minAge: null, maxAge: null }));
+        }
+        if (response.payload && response.payload.updated) {
             Swal.fire({
-                title:t("successfully-created"),
-                icon:'success',
+                title: t("successfully-created"),
+                icon: 'success',
                 timer: 1500
             });
             await dispatch(cancelVariationValidate());
             navigate(-1);
-            return false;
+        }  else {
+            Swal.fire({
+                title: t("something-went-wrong"),
+                icon: "error"
+            });
         }
-        Swal.fire({
-            title:t("something-went-wrong"),
-            icon:"error"
-        });
-    }
+    };
     const variationSchema = Yup.object().shape({
         idSize: Yup.string().required(t("this-field-is-required")),
         idAgeGroup: Yup.string().required(t("this-field-is-required")),
         // variationValidate: Yup.boolean().isFalse(),
         minAge: Yup.lazy(() => {
-          if (sizeVariationForm.isChildren) {
-            return Yup.string()
-              .required(t("this-field-is-required"))
-              .test('minAge',t( 'minimum-age-cannot-be-higher-maximum-age'), function (minAge) {
-                const maxAge = this.parent.maxAge;
-                return !maxAge || (minAge && parseInt(minAge, 10) <= parseInt(maxAge, 10));
-              });
-          }
-          return Yup.string().notRequired();
+            if (sizeVariationForm.isChildren) {
+                return Yup.string()
+                .required(t("this-field-is-required"))
+                .test('minAge',t( 'minimum-age-cannot-be-higher-maximum-age'), function (minAge) {
+                    const maxAge = this.parent.maxAge;
+                    return !maxAge || (minAge && parseInt(minAge, 10) <= parseInt(maxAge, 10));
+                });
+            }
+            return Yup.string().notRequired();
         }),
         maxAge: Yup.lazy(() => {
-          if (sizeVariationForm.isChildren) {
-            return Yup.string()
-              .required(t("this-field-is-required"))
-              .test('maxAge', t('max-age-must-be-greater-than-min-age'), function (maxAge) {
-                const minAge = this.parent.minAge;
-                return !minAge || (maxAge && parseInt(maxAge, 10) >= parseInt(minAge, 10));
-              });
-          }
-          return Yup.string().notRequired();
+            if (sizeVariationForm.isChildren) {
+                return Yup.string()
+                .required(t("this-field-is-required"))
+                .test('maxAge', t('max-age-must-be-greater-than-min-age'), function (maxAge) {
+                    const minAge = this.parent.minAge;
+                    return !minAge || (maxAge && parseInt(maxAge, 10) >= parseInt(minAge, 10));
+                });
+            }
+            return Yup.string().notRequired();
+        }),
+        size:Yup.lazy(() => {
+            if (!sizeVariationForm.isChildren) {
+                return Yup.string()
+                .required(t("this-field-is-required"))
+            }
+            return Yup.string().notRequired();
         }),
       });
     const formik = useFormik({
@@ -151,6 +179,7 @@ function UpdateSizeVariation(){
             idAgeGroup: sizeVariationForm.idAgeGroup, // Corregido el nombre aquí
             minAge: sizeVariationForm.minAge,
             maxAge: sizeVariationForm.maxAge,
+            size: sizeVariationForm.size,
             // variationValidate:variationValidate,
         },
         validationSchema: variationSchema,
@@ -162,6 +191,7 @@ function UpdateSizeVariation(){
             idAgeGroup: sizeVariationForm.idAgeGroup || "", // Corregido el nombre aquí
             minAge: sizeVariationForm.minAge || "",
             maxAge: sizeVariationForm.maxAge || "",
+            size: sizeVariationForm.size || "",
             // variationValidate: variationValidate 
         });
     }, [sizeVariationForm]);
@@ -224,10 +254,11 @@ function UpdateSizeVariation(){
                                         getData={(newValue) =>
                                             setSizeVariationForm((prev) => ({
                                                 ...prev,
-                                                minAge: newValue?.name === "Niño" ? '' : prev?.minAge,
-                                                maxAge: newValue?.name === "Niño" ? '' : prev?.maxAge,
+                                                // minAge: newValue?.name === "Infantil" ? '' : prev?.minAge,
+                                                // maxAge: newValue?.name === "Infantil" ? '' : prev?.maxAge,
+                                                // size: !newValue?.name === "Infantil" ? '' : prev?.size,
                                                 idAgeGroup: newValue?.idAgeGroup,
-                                                isChildren: newValue?.name === "Niño"? true:false
+                                                isChildren: newValue?.name === "Infantil"? true:false
                                             }))
                                         }
                                         itemKey="idAgeGroup"
@@ -249,11 +280,11 @@ function UpdateSizeVariation(){
                                     )
                                 }
                                 {
-                                    sizeVariationForm.isChildren &&(
+                                    sizeVariationForm.isChildren ===true &&(
                                         <>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
-                                                    value={sizeVariationForm?.minAge}
+                                                    value={String(sizeVariationForm?.minAge)}
                                                     label={t("min-age")}
                                                     onChange={handleGetMinAge}
                                                     error={formik.touched.minAge && Boolean(formik.errors.minAge)}
@@ -262,11 +293,26 @@ function UpdateSizeVariation(){
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
-                                                    value={sizeVariationForm?.maxAge}
+                                                    value={String(sizeVariationForm?.maxAge)}
                                                     label={t("max-age")}
                                                     onChange={handleGetMaxAge}
                                                     error={formik.touched.maxAge && Boolean(formik.errors.maxAge)}
                                                     helperText={formik.touched.maxAge && formik.errors.maxAge}
+                                                />
+                                            </Grid>
+                                        </>
+                                    )
+                                }
+                                {
+                                    sizeVariationForm.isChildren === false &&(
+                                        <>
+                                            <Grid item xs={12}>
+                                                <TextFieldNumber
+                                                    value={sizeVariationForm?.size}
+                                                    label={t("size-clothe")}
+                                                    onChange={handleGetsize}
+                                                    error={formik.touched.size && Boolean(formik.errors.size)}
+                                                    helperText={formik.touched.size && formik.errors.size}
                                                 />
                                             </Grid>
                                         </>

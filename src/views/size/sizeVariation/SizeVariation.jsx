@@ -34,12 +34,19 @@ function SizeVariation(){
             if(item.maxAge && item.minAge){
                 return {
                     ...item,
-                    ageRange: `${item.maxAge} - ${item.minAge}`
+                    ageRange: `${item.minAge} - ${item.maxAge}`
+                }
+            }
+            if(item.size){
+                return {
+                    ...item,
+                    size: item.size
                 }
             } 
             return {
                 ...item,
-                ageRange: t("does-not-apply")
+                ageRange: t("does-not-apply"),
+                size: t("does-not-apply")
             }
         });
         setSizeVariationList(data);
@@ -78,12 +85,14 @@ function SizeVariation(){
         t("size-categories-clothe"),
         t("size-ranges-clothe"),
         t("age-range"),
+        t("size-clothe"),
         t("actions")
     ];
     const listKeys=[
         "nameSize",
         "ageGroup",
-        "ageRange"
+        "ageRange",
+        "size"
     ];
     const listButtons = [
         {

@@ -19,7 +19,7 @@ export const createProduct = createAsyncThunk(
     }
 );
 export const getProducts = createAsyncThunk(
-    "get/product",
+    "get/products",
     async(thunkAPI) =>{
         try {
             const token = sessionStorage.getItem(NAME_TOKEN);
@@ -28,6 +28,22 @@ export const getProducts = createAsyncThunk(
                     "x-access-token": token,
                 }
             });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+export const deleteProduct = createAsyncThunk(
+    "delete/product",
+    async(idProduct,thunkAPI) => {
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.delete(`${API_BASE_URL}/product/${idProduct}`,{
+                headers: {
+                    "x-access-token": token
+                }
+            })
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -66,6 +82,18 @@ const materialSlice = createSlice({
             state.products = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getProducts.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(deleteProduct.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(deleteProduct.fulfilled, (state) => {
+            state.loading = false;
+            })
+            .addCase(deleteProduct.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
             });

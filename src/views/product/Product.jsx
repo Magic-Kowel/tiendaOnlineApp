@@ -1,7 +1,8 @@
-import { useState,useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { getProducts } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
+import {Grid,Container} from '@mui/material';
 function Product(){
     const dispatch = useDispatch();
     const {products} = useSelector((state)=>state.product);
@@ -16,9 +17,31 @@ function Product(){
     },[products]);
     
     return (
-        <ProductCard
-            dataProduct={products}
-        />
+        <Container>
+            <Grid 
+                container
+                spacing={1}
+                alignItems="stretch"
+            >
+                {products.map((product) => (
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={3}
+                        lg={2}
+                        key={product.idProduct}
+                    >
+                        <ProductCard
+                            product={product}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+
+ 
+        
     );
 }
 export default Product;
