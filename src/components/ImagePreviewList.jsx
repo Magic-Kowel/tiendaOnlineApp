@@ -1,4 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import FolderDeleteIcon from '@mui/icons-material/FolderDelete';
 import { useTranslation } from 'react-i18next';
 import {
     IconButton,
@@ -10,6 +11,7 @@ import PropTypes from 'prop-types';
 function ImagePreviewList({
     files,
     imageUrls,
+    listImagenes,
     setSelectedFiles,
     fileInputRef
 }){
@@ -86,6 +88,32 @@ function ImagePreviewList({
                             )
                     })
                 }
+                {!!listImagenes?.length &&
+                    listImagenes.map((item, index) =>{
+                            return(
+                                <ImageListItem key={index}>
+                                    <img
+                                        src={(item.imagen || null)}
+                                        alt={`${item.imagen + 1}`}
+                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                    />
+                                    <Tooltip title={t("permanently-delete")}>
+                                        <IconButton
+                                            color='error'
+                                            onClick={()=>console.log(item)}
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 0
+                                            }}
+                                        >
+                                            <FolderDeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ImageListItem>
+                            )
+                    })
+                }
             </ImageList>
         </>
     )
@@ -93,6 +121,7 @@ function ImagePreviewList({
 ImagePreviewList.propTypes = {
     files: PropTypes.array.isRequired,
     imageUrls: PropTypes.array.isRequired,
+    listImagenes: PropTypes.array,
     setSelectedFiles: PropTypes.func.isRequired,
     fileInputRef: PropTypes.object.isRequired
  

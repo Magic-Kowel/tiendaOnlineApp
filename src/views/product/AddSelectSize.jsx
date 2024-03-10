@@ -24,8 +24,8 @@ function AddSelectSize({
     const [listSelectetSize,setListSelectetSize] = useState([]);
 
     const [productVariation,setProductVariation] = useState({
-        stock:0,
-        price:0
+        stock:"0",
+        price:"0"
     });
     useEffect(()=>{
         dispatch(getSizesVariationDisplay())

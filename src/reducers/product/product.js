@@ -18,12 +18,61 @@ export const createProduct = createAsyncThunk(
         }
     }
 );
+export const updateProduct = createAsyncThunk(
+    "update/product",
+    async(data,thunkAPI) => {
+      try {
+        const token = sessionStorage.getItem(NAME_TOKEN);
+        const response = await axios.patch(`${API_BASE_URL}/product`,data,{
+            headers: {
+                "x-access-token": token,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+);
 export const getProducts = createAsyncThunk(
     "get/products",
     async(thunkAPI) =>{
         try {
             const token = sessionStorage.getItem(NAME_TOKEN);
             const response = await axios.get(`${API_BASE_URL}/products`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+export const getProduct = createAsyncThunk(
+    "get/product",
+    async(idProduct,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/product/${idProduct}`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+export const getProductImagens = createAsyncThunk(
+    "get/product/imagens",
+    async(idProduct,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/product/imagens/${idProduct}`,{
                 headers: {
                     "x-access-token": token,
                 }
@@ -52,13 +101,19 @@ export const deleteProduct = createAsyncThunk(
 );
 const initialState = {
     products:[],
+    imagensProduct:[],
     loadingProducts:false,
     error:null
 }
 const materialSlice = createSlice({
     name:"products",
     initialState:initialState,
-    reducers:{},
+    reducers:{
+        clearImagensLists: (state) => {
+            state.products = [];
+            state.imagensProduct = [];
+        },
+    },
     extraReducers:(builder) =>{
         builder
             .addCase(createProduct.pending, (state) => {
@@ -69,6 +124,18 @@ const materialSlice = createSlice({
             state.loadingProducts = false;
             })
             .addCase(createProduct.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(updateProduct.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(updateProduct.fulfilled, (state) => {
+            state.loadingProducts = false;
+            })
+            .addCase(updateProduct.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
             });
@@ -86,6 +153,32 @@ const materialSlice = createSlice({
             state.error = action.payload;
             });
         builder
+            .addCase(getProduct.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(getProduct.fulfilled, (state, action) => {
+            state.loading = false;
+            state.products = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getProduct.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
+            builder
+            .addCase(getProductImagens.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+            })
+            .addCase(getProductImagens.fulfilled, (state, action) => {
+            state.loading = false;
+            state.imagensProduct = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getProductImagens.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            });
+        builder
             .addCase(deleteProduct.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -99,5 +192,6 @@ const materialSlice = createSlice({
             });
          
     }
-})
+});
+export const { clearImagensLists } = materialSlice.actions;
 export default materialSlice.reducer;

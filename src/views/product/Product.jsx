@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch,useSelector } from "react-redux";
-import { getProducts } from "../../reducers/product/product";
+import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
 import {Grid,Container} from '@mui/material';
 function Product(){
@@ -10,10 +10,11 @@ function Product(){
         await dispatch(getProducts());
     }
     useEffect(()=>{
+        dispatch(clearImagensLists())
         handleGetProducts();
     },[]);
     useEffect(()=>{
-        // console.log("products",products[0]?.urlImagenes.split(","));
+        console.log("products",products[0]?.urlImagenes?.split(","));
     },[products]);
     
     return (
@@ -23,7 +24,7 @@ function Product(){
                 spacing={1}
                 alignItems="stretch"
             >
-                {products.map((product) => (
+                {!!products && products?.map((product) => (
                     <Grid
                         item
                         xs={12}

@@ -5,7 +5,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import FormAutocomplete from '../../components/FormAutocomplete';
 import { useDispatch,useSelector } from "react-redux";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getCategories } from '../../reducers/category/category';
 import { getSubcategories } from '../../reducers/subCategory/subCategory';
@@ -23,6 +23,10 @@ function FormProduct({
     const {subcategories} = useSelector((state)=>state.subcategory);
     const {materials} = useSelector((state)=>state.material);
     const {genders} = useSelector((state)=>state.gender);
+    const [materialDefault,setMaterialDefault] = useState(null);
+    const [gendersDefault,setGenderslDefault] = useState(null);
+    const [subcategoriesDefault,seSubcategoriesDefault] = useState(null);
+    const [categorysDefault,setCategorysDefault] = useState(null)
     useEffect(()=>{
         dispatch(getCategories());
         dispatch(getMaterials());
@@ -42,6 +46,18 @@ function FormProduct({
             }));
         }
     },[subcategories]);
+    useEffect(()=>{
+        setMaterialDefault(()=>materials.find((item)=>item?.idMaterial === product?.idMaterial) || null)
+    },[product]);
+    useEffect(()=>{
+        setGenderslDefault(()=>genders.find((item)=>item?.idGender === product?.idGender) || null)
+    },[product]);
+    useEffect(()=>{
+        setCategorysDefault(()=>categorys.find((item)=>item?.ecodCategoria === product?.idCategory) || null)
+    },[categorys,product]);
+    useEffect(()=>{
+        seSubcategoriesDefault(()=>subcategories.find((item)=>item?.ecodsubcategoria === product?.idSubCategory) || null)
+    },[subcategories,product]);
     return(
         <Grid 
             item
@@ -104,6 +120,7 @@ function FormProduct({
                 lg={12}
             >
                 <FormAutocomplete
+                    valueDefault={categorysDefault}
                     data={categorys}
                     getOptionSearch={(option) => option.tNombre}
                     title={t('search-category')}
@@ -116,6 +133,21 @@ function FormProduct({
                     error={formik.touched.idCategory && Boolean(formik.errors.idCategory)}
                     helperText={formik.touched.idCategory && formik.errors.idCategory}
                 />
+{/* 
+                <FormAutocomplete
+                    valueDefault={materialDefault}
+                    data={materials}
+                    getOptionSearch={(option) => option.nameMaterial}
+                    title={t('search-material')}
+                    getData={(newValue) => 
+                        setProduct((prevProduct) => 
+                        ({ ...prevProduct,
+                            idMaterial: newValue?.idMaterial
+                        })
+                    )}
+                    error={formik.touched.idMaterial && Boolean(formik.errors.idMaterial)}
+                    helperText={formik.touched.idMaterial && formik.errors.idMaterial}
+                /> */}
             </Grid>
             <Grid 
                 item
@@ -125,6 +157,7 @@ function FormProduct({
                 lg={12}
             >
                 <FormAutocomplete
+                    valueDefault={subcategoriesDefault}
                     data={subcategories}
                     getOptionSearch={(option) => option.tNombre}
                     title={t('search-subcategory')}
@@ -146,6 +179,7 @@ function FormProduct({
                 lg={12}
             >
                 <FormAutocomplete
+                    valueDefault={materialDefault}
                     data={materials}
                     getOptionSearch={(option) => option.nameMaterial}
                     title={t('search-material')}
@@ -167,6 +201,7 @@ function FormProduct({
                 lg={12}
             >
                 <FormAutocomplete
+                    valueDefault={gendersDefault}
                     data={genders}
                     getOptionSearch={(option) => option.nameGender}
                     title={t('search-gender')}

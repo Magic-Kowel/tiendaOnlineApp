@@ -69,6 +69,7 @@
   "this-field-is-required":"Este campo es requerido",
   "edit-material":"Editar material",
   "create-new-product":"Crear producto nuevo",
+  "edit-product":"Editar producto",
   "description":"Descripción",
   "search-category":"Buscar categoría",
   "search-subcategory":"Buscar subcategoría",
@@ -90,5 +91,6 @@
   "imagen-url":"Url de la imagen",
   "add":"Agregar",
   "invalid-url-format":"Formato de URL inválida",
-  "file":"Archivo"
+  "file":"Archivo",
+  "permanently-delete":"Eliminar permanentemente"
 }

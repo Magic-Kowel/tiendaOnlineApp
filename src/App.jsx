@@ -31,6 +31,7 @@ const UpdateMaterial = lazy(()=>import("./views/material/UpdateMaterial.jsx"));
 // product
 const Product = lazy(()=>import("./views/product/Product.jsx"));
 const CreateProduct = lazy(()=>import("./views/product/CreateProduct.jsx"));
+const UpdateProduct = lazy(()=>import("./views/product/UpdateProduct.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -78,6 +79,16 @@ function App() {
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
                 <CreateProduct />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
+          } 
+        />
+        <Route path='/product/edit/:idProduct' element={
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <UpdateProduct />
               </MenuAdmin>
             </Suspense>
           </ProtectedRoute>

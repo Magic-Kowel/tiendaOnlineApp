@@ -1,4 +1,13 @@
-import { useState,useEffect,useRef } from 'react';
+import { useDispatch,useSelector } from "react-redux";
+import { 
+    getProduct,
+    getProductImagens,
+    updateProduct
+} from "../../reducers/product/product";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
+import TitlePage from "../../components/TitlePage";
+import { useTranslation } from 'react-i18next';
 import {
     Container,
     Grid,
@@ -7,34 +16,44 @@ import {
     InputAdornment,
     Button
 } from '@mui/material';
-import ImagePreviewList from "../../components/ImagePreviewList"
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useTranslation } from 'react-i18next';
-import TitlePage from '../../components/TitlePage';
-import FormProduct from './FormProduct';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
+import LoadingButton from '../../components/LoadingButton ';
+import MainCard from "../../components/MainCard";
+import FormProduct from "./FormProduct";
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
-import { useFormik } from 'formik';
-import MainCard from '../../components/MainCard';
-import AddSelectSize from './AddSelectSize';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { createProduct } from '../../reducers/product/product';
-import { useDispatch, useSelector } from 'react-redux';
-import UploadFile from '../../components/UploadFile';
-import LoadingButton from '../../components/LoadingButton ';
+import ImagePreviewList from "../../components/ImagePreviewList";
 import TabHeader from '../../components/TabsSecion/TabHeader';
 import { colors } from '../../stylesConfig';
+import UploadFile from '../../components/UploadFile';
 import TabPanel from '../../components/TabsSecion/TabPanel';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { isValidUrl } from '../../tools/isValidUrl';
-function CreateProduct(){
+import GoBack from "../../components/goBack";
+function UpdateProduct(){
     const [t] = useTranslation("global");
+    const params = useParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
-    const {loadingProducts} = useSelector((state)=>state.product);
-    const [urlImagen,setUrlImagen] = useState("");
+    const {products,imagensProduct,loadingProducts} = useSelector((state)=>state.product)
+    const {idProduct} = params;
+    useEffect(()=>{
+        dispatch(getProduct(idProduct))
+        dispatch(getProductImagens(idProduct))
+    },[]);
     const [urlError,setUrlError] = useState(false);
+    const [urlImagen,setUrlImagen] = useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [valueTab, setValueTab] = useState(0);
+
+    const handleChangeTap = (event, newValue) => {
+      setValueTab(newValue);
+    };
     const [product,setProduct] = useState({
+        idProduct:idProduct,
         nameProduct:"",
         description:"",
         idCategory:"",
@@ -43,11 +62,27 @@ function CreateProduct(){
         idGender:"",
         sizesList:[],
         files: [],
-        imageUrls:[]
+        imageUrls:[],
+        listImagenes:[]
     });
-    const handleCreate = async ()  =>{
+    useEffect(()=>{
+        if(products.length > 0){
+            setProduct((prev)=>({
+                ...prev,
+                nameProduct:products[0].nameProduct,
+                description:products[0].description,
+                idCategory:products[0].idCategory,
+                idSubCategory:products[0].idSubcategory,
+                idMaterial:products[0].idMaterial,
+                idGender:products[0].idGender,
+                listImagenes:imagensProduct
+            }))
+        }
+    },[products,imagensProduct]);
+    const handleUpdateProduct = async () =>{
         const formData = new FormData();
         // Agregar campos de texto
+        formData.append("idProduct", idProduct);
         formData.append("nameProduct", product.nameProduct);
         formData.append("description", product.description);
         formData.append("idCategory", product.idCategory);
@@ -55,19 +90,21 @@ function CreateProduct(){
         formData.append("idMaterial", product.idMaterial);
         formData.append("idGender", product.idGender);
         // Agregar datos de sizesList
-        formData.append("sizesList", JSON.stringify(product.sizesList));
         formData.append("imageUrls", JSON.stringify(product.imageUrls));
         // Agregar archivos
         for (let i = 0; i < product.files.length; i++) {
             formData.append(`files`, product.files[i]);
         }
-        const response = await dispatch(createProduct(formData));
-        if(response.payload.created){
+        console.log("product",product);
+        const response = await dispatch(updateProduct(formData));
+        if(response.payload.updated){
             Swal.fire({
-                title:t("successfully-created"),
+                title:t("successfully-updated"),
                 icon:'success',
                 timer: 1500
             });
+ 
+            navigate(-1)
             return false;
         }
         Swal.fire({
@@ -82,21 +119,6 @@ function CreateProduct(){
         idSubCategory:Yup.string().required(t("this-field-is-required")),
         idMaterial:Yup.string().required(t("this-field-is-required")),
         idGender:Yup.string().required(t("this-field-is-required")),
-        sizesList:Yup.array().min(1,t("error-no-size-selected")).required(),
-        files:Yup.lazy(() => {
-            // eslint-disable-next-line no-extra-boolean-cast
-            if (product.imageUrls.length > 0) {
-                return Yup.array().notRequired();
-            }
-            return Yup.array().min(1,t("error-no-images-selected")).required()
-        }),
-        imageUrls:Yup.lazy(() => {
-            // eslint-disable-next-line no-extra-boolean-cast
-            if (product.files.length > 0) {
-                return Yup.array().of(Yup.string().url('invalid-url-format')).notRequired();
-            }
-            return Yup.array().of(Yup.string().url('invalid-url-format')).min(1,t("error-no-images-selected")).required(t("error-no-images-selected"))
-        }),
     });
     const formik = useFormik({
         initialValues: {
@@ -105,13 +127,10 @@ function CreateProduct(){
             idCategory:product.idCategory,
             idSubCategory:product.idSubCategory,
             idMaterial:product.idMaterial,
-            idGender:product.idGender,
-            files:product.files,
-            sizesList:product.sizesList,
-            imageUrls:product.imageUrls
+            idGender:product.idGender
         },
-        validationSchema: createProductSchema, 
-        onSubmit: handleCreate,
+        validationSchema: createProductSchema,
+        onSubmit: handleUpdateProduct,
     });
     useEffect(()=>{
         formik.setValues({
@@ -120,10 +139,7 @@ function CreateProduct(){
             idCategory:product.idCategory || "",
             idSubCategory:product.idSubCategory || "",
             idMaterial:product.idMaterial || "",
-            idGender:product.idGender || "",
-            files:product.files || [],
-            sizesList:product.sizesList || [],
-            imageUrls:product.imageUrls || []
+            idGender:product.idGender || ""
         });
     },[product]);
     useEffect(() => {
@@ -132,17 +148,11 @@ function CreateProduct(){
             ...selectedFiles
         }));
     }, [selectedFiles]);
-    const [valueTab, setValueTab] = useState(0);
-
-    const handleChangeTap = (event, newValue) => {
-      setValueTab(newValue);
-    };
-    
     return(
         <>
             <Container>
                 <TitlePage
-                    title={t("create-new-product")}
+                    title={t("edit-product")}
                 />
                 <Grid container spacing={2}>
                     <Grid 
@@ -153,6 +163,7 @@ function CreateProduct(){
                         lg={6}
                         xl={6}
                     >
+                        <GoBack />
                         <>
                             <TabHeader
                                 value={valueTab}
@@ -250,8 +261,8 @@ function CreateProduct(){
                                     </Grid>
                                 </Grid>
                             </TabPanel>
-                        </>
-                        {
+                            </>
+                            {
                                 ((formik.touched.files && Boolean(formik.errors.files)) || (formik.touched.imageUrls && Boolean(formik.errors.imageUrls))) && (
                                     <Alert
                                         variant="filled"
@@ -262,17 +273,18 @@ function CreateProduct(){
                                         {formik.errors.imageUrls}
                                     </Alert>
                                 )
-                        }
-                        <>
-                        {
+                            }
+                            <>
+                            {
                                 <ImagePreviewList
                                     files={selectedFiles?.files || []}
                                     imageUrls={product?.imageUrls || []}
+                                    listImagenes={product.listImagenes || []}
                                     setSelectedFiles={setSelectedFiles}
                                     fileInputRef={fileInputRef}
                                 />
-                        }
-                        </>
+                            }
+                            </>
                     </Grid>
                     <Grid
                         container
@@ -291,45 +303,19 @@ function CreateProduct(){
                             />
                         </MainCard>
                     </Grid>
-                </Grid>
-                <Grid mt={2} container spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12} 
-                        md={12} 
-                        lg={12}
-                        xl={12}
-                    >
-                        <AddSelectSize
-                            setProduct={setProduct}
-                        />
-                        {
-                            formik.touched.sizesList && Boolean(formik.errors.sizesList) && (
-                                <Alert
-                                    variant="filled"
-                                    severity="error"
-                                    sx={{margin:2}}
-                                >
-                                    {formik.errors.sizesList}
-                                </Alert>
-                            )
-                       }
-                    </Grid>
-                </Grid>
-                <Grid container mt={2} mb={2}>
+                    
                     <Grid item xs={12}>
                             <LoadingButton
                                 isLoading={loadingProducts}
                                 click={formik.handleSubmit}
-                                icon={<AddCircleIcon />}
+                                icon={<EditIcon />}
                             >
-                                {t('create')}
+                                {t('edit')}
                             </LoadingButton>
                     </Grid>
                 </Grid>
             </Container>
         </>
-    );
+    )
 }
-export default CreateProduct;
+export default UpdateProduct
