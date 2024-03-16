@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function ProductCard({product}){
@@ -30,7 +31,9 @@ function ProductCard({product}){
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        if (product?.urlImagenes?.split(',')?.length > 0) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
     };
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -80,22 +83,38 @@ function ProductCard({product}){
                     enableMouseEvents
                     interval={5000}
                 >
-                    {product?.urlImagenes?.split(',')?.map((step, stepIndex) => (
-                        <div key={stepIndex}>
-                            {Math.abs(activeStep - stepIndex) <= 2 ? (
-                                <Box
-                                    component="img"
-                                    sx={{
-                                        display: 'block',
-                                        overflow: 'hidden',
-                                        width: '100%',
-                                    }}
-                                    src={step}
-                                    alt={`Step ${stepIndex}`}
-                                />
-                            ) : null}
-                        </div>
-                    ))}
+                    {
+                        product?.urlImagenes ?(
+                            product?.urlImagenes?.split(',')?.map((step, stepIndex) => (
+                                <div key={stepIndex}>
+                                    {Math.abs(activeStep - stepIndex) <= 2 ? (
+                                        <Box
+                                            component="img"
+                                            sx={{
+                                                display: 'block',
+                                                overflow: 'hidden',
+                                                width: '100%',
+                                            }}
+                                            src={step}
+                                            alt={`Step ${stepIndex}`}
+                                        />
+                                    ) : null}
+                                </div>
+                            ))
+
+                        ):( 
+                            <Box
+                                component="img"
+                                sx={{
+                                    display: 'block',
+                                    overflow: 'hidden',
+                                    width: '100%',
+                                }}
+                                src={imagenNotFound}
+                                alt={`imagen not found`}
+                            />
+                        )
+                    }
                 </AutoPlaySwipeableViews>
                 <MobileStepper
                     steps={maxSteps}
@@ -104,17 +123,15 @@ function ProductCard({product}){
                     nextButton={
                         <Button
                             size="small"
-                            onClick={handleNext}
+                            onClick={ handleNext}
                             disabled={activeStep === maxSteps - 1}
                         >
-                            Next
                             {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                         </Button>
                     }
                     backButton={
                         <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
                             {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                            Back
                         </Button>
                     }
                 />
@@ -124,7 +141,10 @@ function ProductCard({product}){
                     {product.nameProduct}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                    Material: {product.nameMaterial}
+                    {t("material")}: {product.nameMaterial}
+                </Typography>
+                <Typography variant="h6" component="div" gutterBottom>
+                    $ {product.price}
                 </Typography>
             </CardContent>
             <CardActions>

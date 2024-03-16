@@ -195,11 +195,28 @@ export const getSizesVariationDisplay = createAsyncThunk(
         }
     }
 );
+export const getSizeVariationProdruct = createAsyncThunk(
+    "get/sizes/variation/product",
+    async(idProduct,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/size/variation/prodruct/${idProduct}`,{
+                headers: {
+                    "x-access-token": token
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     sizes:[],
     sizeVariation:[],
+    sizeVariationProduct:[],
     variationValidate:false,
-    loading:false,
+    loadingSize:false,
     error:null
 }
 const sizeSlice = createSlice({
@@ -213,154 +230,167 @@ const sizeSlice = createSlice({
     extraReducers:(builder) =>{
         builder
             .addCase(getSizes.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(getSizes.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.sizes = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getSizes.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(getSize.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(getSize.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.sizes = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getSize.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(createSize.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(createSize.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSize = false;
             })
             .addCase(createSize.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(deleteSize.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(deleteSize.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSize = false;
             })
             .addCase(deleteSize.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(updateSize.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(updateSize.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSize = false;
             })
             .addCase(updateSize.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(getSizesVariation.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(getSizesVariation.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.sizeVariation = action.payload.length > 0 ? action.payload : [];
             
             })
             .addCase(getSizesVariation.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             // ... Otros casos ...
             .addCase(createSizesVariation.pending, (state) => {
-                state.loading = true;
+                state.loadingSize = true;
                 state.error = null;
             })
             .addCase(createSizesVariation.fulfilled, (state) => {
-                state.loading = false;
+                state.loadingSize = false;
             })
             .addCase(createSizesVariation.rejected, (state, action) => {
-                state.loading = false;
+                state.loadingSize = false;
                 state.error = action.payload;
             });
         builder
             .addCase(deleteSizesVariation.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(deleteSizesVariation.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSize = false;
             })
             .addCase(deleteSizesVariation.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(getSizeVariation.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(getSizeVariation.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.sizeVariation = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getSizeVariation.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(updateSizeVariation.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(updateSizeVariation.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSize = false;
             })
             .addCase(updateSizeVariation.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(sizeVariationValidate.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(sizeVariationValidate.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.variationValidate = action.payload > 0 ? true : false;
             })
             .addCase(sizeVariationValidate.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.error = action.payload;
             });
         builder
             .addCase(getSizesVariationDisplay.pending, (state) => {
-            state.loading = true;
+            state.loadingSize = true;
             state.error = null;
             })
             .addCase(getSizesVariationDisplay.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
             state.sizeVariation = action.payload.length > 0 ? action.payload : false;
             })
             .addCase(getSizesVariationDisplay.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSize = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(getSizeVariationProdruct.pending, (state) => {
+            state.loadingSize = true;
+            state.error = null;
+            })
+            .addCase(getSizeVariationProdruct.fulfilled, (state, action) => {
+            state.loadingSize = false;
+            state.sizeVariationProduct = action.payload.length > 0 ? action.payload : false;
+            })
+            .addCase(getSizeVariationProdruct.rejected, (state, action) => {
+            state.loadingSize = false;
             state.error = action.payload;
             });
     }

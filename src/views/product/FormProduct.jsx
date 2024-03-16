@@ -133,21 +133,6 @@ function FormProduct({
                     error={formik.touched.idCategory && Boolean(formik.errors.idCategory)}
                     helperText={formik.touched.idCategory && formik.errors.idCategory}
                 />
-{/* 
-                <FormAutocomplete
-                    valueDefault={materialDefault}
-                    data={materials}
-                    getOptionSearch={(option) => option.nameMaterial}
-                    title={t('search-material')}
-                    getData={(newValue) => 
-                        setProduct((prevProduct) => 
-                        ({ ...prevProduct,
-                            idMaterial: newValue?.idMaterial
-                        })
-                    )}
-                    error={formik.touched.idMaterial && Boolean(formik.errors.idMaterial)}
-                    helperText={formik.touched.idMaterial && formik.errors.idMaterial}
-                /> */}
             </Grid>
             <Grid 
                 item

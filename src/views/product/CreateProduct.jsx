@@ -46,6 +46,7 @@ function CreateProduct(){
         imageUrls:[]
     });
     const handleCreate = async ()  =>{
+        console.log("product.sizesList",product.sizesList);
         const formData = new FormData();
         // Agregar campos de texto
         formData.append("nameProduct", product.nameProduct);

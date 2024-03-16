@@ -7,7 +7,10 @@ import {
     ImageList,
     Tooltip
 } from '@mui/material';
+import Swal from 'sweetalert2';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { deleteImagenProduct,getProductImagens } from '../reducers/product/product';
 function ImagePreviewList({
     files,
     imageUrls,
@@ -16,6 +19,7 @@ function ImagePreviewList({
     fileInputRef
 }){
     const [t] = useTranslation("global");
+    const dispatch = useDispatch();
     const handleRemoveFiles = async (index) =>{
         const updatedFiles = [...files];
         updatedFiles.splice(index, 1);
@@ -32,6 +36,33 @@ function ImagePreviewList({
             ...prev,
             imageUrls: updatedFiles,
         }));
+    }
+    const handleDeletePermanently = async (idImagen,idProduct) =>{
+        Swal.fire({
+            title: t("delete-this-image-permanently"),
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: t("delete"),
+            denyButtonText: t("cancel"),
+          }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch((deleteImagenProduct(idImagen)))
+                .then((response)=>{
+                    if(response.payload.delete){
+                        Swal.fire({
+                            title:t("successfully-removed"),
+                            icon:'success'
+                        });
+                        dispatch((getProductImagens(idProduct)))
+                        return false;
+                    }
+                    Swal.fire({
+                        title:t("something-went-wrong"),
+                        icon:"error"
+                    });
+                })
+            }
+        });
     }
     return(
         <>
@@ -100,7 +131,7 @@ function ImagePreviewList({
                                     <Tooltip title={t("permanently-delete")}>
                                         <IconButton
                                             color='error'
-                                            onClick={()=>console.log(item)}
+                                            onClick={()=>handleDeletePermanently(item.idImagen,item.idProduct)}
                                             sx={{
                                                 position: 'absolute',
                                                 top: 0,

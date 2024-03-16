@@ -32,6 +32,7 @@ import TabPanel from '../../components/TabsSecion/TabPanel';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { isValidUrl } from '../../tools/isValidUrl';
 import GoBack from "../../components/goBack";
+import UpdateSelectSize from "../../components/UpdateSelectSize";
 function UpdateProduct(){
     const [t] = useTranslation("global");
     const params = useParams();
@@ -41,8 +42,8 @@ function UpdateProduct(){
     const {products,imagensProduct,loadingProducts} = useSelector((state)=>state.product)
     const {idProduct} = params;
     useEffect(()=>{
-        dispatch(getProduct(idProduct))
-        dispatch(getProductImagens(idProduct))
+        dispatch(getProduct(idProduct));
+        dispatch(getProductImagens(idProduct));
     },[]);
     const [urlError,setUrlError] = useState(false);
     const [urlImagen,setUrlImagen] = useState("");
@@ -91,6 +92,7 @@ function UpdateProduct(){
         formData.append("idGender", product.idGender);
         // Agregar datos de sizesList
         formData.append("imageUrls", JSON.stringify(product.imageUrls));
+        formData.append("sizesList", JSON.stringify(product.sizesList));
         // Agregar archivos
         for (let i = 0; i < product.files.length; i++) {
             formData.append(`files`, product.files[i]);
@@ -119,6 +121,7 @@ function UpdateProduct(){
         idSubCategory:Yup.string().required(t("this-field-is-required")),
         idMaterial:Yup.string().required(t("this-field-is-required")),
         idGender:Yup.string().required(t("this-field-is-required")),
+        sizesList:Yup.array().min(0).required(t("this-field-is-required")),
     });
     const formik = useFormik({
         initialValues: {
@@ -127,7 +130,8 @@ function UpdateProduct(){
             idCategory:product.idCategory,
             idSubCategory:product.idSubCategory,
             idMaterial:product.idMaterial,
-            idGender:product.idGender
+            idGender:product.idGender,
+            sizesList:product.sizesList
         },
         validationSchema: createProductSchema,
         onSubmit: handleUpdateProduct,
@@ -139,7 +143,8 @@ function UpdateProduct(){
             idCategory:product.idCategory || "",
             idSubCategory:product.idSubCategory || "",
             idMaterial:product.idMaterial || "",
-            idGender:product.idGender || ""
+            idGender:product.idGender || "",
+            sizesList:product.sizesList || []
         });
     },[product]);
     useEffect(() => {
@@ -303,7 +308,12 @@ function UpdateProduct(){
                             />
                         </MainCard>
                     </Grid>
-                    
+                    <Grid item xs={12}>
+                        <UpdateSelectSize
+                            setProduct={setProduct}
+                            idProduct={idProduct} 
+                        />
+                    </Grid>
                     <Grid item xs={12}>
                             <LoadingButton
                                 isLoading={loadingProducts}

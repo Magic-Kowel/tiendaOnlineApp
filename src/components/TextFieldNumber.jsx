@@ -15,6 +15,7 @@ function TextFieldNumber({
         <TextField
           label={label}
           fullWidth
+          margin="dense"
           type="text"
           value={value}
           onChange={handleInputChange}

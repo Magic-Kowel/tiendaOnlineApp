@@ -92,5 +92,9 @@
   "add":"Agregar",
   "invalid-url-format":"Formato de URL inválida",
   "file":"Archivo",
-  "permanently-delete":"Eliminar permanentemente"
+  "permanently-delete":"Eliminar permanentemente",
+  "delete-this-image-permanently":"Deseas eliminar esta imagen permanentemente",
+  "main":"Principal",
+  "yes":"Si",
+  "Not":"No"
 }

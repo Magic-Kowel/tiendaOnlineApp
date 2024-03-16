@@ -99,6 +99,22 @@ export const deleteProduct = createAsyncThunk(
         }
     }
 );
+export const deleteImagenProduct = createAsyncThunk(
+    "delete/imagen/product",
+    async(idImagen,thunkAPI) => {
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.delete(`${API_BASE_URL}/product/imagen/${idImagen}`,{
+                headers: {
+                    "x-access-token": token
+                }
+            })
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     products:[],
     imagensProduct:[],
@@ -141,53 +157,53 @@ const materialSlice = createSlice({
             });
         builder
             .addCase(getProducts.pending, (state) => {
-            state.loading = true;
+            state.loadingProducts = true;
             state.error = null;
             })
             .addCase(getProducts.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.products = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getProducts.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.error = action.payload;
             });
         builder
             .addCase(getProduct.pending, (state) => {
-            state.loading = true;
+            state.loadingProducts = true;
             state.error = null;
             })
             .addCase(getProduct.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.products = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getProduct.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.error = action.payload;
             });
             builder
             .addCase(getProductImagens.pending, (state) => {
-            state.loading = true;
+            state.loadingProducts = true;
             state.error = null;
             })
             .addCase(getProductImagens.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.imagensProduct = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getProductImagens.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingProducts = false;
             state.error = action.payload;
             });
         builder
-            .addCase(deleteProduct.pending, (state) => {
-            state.loading = true;
+            .addCase(deleteImagenProduct.pending, (state) => {
+            state.loadingProducts = true;
             state.error = null;
             })
-            .addCase(deleteProduct.fulfilled, (state) => {
-            state.loading = false;
+            .addCase(deleteImagenProduct.fulfilled, (state) => {
+            state.loadingProducts = false;
             })
-            .addCase(deleteProduct.rejected, (state, action) => {
-            state.loading = false;
+            .addCase(deleteImagenProduct.rejected, (state, action) => {
+            state.loadingProducts = false;
             state.error = action.payload;
             });
          

@@ -11,6 +11,7 @@ import { colors } from "../../stylesConfig";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import DeleteIcon from '@mui/icons-material/Delete';
+import StarIcon from '@mui/icons-material/Star';
 import TextFieldNumber from "../../components/TextFieldNumber"
 import PropTypes from 'prop-types';
 function AddSelectSize({
@@ -22,7 +23,6 @@ function AddSelectSize({
     const [size,setSize] = useState(null);
     const [sizes,setSizes] = useState([])
     const [listSelectetSize,setListSelectetSize] = useState([]);
-
     const [productVariation,setProductVariation] = useState({
         stock:"0",
         price:"0"
@@ -34,18 +34,23 @@ function AddSelectSize({
         if (listSelectetSize.length) {
             const newArray = sizes.filter(obj1 => !listSelectetSize.some(obj2 => obj2.idSizeVariation === obj1.idSizeVariation));
             setSizes(newArray);
-            setProduct((prev)=>({
-                ...prev,
-                sizesList: [
-                ...prev.sizesList,
-                {
-                    idSizeVariation:listSelectetSize[0].idSizeVariation,
-                    price:productVariation.price,
-                    stock:productVariation.stock
-                }]
-            }))
+
+            // const isUnique = listSelectetSize.some((item)=>item.idSizeVariation ===idSizeVariation);
+            // if(!isUnique){
+            //     setProduct((prev)=>({
+            //         ...prev,
+            //         sizesList: [
+            //         ...prev.sizesList,
+            //         {
+            //             idSizeVariation:listSelectetSize[0].idSizeVariation,
+            //             price:productVariation.price,
+            //             stock:productVariation.stock,
+            //             isMain:productVariation.isMain
+            //         }]
+            //     }))
+            // }
         }
-      }, [listSelectetSize]);
+    }, [listSelectetSize]);
     useEffect(()=>{
         setSizes(sizeVariation);
     },[sizeVariation]);
@@ -60,12 +65,23 @@ function AddSelectSize({
         t("size-ranges-clothe"),
         t("price"),
         t("stock"),
-        t("delete")
+        t("main"),
+        t("actions")
     ];
     const handleAddSizeList = ()=>{
         if(size){
             setListSelectetSize(prevList => [...prevList, {...size ,...productVariation}]);
             setSize(null);
+            setProduct((prev)=>({
+                ...prev,
+                sizesList: [
+                ...prev.sizesList,
+                {
+                    idSizeVariation:size.idSizeVariation,
+                    price:productVariation.price,
+                    stock:productVariation.stock
+                }]
+            }))
             formik.resetForm();
         }
     }
@@ -74,12 +90,32 @@ function AddSelectSize({
         setListSelectetSize(newArray);
         const elementoEspecifico = sizeVariation.find(obj => obj.idSizeVariation === idSizeVariation);
         if (elementoEspecifico) {
-          setSizes(prevSizes => [
-            ...prevSizes,
-            elementoEspecifico
-        ]);
+            setSizes(prevSizes => [
+                ...prevSizes,
+                elementoEspecifico
+            ]);
         }
         setSize(null);
+    }
+    const handleMainSize = (idSizeVariation) =>{
+        console.log(idSizeVariation);
+        setProduct((prev)=>({
+            ...prev,
+            sizesList: [
+            ...prev.sizesList.map((size)=>({
+                ...size,
+                isMain: size?.idSizeVariation === idSizeVariation ? true : false
+            }))]
+        }))
+        const updatedSizes = listSelectetSize.map(item => ({
+            ...item,
+            textMain: item?.idSizeVariation === idSizeVariation ? "si" : "no",
+            isMain: item?.idSizeVariation === idSizeVariation ? true : false
+        }));
+
+       
+        setListSelectetSize(updatedSizes);
+        console.log("updatedSizes",updatedSizes);
     }
     const selectSizeSchema = Yup.object().shape({
         sizeVariation: Yup.string().required(t("this-field-is-required")),
@@ -110,6 +146,12 @@ function AddSelectSize({
             onClick: (idSizeVariation) => handleRemoveSizeList(idSizeVariation),
             icon: <DeleteIcon />,
             color:"error"
+        },
+        {
+            tooltipTitle: t("main"),
+            onClick: (idSizeVariation) => handleMainSize(idSizeVariation),
+            icon: <StarIcon />,
+            color:"warning"
         }
     ];
     return(<>
@@ -181,7 +223,7 @@ function AddSelectSize({
                 <Grid item xs={12}>
                     <DataTable
                         listTitles={listTitles}
-                        listKeys={["nameSize","ageGroup","price","stock"]}
+                        listKeys={["nameSize","ageGroup","price","stock","textMain"]}
                         dataList={listSelectetSize}
                         listButtons={listButtons}
                         id="idSizeVariation"
