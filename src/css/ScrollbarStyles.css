@@ -1,0 +1,19 @@
+/* CSS personalizado para el scrollbar */
+::-webkit-scrollbar {
+    width: 10px; /* Ancho del scrollbar */
+}
+
+/* Color del fondo del scrollbar */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Color del thumb (la barra de desplazamiento en sí) */
+::-webkit-scrollbar-thumb {
+    background: #34dbeb;
+}
+
+/* Estilo del thumb cuando está hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

@@ -47,7 +47,7 @@
   "submenu":"Submenú",
   "url":"Url",
   "edit-submenu":"Editar submenú",
-  "menu":"Menu",
+  "menu":"Menú",
   "size-clothes":"Tallas",
   "size-clothe":"Talla",
   "create-size-clothes":"Crear talla",
@@ -96,5 +96,10 @@
   "delete-this-image-permanently":"Deseas eliminar esta imagen permanentemente",
   "main":"Principal",
   "yes":"Si",
-  "Not":"No"
+  "Not":"No",
+  "no-records-found":"No se han encontrado registros",
+  "please-edit-the-data":"Por favor edité los datos",
+  "search-products":"Buscar productos",
+  "users":"Usuarios",
+  "create-user":"Crear usuario"
 }

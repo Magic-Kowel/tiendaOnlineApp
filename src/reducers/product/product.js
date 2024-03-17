@@ -37,10 +37,13 @@ export const updateProduct = createAsyncThunk(
 );
 export const getProducts = createAsyncThunk(
     "get/products",
-    async(thunkAPI) =>{
+    async (data, thunkAPI) => {
         try {
             const token = sessionStorage.getItem(NAME_TOKEN);
-            const response = await axios.get(`${API_BASE_URL}/products`,{
+            const response = await axios.get(`${API_BASE_URL}/products/${data.page}`, {
+                params: {
+                    nameProduct: data.nameProduct
+                },
                 headers: {
                     "x-access-token": token,
                 }

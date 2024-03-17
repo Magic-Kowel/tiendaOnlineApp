@@ -40,12 +40,10 @@ function DataTable({
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {listTitles.map((title,index)=>(
-                                    <>
-                                        <TableCell align="center" key={index}>
-                                            {title}
-                                        </TableCell>
-                                    </>
+                                {listTitles.map((title, index) => (
+                                    <TableCell align="center" key={`${title}-${index}`}>
+                                        {title}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
@@ -53,9 +51,9 @@ function DataTable({
                             {dataList
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row,index) => (
-                                <TableRow hover key={index} tabIndex={-1}>
-                                    {listKeys.map((key) => (
-                                        <TableCell align="center" key={key}>
+                                <TableRow hover key={`${id}-${index}`} tabIndex={-1}>
+                                    {listKeys.map((key, index) => (
+                                        <TableCell align="center" key={`${key}-${index}`}>
                                             {row[key]}
                                         </TableCell>
                                     ))}

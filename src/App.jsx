@@ -32,6 +32,9 @@ const UpdateMaterial = lazy(()=>import("./views/material/UpdateMaterial.jsx"));
 const Product = lazy(()=>import("./views/product/Product.jsx"));
 const CreateProduct = lazy(()=>import("./views/product/CreateProduct.jsx"));
 const UpdateProduct = lazy(()=>import("./views/product/UpdateProduct.jsx"));
+// Users
+const Users = lazy(()=>import("./views/user/Users.jsx"));
+const CrearUser = lazy(()=>import("./views/user/CrearUser.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -258,6 +261,24 @@ function App() {
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
                 <UpdateMaterial />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
+        } />
+        <Route path="/user" element={
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Users />
+              </MenuAdmin>
+            </Suspense>
+          </ProtectedRoute>
+        } />
+        <Route path="/user/create" element={
+          <ProtectedRoute>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <CrearUser />
               </MenuAdmin>
             </Suspense>
           </ProtectedRoute>

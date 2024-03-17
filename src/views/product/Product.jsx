@@ -1,24 +1,36 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
-import {Grid,Container} from '@mui/material';
+import {
+    Grid,
+    Container
+} from '@mui/material';
 import CardSkeleton from "../../components/skeleton/CardSkeleton";
+import PaginationBar from "../../components/PaginationBar";
+import NoRecordsFound from "../../components/NoRecordsFound";
+import SearchInput from "../../components/SearchInput";
 function Product(){
     const dispatch = useDispatch();
     const {products,loadingProducts} = useSelector((state)=>state.product);
+    const [page, setPage] = useState(1);
+    const [searchProduct,setSearchProduct] = useState("");
     const handleGetProducts = async () =>{
-        await dispatch(getProducts());
+        await dispatch(getProducts({
+            page:page,
+            nameProduct:searchProduct
+        }));
     }
     useEffect(()=>{
         dispatch(clearImagensLists())
         handleGetProducts();
-    },[]);
- 
-    
+    },[page,searchProduct]);
     return (
         <Container>
-            <Grid 
+            <SearchInput
+                setSearchProduct={setSearchProduct}
+            />
+            <Grid
                 container
                 spacing={1}
                 alignItems="stretch"
@@ -50,10 +62,29 @@ function Product(){
                     </Grid>
                 ))}
             </Grid>
-        </Container>
-
+            {products.length ===0 &&(
+                <NoRecordsFound />
+            )}
  
-        
+            <Grid 
+                container
+                alignItems="flex-end"
+                my={4}
+            >
+                <Grid
+                    item
+                    container
+                    alignItems="flex-end"
+                    display="flex" justifyContent="center" 
+                    xs={12}
+                >
+                    <PaginationBar
+                    setPage={setPage}
+                    page={page}
+                    />
+                </Grid>
+            </Grid>
+        </Container>
     );
 }
 export default Product;

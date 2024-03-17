@@ -6,6 +6,7 @@ import {
     DialogContent,
     Button
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import TextFieldNumber from '../TextFieldNumber';
 function ModalChangepriceStock({
@@ -14,6 +15,7 @@ function ModalChangepriceStock({
         productVariationSelect,
         setListUpdateSize
     }){
+    const [t] = useTranslation("global");
     const [price, setPrice] = useState(0);
     const [stock, setStock] = useState(0);
     useEffect(()=>{
@@ -40,25 +42,25 @@ function ModalChangepriceStock({
     return(
         <div>
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Enter Numbers</DialogTitle>
+            <DialogTitle>{t("please-edit-the-data")}</DialogTitle>
             <DialogContent>
                 <TextFieldNumber
-                    label="Price"
+                    label={t("price")}
                     value={price}
                     onChange={setPrice}
                 />
                 <TextFieldNumber
-                    label="Stock"
+                    label={t("stock")}
                     value={stock}
                     onChange={setStock}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button onClick={handleSubmit} color="primary">
-                    Submit
+                    {t("edit")}
                 </Button>
             </DialogActions>
         </Dialog>

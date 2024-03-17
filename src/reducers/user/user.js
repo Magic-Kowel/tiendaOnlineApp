@@ -1,7 +1,6 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_BASE_URL } from "../../config";
-
+import { API_BASE_URL,NAME_TOKEN } from "../../config";
 export const validateEmail = createAsyncThunk(
   "validate/email",
   async (email, thunkAPI) => {
@@ -77,10 +76,26 @@ export const getMenuUser = createAsyncThunk(
     }
   }
 )
+export const createMaterial = createAsyncThunk(
+  "create/user/admind",
+  async(data,thunkAPI) =>{
+      try {
+          const token = sessionStorage.getItem(NAME_TOKEN);
+          const response = await axios.post(`${API_BASE_URL}/user/create`,data,{
+              headers: {
+                  "x-access-token": token
+              }
+          });
+          return response.data;
+      } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+      }
+  }
+);
 const initialState = {
   users: [],
-  loading: false,
-  error: null,
+  loadingUser: false,
+  errorUser: null,
 }
 const productSlice = createSlice({
     name: "user",
@@ -92,7 +107,7 @@ const productSlice = createSlice({
           state.loading = true;
           state.error = null;
         })
-        .addCase(createUser.fulfilled, (state, action) => {
+        .addCase(createUser.fulfilled, (state) => {
           state.loading = false;
         })
         .addCase(createUser.rejected, (state, action) => {
