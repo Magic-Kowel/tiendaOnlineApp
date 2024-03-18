@@ -18,6 +18,7 @@ function GoBack(){
                 startIcon={<ArrowBackIcon />}
                 onClick={goBackPage}
                 sx={{
+                    my:2,
                     backgroundColor:colors.primaryColor,
                     '&:hover':{
                         backgroundColor:colors.primaryColor

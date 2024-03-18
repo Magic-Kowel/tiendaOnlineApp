@@ -50,7 +50,7 @@ return(
           <Card sx={{width:"30rem"}}>
             <CardContent>
               <Typography variant="h4" align="center" gutterBottom>
-                {t("validate-user")} {user[0]?.tNombre}
+                {t("validate-user")} {user[0]?.nameUser}
               </Typography>
               <form onSubmit={validateUserForm} autoComplete="off" >
                 <Grid container spacing={2} direction="column">

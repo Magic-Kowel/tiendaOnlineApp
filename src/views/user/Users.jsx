@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../../reducers/user/user';
+import { getUsers, deleteUser } from '../../reducers/user/user';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router";
+import Swal from 'sweetalert2';
 import {
     Grid,
     Container
@@ -14,6 +16,7 @@ import SearchAutoComplete from '../../components/SearchAutoComplete';
 function Users(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [usersList,setUsersList] = useState([])
     const {users} = useSelector((state)=>state.user);
     useEffect(()=>{
@@ -22,6 +25,34 @@ function Users(){
     useEffect(()=>{
         setUsersList(users)
     },[users]);
+    const handleDeleteUser = async (idUser) =>{
+        Swal.fire({
+            title: t("want-to-delete-material"),
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: t("delete"),
+            denyButtonText: t("cancel"),
+        }).then((result) => {
+            console.log(3);
+            if (result.isConfirmed) {
+                dispatch(deleteUser(idUser))
+                .then((response)=>{
+                    if(response.payload.delete){
+                        Swal.fire({
+                            title:t("successfully-removed"),
+                            icon:'success'
+                        });
+                        dispatch(getUsers());
+                        return false;
+                    }
+                    Swal.fire({
+                        title:t("something-went-wrong"),
+                        icon:"error"
+                    });
+                })
+            }
+        });
+    }
     const listTitles=[
         t("name"),
         t("last-name"),
@@ -35,13 +66,13 @@ function Users(){
     const listButtons = [
         {
             tooltipTitle: t("delete"),
-            onClick: (idUser) => console.log(idUser),
+            onClick: (idUser) => handleDeleteUser(idUser),
             icon: <DeleteIcon />,
             color:"error"
         },
         {
             tooltipTitle: t("update"),
-            onClick: (idUser) => console.log(idUser),
+            onClick: (idUser) => navigate(`edit/${idUser}`),
             icon: <EditIcon />,
             color:"warning"
         }

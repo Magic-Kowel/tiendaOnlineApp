@@ -1,4 +1,5 @@
 import { useState,useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     Grid,
     Container,
@@ -6,28 +7,44 @@ import {
     Button
 } from '@mui/material';
 import Swal from 'sweetalert2';
-import { useDispatch } from 'react-redux';
+import GoBack from '../../components/goBack';
+import { useDispatch,useSelector } from 'react-redux';
 import { colors } from '../../stylesConfig';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
-import { createUserAdmind } from '../../reducers/user/user';
-import { validateEmail } from '../../reducers/user/user';
-function CrearUser(){
+
+import { validateEmailExist, getUser,updateUser } from '../../reducers/user/user';
+function UpdateUser(){
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [t] = useTranslation("global");
+    const {users} = useSelector((state)=>state.user);
+    const params = useParams();
+    const { idUser } = params;
+
     const [isRepitEmail,setIsRepitEmail] = useState(false);
     const [userForm, setUserForm] = useState({
+        idUser:idUser,
         nameUser:"",
         lastName:"",
         email:"",
-        birthDate:""
+        birthdate:""
     })
+    const handleGetUser = async () =>{
+        await dispatch(getUser(idUser));
+    }
+    useEffect(()=>{
+        handleGetUser();
+    },[])
+    useEffect(()=>{
+        setUserForm(users[0]);
+    },[users])
     const userSchema = Yup.object().shape({
         nameUser: Yup.string().required(t("this-field-is-required")),
         lastName: Yup.string().required(t("this-field-is-required")),
-        birthDate: Yup.date().required(t("this-field-is-required")),
+        birthdate: Yup.string().required(t("this-field-is-required")),
         email: Yup.lazy(() => {
             return Yup.string().email(t("please-enter-valid-email")).required(t("this-field-is-required"))
                 .test('email',t("email-has-already-been-registered"), function () {
@@ -35,15 +52,15 @@ function CrearUser(){
                 });
         }),
     });
-    const handleCreateUser = async () =>{
-        const response = await dispatch(createUserAdmind(userForm))
-        if(response.payload.created){
+    const handleUpdateUser = async () =>{
+        const response = await dispatch(updateUser(userForm));
+        if(response.payload.updated){
             Swal.fire({
-                title:t("successfully-created"),
+                title:t("successfully-updated"),
                 icon:'success',
                 timer: 1500
             });
-            formik.resetForm();
+            navigate(-1);
             return false;
         }
         Swal.fire({
@@ -53,34 +70,40 @@ function CrearUser(){
     }
     const formik = useFormik({
         initialValues: {
-            nameUser: userForm.nameUser ||"",
-            lastName: userForm.lastName ||"",
-            email: userForm.email ||"",
-            birthDate: userForm.birthDate ||"",
+            nameUser: userForm?.nameUser ||"",
+            lastName: userForm?.lastName ||"",
+            email: userForm?.email ||"",
+            birthdate: userForm?.birthdate ||"",
         },
         validationSchema: userSchema,
-        onSubmit: handleCreateUser
+        onSubmit: handleUpdateUser
     });
     useEffect(() => {
         formik.setValues({
-            nameUser: userForm.nameUser ||"",
-            lastName: userForm.lastName ||"",
-            email: userForm.email ||"",
-            birthDate: userForm.birthDate ||"",
+            nameUser: userForm?.nameUser ||"",
+            lastName: userForm?.lastName ||"",
+            email: userForm?.email ||"",
+            birthdate: userForm?.birthdate ||"",
         });
     }, [userForm]);
     const handleValidateEmail = async () =>{
-        const isValidate =  await dispatch(validateEmail(userForm.email));
-        setIsRepitEmail(isValidate.payload.exists)
+        if(userForm?.email && idUser){
+            const isValidate =  await dispatch(validateEmailExist({
+                email:userForm?.email,
+                idUser:idUser
+            }));
+            setIsRepitEmail(isValidate.payload.exists);
+        }
     }
     useEffect(()=>{
         handleValidateEmail();
-    },[userForm.email])
+    },[userForm?.email])
     return(
         <Container>
             <TitlePage 
-                title={t("create-user")}
+                title={t("edit-user")}
             />
+            <GoBack />
             <Grid 
                 container 
                 spacing={2}
@@ -92,11 +115,11 @@ function CrearUser(){
                     <TextField
                         fullWidth
                         label={t("name")}
-                        value={userForm.nameUser}
+                        value={userForm?.nameUser}
                         onChange={(e)=>{
                             setUserForm((prev)=>({
                                 ...prev,
-                                nameUser:e.target.value
+                                nameUser:e.target.value.trim()
                             }))
                         }}
                         error={formik.touched.nameUser && Boolean(formik.errors.nameUser)}
@@ -107,11 +130,11 @@ function CrearUser(){
                     <TextField
                         fullWidth
                         label={t("last-name")}
-                        value={userForm.lastName}
+                        value={userForm?.lastName}
                         onChange={(e)=>{
                             setUserForm((prev)=>({
                                 ...prev,
-                                lastName:e.target.value
+                                lastName:e.target.value.trim()
                             }))
                         }}
                         error={formik.touched.lastName && Boolean(formik.errors.lastName)}
@@ -122,11 +145,11 @@ function CrearUser(){
                     <TextField
                         fullWidth
                         label={t("email")}
-                        value={userForm.email}
+                        value={userForm?.email}
                         onChange={(e)=>{
                             setUserForm((prev)=>({
                                 ...prev,
-                                email:e.target.value
+                                email:e.target.value.trim()
                             }))
                         }}
                         error={formik.touched.email && Boolean(formik.errors.email)}
@@ -145,15 +168,15 @@ function CrearUser(){
                         type="date"
                         fullWidth
                         label={t("birth-date")}
-                        value={userForm.birthDate}
+                        value={userForm?.birthdate}
                         onChange={(e)=>{
                             setUserForm((prev)=>({
                                 ...prev,
-                                birthDate:e.target.value
+                                birthdate:e.target.value.trim()
                             }))
                         }}
-                        error={formik.touched.birthDate && Boolean(formik.errors.birthDate)}
-                        helperText={formik.touched.birthDate && formik.errors.birthDate}
+                        error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
+                        helperText={formik.touched.birthdate && formik.errors.birthdate}
                     />
                 </Grid>
                 <Grid item sm={12} md={12} lg={12}>
@@ -168,11 +191,11 @@ function CrearUser(){
                             }
                         }}
                     >
-                            {t("create")}
+                            {t("edit")}
                     </Button>
                 </Grid>
             </Grid>
         </Container>
     )
 }
-export default CrearUser
+export default UpdateUser;

@@ -12,6 +12,17 @@ export const validateEmail = createAsyncThunk(
     }
   }
 )
+export const validateEmailExist = createAsyncThunk(
+  "validate/email/exist",
+  async (data, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/user/email/${data.email}/${data.idUser}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 export const createUser = createAsyncThunk(
   "create/user",
   async (data, thunkAPI) => {
@@ -76,16 +87,48 @@ export const getMenuUser = createAsyncThunk(
     }
   }
 )
-export const createMaterial = createAsyncThunk(
+export const createUserAdmind = createAsyncThunk(
   "create/user/admind",
   async(data,thunkAPI) =>{
       try {
           const token = sessionStorage.getItem(NAME_TOKEN);
-          const response = await axios.post(`${API_BASE_URL}/user/create`,data,{
+          const response = await axios.post(`${API_BASE_URL}/user/admind`,data,{
               headers: {
                   "x-access-token": token
               }
           });
+          return response.data;
+      } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+      }
+  }
+);
+export const updateUser = createAsyncThunk(
+  "update/user",
+  async(data,thunkAPI) =>{
+      try {
+          const token = sessionStorage.getItem(NAME_TOKEN);
+          const response = await axios.patch(`${API_BASE_URL}/user/admind`,data,{
+              headers: {
+                  "x-access-token": token
+              }
+          });
+          return response.data;
+      } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+      }
+  }
+);
+export const deleteUser = createAsyncThunk(
+  "delete/user",
+  async(idUser,thunkAPI) => {
+      try {
+          const token = sessionStorage.getItem(NAME_TOKEN);
+          const response = await axios.delete(`${API_BASE_URL}/user/delete/${idUser}`,{
+              headers: {
+                  "x-access-token": token
+              }
+          })
           return response.data;
       } catch (error) {
           return thunkAPI.rejectWithValue(error.response.data);
@@ -104,28 +147,41 @@ const productSlice = createSlice({
     extraReducers: (builder) => {
       builder
         .addCase(createUser.pending, (state) => {
-          state.loading = true;
-          state.error = null;
+          state.loadingUser = true;
+          state.errorUser = null;
         })
         .addCase(createUser.fulfilled, (state) => {
-          state.loading = false;
+          state.loadingUser = false;
         })
         .addCase(createUser.rejected, (state, action) => {
-          state.loading = false;
-          state.error = action.payload;
+          state.loadingUser = false;
+          state.errorUser = action.payload;
         });
       builder
         .addCase(getUsers.pending, (state) => {
-          state.loading = true;
-          state.error = null;
+          state.loadingUser = true;
+          state.errorUser = null;
         })
         .addCase(getUsers.fulfilled, (state, action) => {
-          state.loading = false;
+          state.loadingUser = false;
           state.users = action.payload.length > 0 ? action.payload : [];
         })
         .addCase(getUsers.rejected, (state, action) => {
-          state.loading = false;
-          state.error = action.payload;
+          state.loadingUser = false;
+          state.errorUser = action.payload;
+        });
+      builder
+        .addCase(getUser.pending, (state) => {
+          state.loadingUser = true;
+          state.errorUser = null;
+        })
+        .addCase(getUser.fulfilled, (state, action) => {
+          state.loadingUser = false;
+          state.users = action.payload.length > 0 ? action.payload : [];
+        })
+        .addCase(getUser.rejected, (state, action) => {
+          state.loadingUser = false;
+          state.errorUser = action.payload;
         });
     },
 });
