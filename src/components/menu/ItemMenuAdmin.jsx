@@ -8,7 +8,7 @@ import {
     AccordionDetails
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import '@fortawesome/fontawesome-free/css/all.css';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
 function ItemMenuAdmin({ item }) {
@@ -31,7 +31,7 @@ function ItemMenuAdmin({ item }) {
                         <ListItemButton onClick={()=>handleNavigateMenu(submenu.url)} 
                         key={submenu.name}>
                             <ListItemIcon>
-                                <PowerSettingsNewIcon />
+                                <i className={submenu.icon}></i>
                             </ListItemIcon>
                             <ListItemText primary={submenu.name} />
                         </ListItemButton>

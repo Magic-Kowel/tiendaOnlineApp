@@ -6,6 +6,7 @@ const Singup = lazy(() => import('./views/Singup.jsx'));
 const Signin = lazy(()=> import('./views/Signin.jsx'));
 const NotFound = lazy(()=>import('./views/NotFound.jsx'));
 const ValidateUser = lazy(()=>import('./views/ValidateUser.jsx'));
+const ResetPassword = lazy(()=>import('./views/ResetPassword.jsx'));
 const Category = lazy(()=>import('./views/category/Category.jsx'));
 const CreateCategory = lazy(()=>import('./views/category/CreateCategory.jsx'));
 const UpdateCategory = lazy(()=>import("./views/category/UpdateCategory.jsx"));
@@ -68,6 +69,7 @@ function App() {
           </Suspense>}
         />
         <Route path="/user/validate/:uid" element={<ValidateUser />} />
+        <Route path="/user/reset/password/:idUser" element={<ResetPassword />} />
         <Route path='/product' element={
           <ProtectedRoute>
             <Suspense fallback={<Loader />}>

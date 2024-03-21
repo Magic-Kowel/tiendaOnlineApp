@@ -102,5 +102,9 @@
   "search-products":"Buscar productos",
   "users":"Usuarios",
   "create-user":"Crear usuario",
-  "edit-user":"Editar usuario"
+  "edit-user":"Editar usuario",
+  "user-has-been-validated":"Usuario ya ha sido validado",
+  "restore-password":"Restablecer contraseña",
+  "min-characters":"Debe tener como mínimo 6 caracteres",
+  "form-submitted-successfully":"Formulario enviado con éxito"
 }

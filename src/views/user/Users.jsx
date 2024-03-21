@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers, deleteUser } from '../../reducers/user/user';
+import { getUsers, deleteUser,sendResetPasswort } from '../../reducers/user/user';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router";
 import Swal from 'sweetalert2';
+import { colors } from '../../stylesConfig';
 import {
     Grid,
     Container
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ReplyIcon from '@mui/icons-material/Reply';
 import EditIcon from '@mui/icons-material/Edit';
 import DataTable from '../../components/DataTable/DataTable';
 import TitlePage from '../../components/TitlePage';
@@ -53,16 +55,30 @@ function Users(){
             }
         });
     }
+    const handleSendResetPasswort = async (idUser) =>{
+        const response = await dispatch(sendResetPasswort(idUser));
+        console.log(response);
+        if(response.payload.send === true){
+            Swal.fire({
+                title:t("form-submitted-successfully"),
+                icon:"success"
+            });
+            return false;
+        }
+        Swal.fire({
+            title:t("something-went-wrong"),
+            icon:"error"
+        });
+    }
     const listTitles=[
         t("name"),
         t("last-name"),
         t("email"),
-        t("birth-date"),
         t("type-user"),
         t("status"),
         t("actions")
     ];
-    const listKeys=["name","lastName","email","birthdate","typeUser","status"];
+    const listKeys=["name","lastName","email","typeUser","status"];
     const listButtons = [
         {
             tooltipTitle: t("delete"),
@@ -75,6 +91,12 @@ function Users(){
             onClick: (idUser) => navigate(`edit/${idUser}`),
             icon: <EditIcon />,
             color:"warning"
+        },
+        {
+            tooltipTitle: t("restore-password"),
+            onClick: (idUser) => handleSendResetPasswort(idUser),
+            icon: <ReplyIcon />,
+            customColor:colors.primaryColor
         }
     ];
     return(

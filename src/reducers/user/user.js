@@ -56,6 +56,17 @@ export const getUser = createAsyncThunk(
     }
   }
 )
+export const getUserProcess = createAsyncThunk(
+  "get/user/process",
+  async (uid, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/user/process/${uid}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 export const getUsers = createAsyncThunk(
   "get/users",
   async (thunkAPI) => {
@@ -135,6 +146,22 @@ export const deleteUser = createAsyncThunk(
       }
   }
 );
+export const sendResetPasswort = createAsyncThunk(
+  "send/reset/passwort",
+  async(idUser,thunkAPI) =>{
+      try {
+          const token = sessionStorage.getItem(NAME_TOKEN);
+          const response = await axios.post(`${API_BASE_URL}/user/send/reset/passwort`,{idUser},{
+              headers: {
+                  "x-access-token": token
+              }
+          });
+          return response.data;
+      } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+      }
+  }
+);
 const initialState = {
   users: [],
   loadingUser: false,
@@ -180,6 +207,19 @@ const productSlice = createSlice({
           state.users = action.payload.length > 0 ? action.payload : [];
         })
         .addCase(getUser.rejected, (state, action) => {
+          state.loadingUser = false;
+          state.errorUser = action.payload;
+        });
+      builder
+        .addCase(getUserProcess.pending, (state) => {
+          state.loadingUser = true;
+          state.errorUser = null;
+        })
+        .addCase(getUserProcess.fulfilled, (state, action) => {
+          state.loadingUser = false;
+          state.users = action.payload.length > 0 ? action.payload : [];
+        })
+        .addCase(getUserProcess.rejected, (state, action) => {
           state.loadingUser = false;
           state.errorUser = action.payload;
         });

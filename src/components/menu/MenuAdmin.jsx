@@ -107,7 +107,8 @@ export default function MenuAdmin({children}) {
         existingMenu.submenus.push({ 
             id: menu.idItemMenu,
             name: menu.itemMenu,
-            url: menu.url
+            url: menu.url,
+            icon:menu.icon
         });
       } else {
         // Menú nuevo, crear un nuevo objeto de menú
@@ -118,7 +119,8 @@ export default function MenuAdmin({children}) {
           submenus: [{ 
               id: menu.idItemMenu,
               name: menu.itemMenu,
-              url: menu.url
+              url: menu.url,
+              icon:menu.icon
           }],
         });
       }
