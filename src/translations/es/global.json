@@ -106,5 +106,7 @@
   "user-has-been-validated":"Usuario ya ha sido validado",
   "restore-password":"Restablecer contraseña",
   "min-characters":"Debe tener como mínimo 6 caracteres",
-  "form-submitted-successfully":"Formulario enviado con éxito"
+  "form-submitted-successfully":"Formulario enviado con éxito",
+  "types-users":"Tipos de usuarios",
+  "icon":"Icono"
 }

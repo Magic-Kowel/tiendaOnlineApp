@@ -177,22 +177,6 @@ export const updateSubMenu = createAsyncThunk(
         }
     }
 );
-export const createViewUser = createAsyncThunk(
-    "user/view",
-    async(data,thunkAPI) =>{
-        try {
-            const token = sessionStorage.getItem(NAME_TOKEN);
-            const response = await axios.post(`${API_BASE_URL}/user/view`,data,{
-                headers: {
-                    "x-access-token": token
-                }
-            });
-            return response.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data);
-        }
-    }
-);
 const initialState = {
     status:[],
     menu:[],
@@ -318,19 +302,6 @@ const securitySlice = createSlice({
             state.loading = false;
             state.error = action.payload;
             });
-        builder
-            .addCase(createViewUser.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-            })
-            .addCase(createViewUser.fulfilled, (state) => {
-            state.loading = false;
-            })
-            .addCase(createViewUser.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-            });
-    
     }
 })
 export default securitySlice.reducer;

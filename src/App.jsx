@@ -18,7 +18,7 @@ const UpdateMenu = lazy(()=>import("./views/security/menu/UpdateMenu.jsx"));
 
 const SubMenu = lazy(()=>import("./views/security/subMenu/SubMenu.jsx"));
 const UpdateSubMenu = lazy(()=>import("./views/security/subMenu/UpdateSubMenu.jsx"));
-const PermisosUser = lazy(()=>import("./views/security/permisosUser/PermisosUser.jsx"));
+const TypesUser = lazy(()=>import("./views/security/permisosUser/TypesUser.jsx"));
 const AddPermissions = lazy(()=>import("./views/security/permisosUser/AddPermissions.jsx"));
 //size
 const Size = lazy(()=>import("./views/size/Size.jsx"));
@@ -200,12 +200,12 @@ function App() {
           <ProtectedRoute>
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
-                <PermisosUser />
+                <TypesUser />
               </MenuAdmin>
             </Suspense>
           </ProtectedRoute>
         } />
-        <Route path="/security/permissions/:idUser" element={
+        <Route path="/security/permissions/:idTypeUser" element={
           <ProtectedRoute>
             <Suspense fallback={<Loader />}>
               <MenuAdmin>

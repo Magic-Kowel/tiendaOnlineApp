@@ -13,10 +13,13 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import DataTable from '../../../components/DataTable/DataTable';
 import EditIcon from '@mui/icons-material/Edit';
 import {colors} from "../../../stylesConfig"
 import SearchAutoComplete from '../../../components/SearchAutoComplete';
+import FormAutocomplete from '../../../components/FormAutocomplete';
 import { useTranslation } from 'react-i18next';
 import getIdUser from '../../../tools/getIdUser';
 import Swal from 'sweetalert2';
@@ -25,15 +28,28 @@ import TitlePage from '../../../components/TitlePage';
 function Menu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [t] = useTranslation("global");
     const {status, menu} = useSelector((state)=>state.security);
-    const [statusData,setStatusData] = useState([]);
     const [menuData,setMenuData] = useState([]);
     const [menuForm,setMenuForm] = useState({
+        idUser:getIdUser(),
         name:"",
-        idUser:"",
         status:""
     });
-    const [t] = useTranslation("global");
+    const createMenuSchema = Yup.object().shape({
+        name: Yup.string().required(t("this-field-is-required")),
+        idUser: Yup.string().required(t("this-field-is-required")),
+        status: Yup.string().required(t("this-field-is-required")),
+    });
+
+    useEffect(()=>{
+        formik.setValues({
+            name:menuForm?.name || "",
+            idUser:menuForm?.idUser || "",
+            status:menuForm?.status || ""
+        });
+    },[menuForm])
+
     const handleGeStatus = async () => {
         await dispatch(getStatus());
     }
@@ -43,19 +59,8 @@ function Menu(){
     const handleUpdate = (id) =>{
         navigate(`/security/menu/edit/${id}`);
     }
-    const handleCreateMenu = async (e) =>{
-        e.preventDefault();
+    const handleCreateMenu = async () =>{
         console.log("menuForm",menuForm.status);
-        if(
-            !menuForm.status||
-            menuForm.name.trim() === ""
-        ){
-            Swal.fire({
-                title:t("fill-in-all-fields"),
-                icon:"error",
-            });
-            return false;
-        }
         const response = await dispatch(createMenu(menuForm));
         if(response.payload.created){
             handleGetMenu();
@@ -71,17 +76,20 @@ function Menu(){
             icon:"error"
         });
     }
+    const formik = useFormik({
+        initialValues: {
+            name: menuForm.name,
+            idUser: menuForm.idUser,
+            status: menuForm.status
+        },
+        validationSchema: createMenuSchema, 
+        onSubmit: handleCreateMenu,
+    });
     useEffect(()=>{
         handleGetMenu();
         handleGeStatus();
     },[])
-    useEffect(()=>{
-        setMenuForm((prevState) => ({
-            ...prevState,
-            idUser:getIdUser(),
-            status: statusData[0]?.id
-        }));
-    },[statusData]);
+ 
     const listTitles = [t("name"),t("status"),t("actions")];
     const listKeys = ["name","status"];
     const listButtons = [
@@ -105,17 +113,23 @@ function Menu(){
                             sx={{padding:"1rem"}}
                         >
                             <form
-                                onSubmit={handleCreateMenu}
+                                onSubmit={formik.handleSubmit}
                                 autoComplete="off"
                             >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
+                                        <FormAutocomplete
                                             data={status}
-                                            getData={setStatusData}
+                                            getData={(newValue) => 
+                                                setMenuForm((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    status: newValue?.id
+                                                })
+                                            )}
                                             getOptionSearch={(item)=>item.name}
                                             title={t("status")}
-                                            isForm={true}
+                                            error={formik.touched.status && Boolean(formik.errors.status)}
+                                            helperText={formik.touched.status && formik.errors.status}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -130,6 +144,8 @@ function Menu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.name && Boolean(formik.errors.name)}
+                                            helperText={formik.touched.name && formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

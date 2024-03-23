@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { getStatus, getMenu, updateMenu } from '../../../reducers/security/security';
 import { useParams, useNavigate } from 'react-router';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
     Container,
     Grid,
@@ -14,40 +16,44 @@ import TitlePage from '../../../components/TitlePage';
 import GoBack from '../../../components/goBack';
 import {colors } from '../../../stylesConfig';
 import { useTranslation } from 'react-i18next';
-import SearchAutoComplete from '../../../components/SearchAutoComplete';
+import FormAutocomplete from '../../../components/FormAutocomplete';
 function UpdateMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {id} = useParams();
     const [t] = useTranslation("global");
-    // const {status} = useSelector((state)=>state.security)
+    const {status} = useSelector((state)=>state.security)
     const [statusData,setStatusData] = useState([]);
     const [menuData,setMenuData] = useState({
         idMenu:"",
         name:"",
-        idStatus:""
+        status:""
     });
     const [selectStatu,setSelectStatu] = useState([]);
+    const createMenuSchema = Yup.object().shape({
+        idMenu: Yup.string().required(t("this-field-is-required")),
+        name: Yup.string().required(t("this-field-is-required")),
+        status: Yup.string().required(t("this-field-is-required")),
+    });
+    useEffect(()=>{
+        formik.setValues({
+            name:menuData?.name || "",
+            idMenu:menuData?.idMenu || "",
+            status:menuData?.status || ""
+        });
+    },[menuData])
+    useEffect(()=>{
+        setStatusData(status);
+    },[status])
     const handleGeStatus = async () => {
-        const response = await dispatch(getStatus());
-        setStatusData(response.payload);
+        await dispatch(getStatus());
     }
     const handleGeMenu = async () => {
         const menu = await dispatch(getMenu(id));
+        console.log(menu.payload);
         setMenuData(menu.payload[0]);
     }
-    const handleUpdateMenu = async (e) =>{
-        e.preventDefault();
-        if(
-            menuData.name.trim()==="" ||
-            !menuData.idStatus
-        ){
-            Swal.fire({
-                title:t("fill-in-all-fields"),
-                icon:"error",
-            });
-            return false;
-        }
+    const handleUpdateMenu = async () =>{
         const response = await dispatch(updateMenu(menuData));
         if(response.payload.updated){
             Swal.fire({
@@ -63,6 +69,15 @@ function UpdateMenu(){
             icon:"error"
         });
     }
+    const formik = useFormik({
+        initialValues: {
+            name: menuData.name,
+            status: menuData.status,
+            idMenu: menuData.idMenu
+        },
+        validationSchema: createMenuSchema, 
+        onSubmit: handleUpdateMenu,
+    });
     useEffect(()=>{
         handleGeStatus();
         handleGeMenu();
@@ -70,9 +85,10 @@ function UpdateMenu(){
  
     useEffect(() => {
         if (statusData.length > 0 && menuData) {
-            setSelectStatu(statusData.find((item) => item?.id === menuData?.idStatus));
+            setSelectStatu(statusData.find((item) => item?.id === menuData?.status));
         }
-    }, [statusData, menuData]);
+        console.log("menuData",menuData);
+    }, [statusData,menuData]);
  
     return(
         <>
@@ -87,20 +103,24 @@ function UpdateMenu(){
                             sx={{padding:"1rem"}}
                         >
                             <form
-                                onSubmit={handleUpdateMenu}
+                                onSubmit={formik.handleSubmit}
                                 autoComplete="off"
                             >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
+                                        <FormAutocomplete
                                             valueDefault={selectStatu?selectStatu:null}
-                                            itemKey="idStatus"
-                                            itemKeyForId="id"
                                             data={statusData}
-                                            getData={setMenuData}
-                                            getOptionSearch={(item) => item?.name || ""}
+                                            getData={(newValue) => 
+                                                setMenuData((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    status: newValue?.id
+                                                })
+                                            )}
+                                            getOptionSearch={(item)=>item.name}
                                             title={t("status")}
-                                            isForm={true}
+                                            error={formik.touched.status && Boolean(formik.errors.status)}
+                                            helperText={formik.touched.status && formik.errors.status}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -115,6 +135,8 @@ function UpdateMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.name && Boolean(formik.errors.name)}
+                                            helperText={formik.touched.name && formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

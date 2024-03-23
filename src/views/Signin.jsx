@@ -15,7 +15,7 @@ import MenuWithoutSection from "../components/menu/MenuWithoutSection";
 import { useTranslation } from "react-i18next";
 import {colors} from "../stylesConfig";
 import { loginValidate } from "../reducers/user/user";
-import { NAME_TOKEN } from "../config";
+import { NAME_TOKEN,NAME_USER } from "../config";
 function Signin(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,7 +30,8 @@ function Signin(){
         try {
             const response = await dispatch(loginValidate(user));
             if(response.payload.auth){
-                sessionStorage.setItem(NAME_TOKEN, response.payload.token);
+                await sessionStorage.setItem(NAME_TOKEN, response.payload.token);
+                await sessionStorage.setItem(NAME_USER, response.payload.userName);
                 navigate('/home');
                 return false;
             }

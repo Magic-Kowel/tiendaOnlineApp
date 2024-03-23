@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { getStatus, getSubMenu, updateSubMenu,getMenus } from '../../../reducers/security/security';
 import { useParams, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
@@ -11,7 +13,7 @@ import {
     Button
 } from '@mui/material';
 import TitlePage from '../../../components/TitlePage';
-import SearchAutoComplete from '../../../components/SearchAutoComplete';
+import FormAutocomplete from '../../../components/FormAutocomplete';
 import GoBack from '../../../components/goBack';
 import {colors } from '../../../stylesConfig';
 import { useTranslation } from 'react-i18next';
@@ -22,15 +24,33 @@ function UpdateSubMenu(){
     const [t] = useTranslation("global");
     const [statusData,setStatusData] = useState([]);
     const [menuData,setMenuData] = useState([]);
+    const [selectStatu,setSelectStatu] = useState([]);
+    const [selectMenu,setSelectMenu] = useState([]);
     const [submenu,setSubmenu] = useState({
         idSubMenu:id,
         name:"",
         status:"",
         idMenu:"",
-        url:""
+        url:"",
+        icon:""
     });
-    const [selectStatu,setSelectStatu] = useState([]);
-    const [selectMenu,setSelectMenu] = useState([]);
+    const createSubMenuSchema = Yup.object().shape({
+        idMenu: Yup.string().required(t("this-field-is-required")),
+        name: Yup.string().required(t("this-field-is-required")),
+        status: Yup.string().required(t("this-field-is-required")),
+        url: Yup.string().required(t("this-field-is-required")),
+        idSubMenu: Yup.string().required(t("this-field-is-required")),
+    });
+    useEffect(()=>{
+        formik.setValues({
+            url:submenu.url || "",
+            idMenu:submenu.idMenu || '',
+            name: submenu.name || "",
+            idSubMenu: submenu.idSubMenu || "",
+            status: submenu.status || ""
+        });
+        console.log(submenu);
+    },[submenu])
     const handleGeStatus = async () => {
         const response = await dispatch(getStatus());
         setStatusData(response.payload);
@@ -43,21 +63,7 @@ function UpdateSubMenu(){
         const response = await dispatch(getMenus());
         setMenuData(response.payload);
     }
-    const handleUpdateSubmenu = async (e) =>{
-        e.preventDefault();
-        if(
-            selectMenu.id,
-            selectStatu.id,
-            submenu.name.trim()==="" ||
-            submenu.url.trim()==="" ||
-            !submenu.status
-        ){
-            Swal.fire({
-                title:t("fill-in-all-fields"),
-                icon:"error",
-            });
-            return false;
-        }
+    const handleUpdateSubmenu = async () =>{
         const response = await dispatch(updateSubMenu(submenu));
         console.log(response);
         if(response.payload.updated){
@@ -74,6 +80,17 @@ function UpdateSubMenu(){
             icon:"error"
         });
     }
+    const formik = useFormik({
+        initialValues: {
+            url:submenu.url,
+            idMenu:submenu.idMenu,
+            name: submenu.name,
+            idUser: submenu.idUser,
+            status: submenu.status
+        },
+        validationSchema: createSubMenuSchema, 
+        onSubmit: handleUpdateSubmenu,
+    });
     useEffect(() => {
         if (statusData.length > 0 && submenu) {
             setSelectStatu(statusData.find((item) => item?.id === submenu.status));
@@ -101,35 +118,62 @@ function UpdateSubMenu(){
                         sx={{padding:"1rem"}}
                     >
                         <form
-                            onSubmit={handleUpdateSubmenu}
+                            onSubmit={formik.handleSubmit}
                             autoComplete="off"
                         >
                             <Grid container spacing={2} >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
-                                            valueDefault={selectStatu?selectStatu:null}
-                                            itemKey="status"
-                                            itemKeyForId="id"
-                                            data={statusData}
-                                            getData={setSubmenu}
-                                            getOptionSearch={(item)=>item?.name || ""}
+                                        <FormAutocomplete
+                                            valueDefault={selectStatu ||null}
+                                            data={menuData}
+                                            getData={(newValue) => 
+                                                setSubmenu((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    status: newValue?.id
+                                                })
+                                            )}
+                                            getOptionSearch={(item)=>item.name}
                                             title={t("status")}
-                                            isForm={true}
+                                            error={formik.touched.status && Boolean(formik.errors.status)}
+                                            helperText={formik.touched.status && formik.errors.status}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
-                                            valueDefault={selectMenu}
-                                            itemKey="idMenu"
-                                            itemKeyForId="id"
-                                            isForm={true}
+                                        <FormAutocomplete
+                                            valueDefault={selectMenu || null}
                                             data={menuData}
-                                            getData={setSubmenu}
-                                            getOptionSearch={(item)=>item?.name || ""}
+                                            getData={(newValue) => 
+                                                setSubmenu((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    idMenu: newValue?.id
+                                                })
+                                            )}
+                                            getOptionSearch={(item)=>item.name}
                                             title={t("menu")}
-                                            
+                                            error={formik.touched.idMenu && Boolean(formik.errors.idMenu)}
+                                            helperText={formik.touched.idMenu && formik.errors.idMenu}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Paper sx={{ display: 'flex',justifyContent:"center", alignItems:"center"}}>
+                                            <TextField
+                                                value={submenu.icon}
+                                                label={t("icon")}
+                                                fullWidth
+                                                variant="outlined"
+                                                onChange={(e)=>{
+                                                    setSubmenu({
+                                                        ...submenu,
+                                                        icon:e.target.value
+                                                    })
+                                                }}
+                                            />
+                                            <i 
+                                                className={submenu.icon}
+                                                style={{ marginRight:"1rem", marginLeft:"1rem", fontSize:"2rem", marginY: 0.5 }}
+                                            ></i>
+                                        </Paper>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -143,6 +187,8 @@ function UpdateSubMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.name && Boolean(formik.errors.name)}
+                                            helperText={formik.touched.name && formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -157,6 +203,8 @@ function UpdateSubMenu(){
                                                     url:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.url && Boolean(formik.errors.url)}
+                                            helperText={formik.touched.url && formik.errors.url}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

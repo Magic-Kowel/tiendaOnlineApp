@@ -13,16 +13,41 @@ import { useFormik } from 'formik';
 import TextFieldPassword from '../components/TextFieldPassword';
 import { useTranslation } from "react-i18next";
 import { colors } from '../stylesConfig';
+import { useDispatch } from 'react-redux';
+import { resetPasswort } from '../reducers/user/user';
+import { useNavigate,useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 function ResetPassword(){
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [t]= useTranslation("global");
+    const params = useParams();
+    const { idUser } = params;
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
     const passSchema = Yup.object().shape({
         password: Yup.string().min(6,t("min-characters")).required(t("this-field-is-required")),
         password2: Yup.string().min(6,t("min-characters")).required(t("this-field-is-required")),
     });
-    const handleResetPassword= () =>{
-
+    const handleResetPassword = async () =>{
+        const response = await dispatch(resetPasswort({
+            idUser:idUser,
+            password:password,
+            password2:password2
+        }))
+        if(response.payload.updated){
+            Swal.fire({
+                title:t("successfully-updated"),
+                icon:'success',
+                timer: 1500
+            });
+            navigate("/signin");
+            return false;
+        }
+        Swal.fire({
+            title:t("something-went-wrong"),
+            icon:"error"
+        });
     }
     const formik = useFormik({
         initialValues: {
@@ -86,7 +111,7 @@ function ResetPassword(){
                                             }
                                         }}
                                         >
-                                        {t("activate")}
+                                        {t("update")}
                                     </Button>
                                 </Grid>
                             </Grid>

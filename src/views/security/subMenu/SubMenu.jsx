@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { getSubMenus,getMenus,createSubMenu,getStatus } from "../../../reducers/security/security";
 import TitlePage from "../../../components/TitlePage";
 import getIdUser from "../../../tools/getIdUser";
@@ -16,22 +18,39 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { colors } from "../../../stylesConfig";
 import SearchAutoComplete from "../../../components/SearchAutoComplete";
+import FormAutocomplete from "../../../components/FormAutocomplete";
 import GoBack from "../../../components/goBack";
 import DataTable from "../../../components/DataTable/DataTable";
 function SubMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [t] = useTranslation("global");
     const [subMenuData, setSubmenuData] = useState([]);
     const {status, submenu,menu } = useSelector((state)=>state.security)
-    const [selectedStatus,setSelectedStatus] = useState("");
-    const [selectedMenu,setSelectedMenu] = useState("");
     const [submenuForm,setSubmenuForm] = useState({
         name:"",
         url:"",
-        idUser:"",
+        idUser:getIdUser(),
         status:"",
         idMenu:""
     });
+    const createSubMenuSchema = Yup.object().shape({
+        idMenu: Yup.string().required(t("this-field-is-required")),
+        name: Yup.string().required(t("this-field-is-required")),
+        status: Yup.string().required(t("this-field-is-required")),
+        url: Yup.string().required(t("this-field-is-required")),
+        idUser: Yup.string().required(t("this-field-is-required")),
+    });
+    useEffect(()=>{
+        formik.setValues({
+            url:submenuForm.url || "",
+            idMenu:submenuForm.idMenu || '',
+            name: submenuForm.name || "",
+            idUser: submenuForm.idUser || "",
+            status: submenuForm.status || ""
+        });
+    },[submenuForm])
+
     const handleGetSubMenu = async () =>{
         await dispatch(getSubMenus())
     }
@@ -41,8 +60,7 @@ function SubMenu(){
     const handleGeStatus = async () => {
         await dispatch(getStatus());
     }
-    const handleCreateSubmenu = async (e) =>{
-        e.preventDefault();
+    const handleCreateSubmenu = async () =>{
         if(
             submenuForm.idMenu,
             submenuForm.status,
@@ -72,6 +90,17 @@ function SubMenu(){
             icon:"error"
         });
     }
+    const formik = useFormik({
+        initialValues: {
+            url:submenuForm.url,
+            idMenu:submenuForm.idMenu,
+            name: submenuForm.name,
+            idUser: submenuForm.idUser,
+            status: submenuForm.status
+        },
+        validationSchema: createSubMenuSchema, 
+        onSubmit: handleCreateSubmenu,
+    });
     const handleUpdateSubmenu = (id) =>{
         navigate(`/security/submenu/edit/${id}`)
     }
@@ -81,17 +110,8 @@ function SubMenu(){
         handleGeStatus();
     },[])
     useEffect(()=>{
-        setSubmenuForm((prevState) => ({
-            ...prevState,
-            idUser:getIdUser(),
-            status: selectedStatus[0]?.id,
-            idMenu:selectedMenu[0]?.id
-        }));
-    },[selectedMenu,selectedStatus]);
-    useEffect(()=>{
         setSubmenuData(submenu);
     },[submenu])
-    const [t] = useTranslation("global");
     const listTitles=[t("name"),t("url"),t("status"),t("menu"),t("edit")];
     const listKeys=["name","url","status","nameMenu"];
     const listButtons = [
@@ -117,28 +137,40 @@ function SubMenu(){
                             >
                                 <Grid
                                     component="form"
-                                    onSubmit={handleCreateSubmenu}
+                                    onSubmit={formik.handleSubmit}
                                     autoComplete="off"
                                     container 
                                     item 
                                     spacing={2}
                                 >
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
+                                        <FormAutocomplete
                                             data={status}
-                                            getData={setSelectedStatus}
+                                            getData={(newValue) => 
+                                                setSubmenuForm((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    status: newValue?.id
+                                                })
+                                            )}
                                             getOptionSearch={(item)=>item.name}
                                             title={t("status")}
-                                            isForm={true}
+                                            error={formik.touched.status && Boolean(formik.errors.status)}
+                                            helperText={formik.touched.status && formik.errors.status}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <SearchAutoComplete
+                                        <FormAutocomplete
                                             data={menu}
-                                            getData={setSelectedMenu}
+                                            getData={(newValue) => 
+                                                setSubmenuForm((prevMenu) => 
+                                                ({ ...prevMenu,
+                                                    idMenu: newValue?.id
+                                                })
+                                            )}
                                             getOptionSearch={(item)=>item.name}
                                             title={t("menu")}
-                                            isForm={true}
+                                            error={formik.touched.idMenu && Boolean(formik.errors.idMenu)}
+                                            helperText={formik.touched.idMenu && formik.errors.idMenu}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -153,6 +185,8 @@ function SubMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.name && Boolean(formik.errors.name)}
+                                            helperText={formik.touched.name && formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -167,6 +201,8 @@ function SubMenu(){
                                                     url:e.target.value
                                                 })
                                             }}
+                                            error={formik.touched.url && Boolean(formik.errors.url)}
+                                            helperText={formik.touched.url && formik.errors.url}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

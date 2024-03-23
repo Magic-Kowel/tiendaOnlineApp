@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import { NAME_PAGE, MENU_USER } from '../../config';
+import { NAME_PAGE, MENU_USER ,NAME_USER } from '../../config';
 import { getMenuUser } from '../../reducers/user/user';
 import { colors } from '../../stylesConfig';
 import { useTranslation } from "react-i18next";
@@ -82,6 +82,11 @@ export default function MenuAdmin({children}) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState([]);
+    const [userData, setUserData] = useState([]);
+    useEffect(()=>{
+      const user= sessionStorage.getItem(NAME_USER)
+      setUserData(user)
+    },[])
     useEffect(()=>{
       const resMenu = JSON.parse(sessionStorage.getItem(MENU_USER));
       if(!resMenu){
@@ -142,18 +147,21 @@ export default function MenuAdmin({children}) {
           <CssBaseline />
           <AppBar sx={{backgroundColor:colors.primaryColor}} position="fixed" open={open}>
               <Toolbar>
-              <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
-              >
-                  <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" noWrap component="div">
-                  {NAME_PAGE}
-              </Typography>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                    {NAME_PAGE}
+                </Typography>
+                <Typography variant="h6" noWrap component="div">
+                  {userData}
+                </Typography>
               </Toolbar>
           </AppBar>
           <Drawer
