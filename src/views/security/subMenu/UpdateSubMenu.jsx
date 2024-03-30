@@ -126,7 +126,7 @@ function UpdateSubMenu(){
                                     <Grid item xs={12}>
                                         <FormAutocomplete
                                             valueDefault={selectStatu ||null}
-                                            data={menuData}
+                                            data={statusData}
                                             getData={(newValue) => 
                                                 setSubmenu((prevMenu) => 
                                                 ({ ...prevMenu,

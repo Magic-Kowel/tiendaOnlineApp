@@ -94,7 +94,7 @@ function ProductCard({product}){
                                                 display: 'block',
                                                 overflow: 'hidden',
                                                 width: '100%',
-                                                height:220,
+                                                height:260,
                                                 objectFit:"cover"
                                             }}
                                             src={step}

@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
+import { useTranslation } from 'react-i18next';
 import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
 import {
@@ -10,8 +11,10 @@ import CardSkeleton from "../../components/skeleton/CardSkeleton";
 import PaginationBar from "../../components/PaginationBar";
 import NoRecordsFound from "../../components/NoRecordsFound";
 import SearchInput from "../../components/SearchInput";
+import TitlePage from "../../components/TitlePage";
 function Product(){
     const dispatch = useDispatch();
+    const [t] = useTranslation("global");
     const {products,loadingProducts} = useSelector((state)=>state.product);
     const [page, setPage] = useState(1);
     const [searchProduct,setSearchProduct] = useState("");
@@ -27,6 +30,9 @@ function Product(){
     },[page,searchProduct]);
     return (
         <Container>
+            <TitlePage
+                title={t("products")}
+            />
             <SearchInput
                 setSearchProduct={setSearchProduct}
             />

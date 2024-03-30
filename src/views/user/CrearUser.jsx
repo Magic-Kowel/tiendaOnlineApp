@@ -88,7 +88,7 @@ function CrearUser(){
                 autoComplete="off"
                 onSubmit={formik.handleSubmit}
             >
-                <Grid item sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <TextField
                         fullWidth
                         label={t("name")}
@@ -103,7 +103,7 @@ function CrearUser(){
                         helperText={formik.touched.nameUser && formik.errors.nameUser}
                     />
                 </Grid>
-                <Grid item sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <TextField
                         fullWidth
                         label={t("last-name")}
@@ -118,7 +118,7 @@ function CrearUser(){
                         helperText={formik.touched.lastName && formik.errors.lastName}
                     />
                 </Grid>
-                <Grid item sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <TextField
                         fullWidth
                         label={t("email")}
@@ -133,7 +133,7 @@ function CrearUser(){
                         helperText={formik.touched.email && formik.errors.email}
                     />
                 </Grid>
-                <Grid item sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <TextField
                         InputLabelProps={{
                             shrink: true,
@@ -156,7 +156,7 @@ function CrearUser(){
                         helperText={formik.touched.birthDate && formik.errors.birthDate}
                     />
                 </Grid>
-                <Grid item sm={12} md={12} lg={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <Button
                         fullWidth
                         variant="contained"

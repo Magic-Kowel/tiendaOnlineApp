@@ -7,6 +7,7 @@ export function validateToken(){
             return false;
         }
         const decoded = jwtDecode(token);
+        sessionStorage.setItem("typeUser", decoded.typeUser);
         const currentTime = Date.now() / 1000;
         if(decoded.exp > currentTime){
             return true;

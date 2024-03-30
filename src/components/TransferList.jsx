@@ -15,7 +15,6 @@ import {
 function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
 }
-
 function intersection(a, b) {
     return a.filter((value) => b.indexOf(value) !== -1);
 }
@@ -26,6 +25,8 @@ function union(a, b) {
 function TransferList({
     listLeft,
     listRight,
+    setListLeft,
+    setListRight,
     index
 }){
     const [checked, setChecked] = useState([]);
@@ -61,12 +62,16 @@ function TransferList({
 
     const handleCheckedRight = () => {
         setRight(right.concat(leftChecked));
+        setListRight(right.concat(leftChecked));
+        setListLeft(not(left, leftChecked));
         setLeft(not(left, leftChecked));
         setChecked(not(checked, leftChecked));
     };
 
     const handleCheckedLeft = () => {
         setLeft(left.concat(rightChecked));
+        setListLeft(left.concat(rightChecked));
+        setListRight(not(right, rightChecked))
         setRight(not(right, rightChecked));
         setChecked(not(checked, rightChecked));
     };
@@ -93,21 +98,21 @@ function TransferList({
           <Divider />
           <List
             sx={{
-        
-              height: 230,
-              bgcolor: 'background.paper',
-              overflow: 'auto',
+                width:"100%",
+                height:"60vh",
+                bgcolor: 'background.paper',
+                overflow: 'auto',
             }}
             dense
             component="div"
             role="list"
           >
-            {items?.map((value) => {
+            {items?.map((value, indexKey) => {
               const labelId = `transfer-list-all-item-${value}-label`;
     
               return (
                 <ListItemButton
-                  key={value}
+                  key={`${value[index]}-${indexKey}`}
                   role="listitem"
                   onClick={handleToggle(value)}
                 >
@@ -121,7 +126,7 @@ function TransferList({
                       }}
                     />
                   </ListItemIcon>
-                  <ListItemText id={labelId} primary={`List item ${value[index]}`} />
+                  <ListItemText id={labelId} primary={`${value[index]}`} />
                 </ListItemButton>
               );
             })}
@@ -131,8 +136,8 @@ function TransferList({
     return(
         <>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs="auto">{customList('Choices', left)}</Grid>
-                    <Grid item>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>{customList('Choices', left)}</Grid>
+                    <Grid item >
                         <Grid 
                             container
                             direction="column" 
@@ -160,7 +165,7 @@ function TransferList({
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item xs="auto">{customList('Chosen', right)}</Grid>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>{customList('Chosen', right)}</Grid>
                 </Grid>
     
         </>
@@ -169,6 +174,8 @@ function TransferList({
 TransferList.propTypes = {
     listLeft: PropTypes.array,
     listRight: PropTypes.array,
+    setListRight: PropTypes.func,
+    setListLeft: PropTypes.func,
     index: PropTypes.string.isRequired,
 };
 export default TransferList;

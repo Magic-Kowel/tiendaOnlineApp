@@ -30,7 +30,16 @@ function TypesUser(){
     const handlePermissions = (idTypeUser) =>{
         navigate(`/security/permissions/${idTypeUser}`);
     }
+    const handlePermissionsMenu = (idTypeUser) =>{
+        navigate(`/security/permissions/menu/${idTypeUser}`);
+    }
     const listButtons = [
+        {
+            tooltipTitle: t("permissions"),
+            onClick: (idTypeUser) => handlePermissionsMenu(idTypeUser),
+            icon: <ListIcon />,
+            customColor:colors.primaryColor
+        },
         {
             tooltipTitle: t("permissions"),
             onClick: (idTypeUser) => handlePermissions(idTypeUser),

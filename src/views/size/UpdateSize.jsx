@@ -76,7 +76,7 @@ function UpdateSize(){
         <>
             <Container>
                 <TitlePage
-                    title={t("edit-category")}
+                    title={t("edit-size-clothe")}
                 />
                 <Card>
                     <CardContent 

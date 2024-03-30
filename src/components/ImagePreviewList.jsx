@@ -74,7 +74,7 @@ function ImagePreviewList({
                                     <img
                                         src={URL.createObjectURL(item || null)}
                                         alt={`Blob Image ${index + 1}`}
-                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                        style={{ maxWidth: '100%', height: "200px", objectFit:"cover" }}
                                     />
                                     <Tooltip title={t("delete")}>
                                         <IconButton
@@ -100,7 +100,7 @@ function ImagePreviewList({
                                     <img
                                         src={(item || null)}
                                         alt={`Blob Image ${index + 1}`}
-                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                        style={{ maxWidth: '100%', height: "200px", objectFit:"cover" }}
                                     />
                                     <Tooltip title={t("delete")}>
                                         <IconButton
@@ -126,7 +126,7 @@ function ImagePreviewList({
                                     <img
                                         src={(item.imagen || null)}
                                         alt={`${item.imagen + 1}`}
-                                        style={{ maxWidth: '100%', height: 'auto' }}
+                                        style={{ maxWidth: '100%', height:"200px", objectFit:"cover"}}
                                     />
                                     <Tooltip title={t("permanently-delete")}>
                                         <IconButton

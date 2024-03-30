@@ -52,7 +52,7 @@
   "size-clothe":"Talla",
   "create-size-clothes":"Crear talla",
   "want-to-delete-size-clothe":"Desea eliminar talla",
-  "edit-size-clothe":"Editar categoria",
+  "edit-size-clothe":"Editar talla",
   "size-categories-clothe":"Categorías de Tallas",
   "size-ranges-clothe":"Rangos de Tallas",
   "min-age":"Edad mínima",
@@ -108,5 +108,10 @@
   "min-characters":"Debe tener como mínimo 6 caracteres",
   "form-submitted-successfully":"Formulario enviado con éxito",
   "types-users":"Tipos de usuarios",
-  "icon":"Icono"
+  "icon":"Icono",
+  "choose-some-permission":"Elige algún permiso",
+  "transferir":"Transferir",
+  "products":"Productos",
+  "permission":"Permiso",
+  "update-permission":"Editar permiso"
 }

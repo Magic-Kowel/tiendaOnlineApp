@@ -28,10 +28,10 @@ function Subcategory(){
         await dispatch(getSubcategories(idCategory));
     }
     const handleCreateSubcategory = () =>{
-        navigate(`/product/category/subcategory/create/${idCategory}`)
+        navigate(`/category/subcategory/create/${idCategory}`)
     }
     const handleUpdate = (id) =>{
-        navigate(`/product/category/subcategory/edit/${id}`)
+        navigate(`/category/subcategory/edit/${id}`)
     }
     const handleDeleteSubcategory = (id) =>{
         Swal.fire({

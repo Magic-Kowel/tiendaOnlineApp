@@ -31,10 +31,10 @@ function Category(){
         getCategoryData();
     }, []);
     const createCategory=()=>{
-        navigate("/product/category/create");
+        navigate("/category/create");
     }
     const subcategory = (id) => {
-        navigate(`/product/category/subcategory/${id}`);
+        navigate(`/category/subcategory/${id}`);
     }
     const handleDeleteCategory = async (id) =>{
         Swal.fire({
@@ -64,7 +64,7 @@ function Category(){
         });
     }
     const handleUpdateCategory = (id) =>{
-        navigate(`/product/category/edit/${id}`);
+        navigate(`/category/edit/${id}`);
     }
     const listTitles=[t("name"),t("actions")];
     const listKeys=["tNombre"];
