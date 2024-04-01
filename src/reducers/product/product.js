@@ -54,6 +54,22 @@ export const getProducts = createAsyncThunk(
         }
     }
 );
+export const getProductDescription = createAsyncThunk(
+    "get/product/description",
+    async (idProduct, thunkAPI) => {
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/product/description/${idProduct}`, {
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getProduct = createAsyncThunk(
     "get/product",
     async(idProduct,thunkAPI) =>{
@@ -184,7 +200,20 @@ const materialSlice = createSlice({
             state.loadingProducts = false;
             state.error = action.payload;
             });
-            builder
+        builder
+            .addCase(getProductDescription.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(getProductDescription.fulfilled, (state, action) => {
+            state.loadingProducts = false;
+            state.products = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getProductDescription.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
             .addCase(getProductImagens.pending, (state) => {
             state.loadingProducts = true;
             state.error = null;

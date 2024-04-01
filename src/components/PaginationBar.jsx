@@ -1,6 +1,7 @@
 import {
     Pagination
 } from '@mui/material';
+import { colors } from '../stylesConfig';
 import PropTypes from 'prop-types';
 function PaginationBar({setPage,page}){
 
@@ -16,6 +17,13 @@ function PaginationBar({setPage,page}){
                 onChange={handleChange} // Manejador de cambio de página
                 shape="circular" // Forma de los botones
                 color="primary" // Color del paginador
+                sx={{ "& .MuiPaginationItem-root": { // Aplica estilos a los elementos MuiPaginationItem
+                    color: colors.secondaryColor, // Cambia el color del texto de las páginas
+                    "&.Mui-selected": { // Estilos cuando una página está seleccionada
+                        backgroundColor: colors.primaryColor, // Cambia el color de fondo cuando la página está seleccionada
+                        color: "white" // Cambia el color del texto cuando la página está seleccionada
+                    }
+                }}}
                 size="large" // Tamaño del paginador
             />
         </>

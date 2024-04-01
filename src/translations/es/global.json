@@ -24,6 +24,7 @@
   "delete":"Eliminar",
   "update":"Actualizar",
   "categories":"Categorías",
+  "category":"Categoría",
   "create-category":"Crear categoria",
   "go-back":"regresar",
   "successfully-created":"Creado con exito",
@@ -76,6 +77,7 @@
   "no-results-found":"No se encontró resultados",
   "search-material":"Buscar material",
   "search-gender":"Buscar género",
+  "gender":"Género",
   "combination-already-exists":"Esta combinación de alla ya existe",
   "select-size-clothe":"Seleccione talla",
   "add-size-clothe":"Agregar talla",
@@ -113,5 +115,8 @@
   "transferir":"Transferir",
   "products":"Productos",
   "permission":"Permiso",
-  "update-permission":"Editar permiso"
+  "update-permission":"Editar permiso",
+  "see-more":"Ver más",
+  "clothes":"Ropa",
+  "public":"Público"
 }

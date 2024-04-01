@@ -103,7 +103,12 @@ function Signin(){
                                     <Grid item>
                                         <Button 
                                         variant="contained"
-                                        sx={{backgroundColor:colors.primaryColor}}
+                                        sx={{
+                                            backgroundColor:colors.primaryColor,
+                                            '&:hover':{
+                                                backgroundColor:colors.primaryColor
+                                            }
+                                        }}
                                         fullWidth
                                         type="submit"
                                         >

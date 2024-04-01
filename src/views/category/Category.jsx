@@ -4,17 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategories, deleteCategory } from '../../reducers/category/category';
 import { colors } from '../../stylesConfig';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {
-    Button,
     Container,
 } from '@mui/material';
 import DataTable from '../../components/DataTable/DataTable';
 import Swal from 'sweetalert2';
-import GoBack from '../../components/goBack';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
 function Category(){
@@ -30,9 +27,6 @@ function Category(){
     useEffect(() => {
         getCategoryData();
     }, []);
-    const createCategory=()=>{
-        navigate("/category/create");
-    }
     const subcategory = (id) => {
         navigate(`/category/subcategory/${id}`);
     }
@@ -94,20 +88,6 @@ function Category(){
             <TitlePage 
                 title={t("categories")}
             />
-            <GoBack />
-            <Button
-                variant="contained"
-                startIcon={<AddCircleIcon />}
-                onClick={createCategory}
-                sx={{
-                    backgroundColor:colors.secondaryColor,
-                    '&:hover':{
-                        backgroundColor:colors.secondaryColor
-                    }
-                }}
-            >
-                {t("create-category")}
-            </Button>
             <SearchAutoComplete
                 data={categorys}
                 getData={setCategories}

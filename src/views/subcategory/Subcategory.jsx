@@ -91,9 +91,9 @@ function Subcategory(){
                     startIcon={<AddCircleIcon />}
                     onClick={handleCreateSubcategory}
                     sx={{
-                        backgroundColor:colors.secondaryColor,
+                        backgroundColor:colors.primaryColor,
                         '&:hover':{
-                            backgroundColor:colors.secondaryColor
+                            backgroundColor:colors.primaryColor
                         }
                     }}
                 >

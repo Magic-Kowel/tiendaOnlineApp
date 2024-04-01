@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
+import { colors } from '../stylesConfig';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function ProductCard({product}){
     const dispatch =  useDispatch();
@@ -30,6 +31,7 @@ function ProductCard({product}){
     const [t] = useTranslation("global");
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
+    const [isLog, action] = useState(sessionStorage.getItem("token"));
     const handleNext = () => {
         if (product?.urlImagenes?.split(',')?.length > 0) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -43,6 +45,9 @@ function ProductCard({product}){
     };
     const handleUpdate = (id) =>{
         navigate(`edit/${id}`);
+    }
+    const handleDescription = (id) =>{
+        navigate(`/product/description/${id}`);
     }
     const handleDeleteProduct = async (id) =>{
         Swal.fire({
@@ -119,20 +124,31 @@ function ProductCard({product}){
                     }
                 </AutoPlaySwipeableViews>
                 <MobileStepper
-                    steps={maxSteps}
+                    steps={maxSteps || 0}
                     position="static"
                     activeStep={activeStep}
+                    sx={{
+                        '& .MuiMobileStepper-dotActive': {
+                          backgroundColor: colors.primaryColor, // Cambia el color de fondo del punto activo
+                        },
+                    }}
                     nextButton={
                         <Button
                             size="small"
                             onClick={ handleNext}
                             disabled={activeStep === maxSteps - 1}
+                            sx={{color:colors.primaryColor}}
                         >
                             {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                         </Button>
                     }
                     backButton={
-                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                        <Button 
+                            size="small" 
+                            onClick={handleBack} 
+                            disabled={activeStep === 0}
+                            sx={{color:colors.primaryColor}}
+                        >
                             {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                         </Button>
                     }
@@ -156,24 +172,45 @@ function ProductCard({product}){
                     justifyContent="space-between"
                     alignItems="center"
                 >
-                    <Grid item container justifyContent="flex-end" xs={4.5}>
-                        <Tooltip title={t("edit")}>
-                            <IconButton 
-                                color="warning"
-                                onClick={()=>handleUpdate(product.idProduct)}
-                            >
-                                <EditIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item container xs={4.5}>
-                        <Tooltip title={t("delete")}>
-                            <IconButton 
-                                color='error'
-                                onClick={()=>handleDeleteProduct(product.idProduct)}
-                            >
-                                <DeleteIcon />
-                            </IconButton>
+                    {isLog &&(
+                        <>
+                            <Grid item container justifyContent="flex-end" xs={4.5}>
+                                <Tooltip title={t("edit")}>
+                                    <IconButton 
+                                        color="warning"
+                                        onClick={()=>handleUpdate(product.idProduct)}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item container xs={4.5}>
+                                <Tooltip title={t("delete")}>
+                                    <IconButton 
+                                        color='error'
+                                        onClick={()=>handleDeleteProduct(product.idProduct)}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </>
+                    )}
+                    <Grid item container xs={12}>
+                        <Tooltip title={t("see-more")}>
+                                <Button
+                                    variant="contained"
+                                    fullWidth
+                                    sx={{
+                                        backgroundColor:colors.primaryColor,
+                                        '&:hover':{
+                                            backgroundColor:colors.primaryColor
+                                        }
+                                    }}
+                                    onClick={()=>handleDescription(product.idProduct)}
+                                >
+                                    {t("see-more")}
+                                </Button>
                         </Tooltip>
                     </Grid>
                 </Grid>

@@ -31,7 +31,7 @@ function ItemMenuAdmin({ item }) {
                         <ListItemButton onClick={()=>handleNavigateMenu(submenu.url)} 
                         key={submenu.name}>
                             <ListItemIcon>
-                                <i className={submenu.icon}></i>
+                                <i className={submenu.icon} ></i>
                             </ListItemIcon>
                             <ListItemText primary={submenu.name} />
                         </ListItemButton>

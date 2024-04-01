@@ -273,6 +273,22 @@ export const getAccessControlMenuPermissions = createAsyncThunk(
         }
     }
 );
+export const permissionsTypeUserLogin = createAsyncThunk(
+    "/user/access/permissions/login",
+    async(typeUser,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/user/access/permissions/login/${typeUser}`,{
+                headers: { 
+                    "x-access-token": token
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getSubMenuPermission = createAsyncThunk(
     "get/subMenu/permission",
     async(idTypeUser,thunkAPI) =>{
@@ -585,6 +601,19 @@ const securitySlice = createSlice({
               state.listAccessControlMenuPermissions = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getAccessControlMenuPermissions.rejected, (state, action) => {
+              state.loadingUser = false;
+              state.error = action.payload;
+            });
+        builder
+            .addCase(permissionsTypeUserLogin.pending, (state) => {
+              state.loadingUser = true;
+              state.error = null;
+            })
+            .addCase(permissionsTypeUserLogin.fulfilled, (state,action) => {
+              state.loading = false;
+              state.userPermissions = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(permissionsTypeUserLogin.rejected, (state, action) => {
               state.loadingUser = false;
               state.error = action.payload;
             });

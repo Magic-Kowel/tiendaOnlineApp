@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 function ActionButtons({row,listButtons,id}){
     return(
         <TableCell align="center">
-          <ButtonGroup variant="contained">
+          <ButtonGroup variant="contained"  color="inherit" sx={{ color:"#fff"}}>
             {listButtons.map((button, buttonIndex) => (
               <Tooltip key={buttonIndex} title={button.tooltipTitle}>
                 <Button 

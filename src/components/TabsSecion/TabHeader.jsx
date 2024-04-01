@@ -2,6 +2,7 @@ import {
     Tabs,
     Tab
 } from '@mui/material';
+import { colors } from '../../stylesConfig';
 import PropTypes from 'prop-types';
 function TabHeader({
     value,
@@ -11,7 +12,7 @@ function TabHeader({
     return (
         <Tabs value={value} onChange={handleChange} centered>
           {listTitles.map((title, index) => (
-            <Tab key={index} label={title} />
+            <Tab key={index} label={title}  sx={{color:colors.primaryColor}} />
           ))}
         </Tabs>
     );

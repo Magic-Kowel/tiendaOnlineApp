@@ -4,7 +4,9 @@ import {
     Grid,
     Container,
     TextField,
-    Button
+    Button,
+    CardContent,
+    Card
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import GoBack from '../../components/goBack';
@@ -103,98 +105,102 @@ function UpdateUser(){
             <TitlePage 
                 title={t("edit-user")}
             />
-            <GoBack />
-            <Grid 
-                container 
-                spacing={2}
-                component="form"
-                autoComplete="off"
-                onSubmit={formik.handleSubmit}
-            >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <TextField
-                        fullWidth
-                        label={t("name")}
-                        value={userForm?.nameUser}
-                        onChange={(e)=>{
-                            setUserForm((prev)=>({
-                                ...prev,
-                                nameUser:e.target.value.trim()
-                            }))
-                        }}
-                        error={formik.touched.nameUser && Boolean(formik.errors.nameUser)}
-                        helperText={formik.touched.nameUser && formik.errors.nameUser}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <TextField
-                        fullWidth
-                        label={t("last-name")}
-                        value={userForm?.lastName}
-                        onChange={(e)=>{
-                            setUserForm((prev)=>({
-                                ...prev,
-                                lastName:e.target.value.trim()
-                            }))
-                        }}
-                        error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                        helperText={formik.touched.lastName && formik.errors.lastName}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <TextField
-                        fullWidth
-                        label={t("email")}
-                        value={userForm?.email}
-                        onChange={(e)=>{
-                            setUserForm((prev)=>({
-                                ...prev,
-                                email:e.target.value.trim()
-                            }))
-                        }}
-                        error={formik.touched.email && Boolean(formik.errors.email)}
-                        helperText={formik.touched.email && formik.errors.email}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <TextField
-                        InputLabelProps={{
-                            shrink: true,
-                            style: { fontSize: '1rem', verticalAlign: 'top' } // Ajusta el tamaño de la fuente y la alineación vertical
-                        }}
-                        InputProps={{
-                            style: { marginTop: '0.1rem' } // Agrega un margen superior
-                        }}
-                        type="date"
-                        fullWidth
-                        label={t("birth-date")}
-                        value={userForm?.birthdate}
-                        onChange={(e)=>{
-                            setUserForm((prev)=>({
-                                ...prev,
-                                birthdate:e.target.value.trim()
-                            }))
-                        }}
-                        error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
-                        helperText={formik.touched.birthdate && formik.errors.birthdate}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        type="submit"
-                        sx={{
-                            backgroundColor:colors.primaryColor,
-                            '&:hover':{
-                                backgroundColor:colors.primaryColor
-                            }
-                        }}
+            <Card>
+                <CardContent>
+                    <GoBack />
+                    <Grid 
+                        container 
+                        spacing={2}
+                        component="form"
+                        autoComplete="off"
+                        onSubmit={formik.handleSubmit}
                     >
-                            {t("edit")}
-                    </Button>
-                </Grid>
-            </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <TextField
+                                fullWidth
+                                label={t("name")}
+                                value={userForm?.nameUser}
+                                onChange={(e)=>{
+                                    setUserForm((prev)=>({
+                                        ...prev,
+                                        nameUser:e.target.value.trim()
+                                    }))
+                                }}
+                                error={formik.touched.nameUser && Boolean(formik.errors.nameUser)}
+                                helperText={formik.touched.nameUser && formik.errors.nameUser}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <TextField
+                                fullWidth
+                                label={t("last-name")}
+                                value={userForm?.lastName}
+                                onChange={(e)=>{
+                                    setUserForm((prev)=>({
+                                        ...prev,
+                                        lastName:e.target.value.trim()
+                                    }))
+                                }}
+                                error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                                helperText={formik.touched.lastName && formik.errors.lastName}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <TextField
+                                fullWidth
+                                label={t("email")}
+                                value={userForm?.email}
+                                onChange={(e)=>{
+                                    setUserForm((prev)=>({
+                                        ...prev,
+                                        email:e.target.value.trim()
+                                    }))
+                                }}
+                                error={formik.touched.email && Boolean(formik.errors.email)}
+                                helperText={formik.touched.email && formik.errors.email}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <TextField
+                                InputLabelProps={{
+                                    shrink: true,
+                                    style: { fontSize: '1rem', verticalAlign: 'top' } // Ajusta el tamaño de la fuente y la alineación vertical
+                                }}
+                                InputProps={{
+                                    style: { marginTop: '0.1rem' } // Agrega un margen superior
+                                }}
+                                type="date"
+                                fullWidth
+                                label={t("birth-date")}
+                                value={userForm?.birthdate}
+                                onChange={(e)=>{
+                                    setUserForm((prev)=>({
+                                        ...prev,
+                                        birthdate:e.target.value.trim()
+                                    }))
+                                }}
+                                error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
+                                helperText={formik.touched.birthdate && formik.errors.birthdate}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                type="submit"
+                                sx={{
+                                    backgroundColor:colors.primaryColor,
+                                    '&:hover':{
+                                        backgroundColor:colors.primaryColor
+                                    }
+                                }}
+                            >
+                                    {t("edit")}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
         </Container>
     )
 }

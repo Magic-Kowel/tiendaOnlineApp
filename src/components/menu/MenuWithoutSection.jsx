@@ -33,6 +33,7 @@ function MenuWithoutSection(){
   };
   return (
     <AppBar sx={{
+      m:0,
       mb:10,
       backgroundColor: colors.primaryColor,
     }} 
@@ -56,8 +57,8 @@ function MenuWithoutSection(){
               display: { xs: 'none', md: 'flex' },
               fontWeight: 300,
               
-              fontSize:20,
-              color: colors.secondaryColor,
+              fontSize:30,
+              color: "#fff",
               textDecoration: 'none',
             }}
           >
@@ -96,7 +97,7 @@ function MenuWithoutSection(){
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography 
-                  sx={{color: colors.secondaryColor}} 
+                  sx={{color:"#fff"}} 
                   textAlign="center">
                     <MuiLink 
                       component={Link} 
@@ -120,8 +121,8 @@ function MenuWithoutSection(){
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontWeight: 200,
-              fontSize:20,
-              color: 'inherit',
+              fontSize:30,
+              color: "#fff",
               textDecoration: 'none',
             }}
           >
@@ -135,7 +136,7 @@ function MenuWithoutSection(){
                 to={page.url} 
                 key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: '#17a2b8', display: 'block' }}
+                sx={{ my: 2, color: '#fff', display: 'block' }}
               >
                 {page.name}
               </Button>

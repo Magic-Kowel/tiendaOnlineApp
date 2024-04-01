@@ -33,6 +33,7 @@ const Material = lazy(()=>import("./views/material/Material.jsx"));
 const UpdateMaterial = lazy(()=>import("./views/material/UpdateMaterial.jsx"));
 // product
 const Product = lazy(()=>import("./views/product/Product.jsx"));
+const ProductDescription = lazy(()=>import("./views/product/ProductDescription.jsx"));
 const CreateProduct = lazy(()=>import("./views/product/CreateProduct.jsx"));
 const UpdateProduct = lazy(()=>import("./views/product/UpdateProduct.jsx"));
 // Users
@@ -90,7 +91,7 @@ function App() {
         />
         <Route path='/product/create' element={
           <ProtectedRoute
-            permission='userCreate'
+            permission='createProduct'
           >
               <Suspense fallback={<Loader />}>
                 <MenuAdmin>
@@ -102,7 +103,7 @@ function App() {
         />
         <Route path='/product/edit/:idProduct' element={
           <ProtectedRoute
-            permission='userCreate'
+            permission='updateProduct'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -110,6 +111,12 @@ function App() {
               </MenuAdmin>
             </Suspense>
           </ProtectedRoute>
+          } 
+        />
+        <Route path='/product/description/:idProduct' element={
+            <Suspense fallback={<Loader />}>
+                <ProductDescription />
+            </Suspense>
           } 
         />
         <Route path='/category' element={
@@ -126,7 +133,7 @@ function App() {
         />
         <Route path='/category/create' element={
           <ProtectedRoute
-            permission='categoryCreate'
+            permission='createCategory'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -138,7 +145,7 @@ function App() {
         />
         <Route path='/category/edit/:id' element={
           <ProtectedRoute
-            permission='categoryCreate'
+            permission='updateCategory'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -150,7 +157,7 @@ function App() {
         />
         <Route path='/category/subcategory/:idCategory' element={
           <ProtectedRoute
-            permission='category'
+            permission='createSubcategory'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -162,7 +169,7 @@ function App() {
         />
         <Route path='/category/subcategory/create/:idCategory' element={
           <ProtectedRoute
-            permission='categoryCreate'
+            permission='createSubcategory'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -174,7 +181,7 @@ function App() {
         />
         <Route path="/category/subcategory/edit/:idSubcategory" element={
           <ProtectedRoute
-            permission='categoryCreate'
+            permission='updateSubcategory'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -185,7 +192,7 @@ function App() {
         } />
         <Route path="/security/menu" element={
           <ProtectedRoute
-            permission='securityMenu'
+            permission='menu'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -196,7 +203,7 @@ function App() {
         } />
         <Route path="/security/menu/edit/:id" element={
           <ProtectedRoute
-            permission='securityMenu'
+            permission='updateMenu'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -207,7 +214,7 @@ function App() {
         } />
         <Route path="/security/submenu" element={
           <ProtectedRoute
-            permission='securitySubmenu'
+            permission='submenu'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -218,7 +225,7 @@ function App() {
         } />
         <Route path="/security/submenu/edit/:id" element={
           <ProtectedRoute
-            permission='securitySubmenu'
+            permission='updateSubmenu'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -230,7 +237,7 @@ function App() {
         { /*relusuariomenusubmenucontroller */} 
         <Route path="/security/permissions" element={
           <ProtectedRoute
-            permission='securityPermission'
+            permission='typeUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -241,7 +248,7 @@ function App() {
         } />
         <Route path="/security/permissions/:idTypeUser" element={
           <ProtectedRoute
-            permission='securityPermission'
+            permission='typeUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -252,7 +259,7 @@ function App() {
         } />
         <Route path="/security/permissions/edit/:idTypeUserPermission" element={
           <ProtectedRoute
-            permission='securityPermission'
+            permission='typeUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -263,7 +270,7 @@ function App() {
         } />
         <Route path="/security/permissions/menu/:idTypeUser" element={
           <ProtectedRoute
-            permission='securityPermission'
+            permission='typeUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -285,7 +292,7 @@ function App() {
         } />
         <Route path="/size/edit/:id" element={
           <ProtectedRoute
-            permission="size"
+            permission="updateSize"
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -307,7 +314,7 @@ function App() {
         } />
         <Route path="/size/variation/edit/:idSizeVariation" element={
           <ProtectedRoute
-            permission='sizeVariation'
+            permission='updateSizeVariation'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -329,7 +336,7 @@ function App() {
         } />
         <Route path="/material/edit/:idMaterial" element={
           <ProtectedRoute
-            permission='material'
+            permission='updateMaterial'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -351,7 +358,7 @@ function App() {
         } />
         <Route path="/user/create" element={
           <ProtectedRoute
-            permission='userCreate'
+            permission='createUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>
@@ -362,7 +369,7 @@ function App() {
         } />
         <Route path="/user/edit/:idUser" element={
           <ProtectedRoute
-            permission='userCreate'
+            permission='updateUser'
           >
             <Suspense fallback={<Loader />}>
               <MenuAdmin>

@@ -96,7 +96,6 @@ function UpdateMenu(){
                 <TitlePage 
                     title={t("edit-menu")}
                 />
-                <GoBack />
                 <Grid container spacing={2} >
                     <Grid item xs={12}>
                         <Paper
@@ -108,6 +107,7 @@ function UpdateMenu(){
                             >
                                 <Grid container item spacing={2}  >
                                     <Grid item xs={12}>
+                                        <GoBack />
                                         <FormAutocomplete
                                             valueDefault={selectStatu?selectStatu:null}
                                             data={statusData}
