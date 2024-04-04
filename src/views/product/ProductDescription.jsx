@@ -1,5 +1,5 @@
 import { useEffect,useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { 
     Container,
     Box,
@@ -32,6 +32,9 @@ import FaceIcon from '@mui/icons-material/Face';
 import Footer from '../../components/Footer';
 import GoBack from '../../components/goBack';
 import { colors } from '../../stylesConfig';
+import MenuWithoutSection from '../../components/menu/MenuWithoutSection';
+import Seo from '../../components/Seo';
+import productDescriptionSeo from '../../tools/seo/productDescriptionSeo';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function ProductDescription(){
     const theme = useTheme();
@@ -39,7 +42,9 @@ function ProductDescription(){
     const [t] = useTranslation("global");
     const params = useParams();
     const dispatch = useDispatch();
-    const {products,imagensProduct,loadingProducts} = useSelector((state)=>state.product)
+    const {products,imagensProduct} = useSelector((state)=>state.product)
+    const isLogin = sessionStorage.getItem("token")
+
     const {idProduct} = params;
     useEffect(()=>{
         dispatch(getProductDescription(idProduct));
@@ -90,11 +95,25 @@ function ProductDescription(){
                 sizes:products,
                 listImagenes:imagensProduct
             }));
-            setSizes(products.find((item)=>item.main))
+            if(!!products.length && !!imagensProduct.length){
+                productDescriptionSeo({
+                    title:products[0].nameProduct,
+                    description:products[0].description,
+                    img:imagensProduct[0].imagen
+                })
+            }
+            setSizes(products.find((item)=>item.main));
+           
         }
     },[products,imagensProduct]);
     return(
         <>
+            <Seo />
+            {
+                Boolean(!isLogin) &&(
+                    <MenuWithoutSection />
+                )
+            }
             <Container sx={{minHeight: "100vh"}}>
             <GoBack />
                 <Card elevation={3}>
@@ -178,28 +197,53 @@ function ProductDescription(){
                             </Grid>
                             <Grid container item flexDirection="row" xs={12} sm={12} md={6} lg={6}>
                                 <Grid item xs={12} marginTop={5}>
-                                    <Typography  textAlign="center" variant="h3" component="h1">
+                                    <Typography  
+                                        textAlign="center" 
+                                        variant="h3" 
+                                        component="h1"
+                                        sx={{textTransform:"uppercase"}}
+                                    >
                                         {product?.nameProduct}
                                     </Typography>
                                 </Grid>
                                 <Grid container item xs={12} sx={{ display: "flex", gap: 3, flexDirection: "column", paddingLeft:5}}>
-                                    <Typography variant="h6" component="p">
+                                    <Typography 
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={<DescriptionIcon />} label={t("description")} />
                                         : {product?.description}
                                     </Typography>
-                                    <Typography variant="h6" component="p">
+                                    <Typography 
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={<FaTshirt />} label={t("category")} />
                                         : {product?.category}
                                     </Typography>
-                                    <Typography variant="h6" component="p">
+                                    <Typography 
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={<FaTshirt />} label={t("clothes")} />
                                         : {product?.subcategory}
                                     </Typography>
-                                    <Typography variant="h6" component="p">
+                                    <Typography 
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={<CheckroomIcon />} label={t("material")} />
                                         : {product?.material}
                                     </Typography>
-                                    <Typography variant="h6" component="p">
+                                    <Typography
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={ 
                                             product?.gender ==="Femenino" 
                                             ? <FemaleIcon />:
@@ -207,7 +251,11 @@ function ProductDescription(){
                                         } label={t("gender")} />
                                         : {product?.gender}
                                     </Typography>
-                                    <Typography variant="h6" component="p">
+                                    <Typography
+                                        variant="h6" 
+                                        component="p" 
+                                        sx={{textTransform:"capitalize"}}
+                                    >
                                         <Chip icon={ 
                                             sizes?.public ==="Infantil" 
                                             ? <ChildCareIcon />:

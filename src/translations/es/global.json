@@ -118,5 +118,11 @@
   "update-permission":"Editar permiso",
   "see-more":"Ver más",
   "clothes":"Ropa",
-  "public":"Público"
+  "public":"Público",
+  "priceMax":"Precio máximo",
+  "priceMin":"Precio mínimo",
+  "child":"Niño",
+  "childish":"Infantil",
+  "adult":"Adulto",
+  "filter":"Filtrar"
 }

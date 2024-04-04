@@ -31,7 +31,7 @@ function ProductCard({product}){
     const [t] = useTranslation("global");
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
-    const [isLog, action] = useState(sessionStorage.getItem("token"));
+    const isLogin = sessionStorage.getItem("token")
     const handleNext = () => {
         if (product?.urlImagenes?.split(',')?.length > 0) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -95,6 +95,7 @@ function ProductCard({product}){
                                     {Math.abs(activeStep - stepIndex) <= 2 ? (
                                         <Box
                                             component="img"
+                                            loading="lazy"
                                             sx={{
                                                 display: 'block',
                                                 overflow: 'hidden',
@@ -155,10 +156,19 @@ function ProductCard({product}){
                 />
             </Box>
             <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" component="div" gutterBottom>
+                <Typography 
+                    variant="h6" 
+                    component="div" 
+                    gutterBottom
+                    sx={{textTransform:"uppercase"}}
+                >
                     {product.nameProduct}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
+                <Typography 
+                    variant="body2" 
+                    color="textSecondary"
+                    sx={{textTransform:"capitalize"}}
+                >
                     {t("material")}: {product.nameMaterial}
                 </Typography>
                 <Typography variant="h6" component="div" gutterBottom>
@@ -172,7 +182,7 @@ function ProductCard({product}){
                     justifyContent="space-between"
                     alignItems="center"
                 >
-                    {isLog &&(
+                    {isLogin &&(
                         <>
                             <Grid item container justifyContent="flex-end" xs={4.5}>
                                 <Tooltip title={t("edit")}>

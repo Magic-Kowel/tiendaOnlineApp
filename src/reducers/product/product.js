@@ -42,7 +42,15 @@ export const getProducts = createAsyncThunk(
             const token = sessionStorage.getItem(NAME_TOKEN);
             const response = await axios.get(`${API_BASE_URL}/products/${data.page}`, {
                 params: {
-                    nameProduct: data.nameProduct
+                    nameProduct: data.searchProduct,
+                    materialList: data.materialList,
+                    genderList: data.genderList,
+                    minPrice: data.minPrice,
+                    maxPrice: data.maxPrice,
+                    maxAge:data.maxAge,
+                    minAge:data.minAge,
+                    size:data.size,
+                    publicPerson:data.publicPerson
                 },
                 headers: {
                     "x-access-token": token,

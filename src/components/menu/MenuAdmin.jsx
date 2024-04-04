@@ -215,9 +215,9 @@ export default function MenuAdmin({children}) {
                     >
                       {children}
                     </Box>
+              <Footer /> 
             </Main>
           </Box>
-          <Footer /> 
         </>
       );
 }

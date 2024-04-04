@@ -9,9 +9,10 @@ function TitlePage({title}){
             <Typography
                     sx={{
                         fontSize:sizeTitle,
+                        textTransform:"uppercase"
                     }}
                     textAlign="center"
-                    variant="h1" 
+                    component="h1" 
                     gutterBottom
             >
                 {title}

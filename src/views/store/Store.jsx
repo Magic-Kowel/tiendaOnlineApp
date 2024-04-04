@@ -4,24 +4,35 @@ import { useTranslation } from 'react-i18next';
 import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import MenuWithoutSection from "../../components/menu/MenuWithoutSection";
 import Footer from "../../components/Footer";
-import { Grid, Container  } from "@mui/material";
+import { Grid, Container, Drawer,Stack, Box, Chip  } from "@mui/material";
+import { useMediaQuery, useTheme } from '@mui/material';
 import TitlePage from "../../components/TitlePage";
 import CardSkeleton from "../../components/skeleton/CardSkeleton";
 import SearchInput from "../../components/SearchInput";
 import ProductCard from "../../components/ProductCard";
 import NoRecordsFound from "../../components/NoRecordsFound";
 import PaginationBar from "../../components/PaginationBar";
+import FormSearchProduct from "./FormSearchProduct";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import Seo from "../../components/Seo";
 function Store(){
     const dispatch = useDispatch();
+    const theme = useTheme();
     const [t] = useTranslation("global");
     const {products,loadingProducts} = useSelector((state)=>state.product);
+    const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const [page, setPage] = useState(1);
+    const [isOpen, setIsOpen] = useState(false);
     const [searchProduct,setSearchProduct] = useState("");
+
     const handleGetProducts = async () =>{
         await dispatch(getProducts({
             page:page,
             nameProduct:searchProduct
         }));
+    }
+    const openDrawer = () =>{
+        setIsOpen(!isOpen);
     }
     useEffect(()=>{
         dispatch(clearImagensLists())
@@ -29,51 +40,91 @@ function Store(){
     },[page,searchProduct]);
     return(
         <>
+            <Seo />
             <MenuWithoutSection />
+            {/* <TitlePage
+                title={t("products")}
+            /> */}
             <Container
                 component="main"
             >
-                <TitlePage
-                title={t("products")}
-                />
-                <SearchInput
-                    setSearchProduct={setSearchProduct}
-                />
-                    <Grid
-                        container
-                        spacing={1}
-                        alignItems="stretch"
-                    >
-                        {loadingProducts ===true && [0,1,2,3,4,5,6,7,8,9,10,11]?.map((product,index) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={3}
-                                lg={2}
-                                key={index}
-                            >
+                    <SearchInput
+                        setSearchProduct={setSearchProduct}
+                    />
+                    {  (searchProduct.length > 0 && !onlySmallScreen) &&(
+                        <Stack 
+                            direction="row"
+                            justifyContent="flex-end"
+                            alignItems="flex-start"
+                            spacing={2}
+                            mb={2}
+                        >
+                                <Chip
+                                    label={`${t("filter")}`}
+                                    onClick={openDrawer}
+                                    onDelete={openDrawer}
+                                    deleteIcon={<FilterAltIcon />}
+                                />
+                        </Stack>
+                    )}
+                    <Grid container justifyContent="center">
+                        {
+                            (searchProduct.length > 0 && onlySmallScreen) &&(
+                                    <Grid item xs={3}>
+                                        <FormSearchProduct
+                                            page={page}
+                                            searchProduct={searchProduct}
+                                        />
+                                    </Grid>
+                            )
+                        }
+                        <Drawer
+                            anchor="left"
+                            open={isOpen}
+                            onClose={openDrawer}
+                            sx={{"& .MuiDrawer-paper":{
+                                height:"100vh",
+                                width:'80%',
+                                transition: "all 0.3 ease-in-out"
+
+                            }}}
+                        >
+                            <Box mt={5} >
+                                <FormSearchProduct
+                                    page={page}
+                                    searchProduct={searchProduct}
+                                />
+                            </Box>
+                        </Drawer>
+                        <Grid container item spacing={1} xs={9} alignItems="stretch">
+                            {loadingProducts === true && [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]?.map((product, index) => (
+                            <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
                                 <CardSkeleton />
                             </Grid>
-                        ))}
-                        {!!products && products?.map((product) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={3}
-                                lg={2}
-                                key={product.idProduct}
-                            >
-                                <ProductCard
-                                    product={product}
-                                />
-                            </Grid>
-                        ))}
+                            ))}
+                            {!!products && products?.map((product) => (
+                                <Grid 
+                                    item 
+                                    xs={12} 
+                                    sm={6} 
+                                    md={3} 
+                                    lg={searchProduct ?4:3} 
+                                    key={product.idProduct}
+                                >
+                                    <ProductCard product={product} />
+                                </Grid>
+                            ))}
+                            {products.length ===0 &&(
+                                <Grid
+                                    container
+                                    item
+                                    justifyContent="center"
+                                >
+                                    <NoRecordsFound />
+                                </Grid>
+                            )}
+                        </Grid>
                     </Grid>
-                    {products.length ===0 &&(
-                        <NoRecordsFound />
-                    )}
         
                     <Grid 
                         container
