@@ -9,6 +9,8 @@ import {
 import {
     Container,
     Grid,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import DataTable from "../../../components/DataTable/DataTable";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,9 +19,12 @@ import TitlePage from "../../../components/TitlePage";
 import SearchAutoComplete from "../../../components/SearchAutoComplete";
 import FormSizeVariation from "./FormSizeVariation";
 import Swal from 'sweetalert2';
+import StackTable from "../../../components/DataTable/StackTable";
 function SizeVariation(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const {sizeVariation} = useSelector((state)=>state.size);
     const [t] = useTranslation("global");
     const [sizeVariationList, setSizeVariationList] = useState([]);
@@ -115,19 +120,31 @@ function SizeVariation(){
                     title={t("size-categories-clothe")}
                 />
                 <Grid container spacing={2}>
-                    <Grid item sm={12} md={7} lg={7}>
+                    <Grid item xs={12} sm={12} md={7} lg={7}>
                         <SearchAutoComplete
                             data={sizeVariation}
                             getData={setSizeVariationList}
                             getOptionSearch={(item)=>item.nameSize}
                         />
-                        <DataTable
-                            listTitles={listTitles}
-                            listKeys={listKeys}
-                            dataList={sizeVariationList}
-                            listButtons={listButtons}
-                            id="idSizeVariation"
-                        />
+                        {
+                            !isMobile?(
+                                <DataTable
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={sizeVariationList}
+                                    listButtons={listButtons}
+                                    id="idSizeVariation"
+                                />
+                            ):(
+                                <StackTable 
+                                   listTitles={listTitles}
+                                   listKeys={listKeys}
+                                   dataList={sizeVariationList}
+                                   listButtons={listButtons}
+                                   id="idSizeVariation"
+                               />
+                            )
+                        }
                     </Grid>
                     <Grid item sm={12} md={5} lg={5}>
                         <FormSizeVariation />

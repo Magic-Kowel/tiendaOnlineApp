@@ -11,7 +11,9 @@ import {
     Grid,
     Paper,
     TextField,
-    Button
+    Button,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -25,9 +27,12 @@ import getIdUser from '../../../tools/getIdUser';
 import Swal from 'sweetalert2';
 import GoBack from '../../../components/goBack';
 import TitlePage from '../../../components/TitlePage';
+import StackTable from '../../../components/DataTable/StackTable';
 function Menu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [t] = useTranslation("global");
     const {status, menu} = useSelector((state)=>state.security);
     const [menuData,setMenuData] = useState([]);
@@ -173,13 +178,24 @@ function Menu(){
                             getData={setMenuData}
                             getOptionSearch={(item)=>item.name}
                         />
-                        <DataTable
-                            listTitles={listTitles}
-                            listKeys={listKeys}
-                            dataList={menuData}
-                            listButtons={listButtons}
-                            id="id"
-                        />
+                        {!isMobile?(
+                            <DataTable
+                                listTitles={listTitles}
+                                listKeys={listKeys}
+                                dataList={menuData}
+                                listButtons={listButtons}
+                                id="id"
+                            />
+                        ):(
+                            <StackTable 
+                                listTitles={listTitles}
+                                listKeys={listKeys}
+                                dataList={menuData}
+                                listButtons={listButtons}
+                                id="id"
+                            />
+                        )}
+          
                     </Grid>
                 </Grid>
             </Container>

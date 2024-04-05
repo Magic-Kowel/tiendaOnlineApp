@@ -7,7 +7,9 @@ import Swal from 'sweetalert2';
 import { colors } from '../../stylesConfig';
 import {
     Grid,
-    Container
+    Container,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -15,10 +17,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DataTable from '../../components/DataTable/DataTable';
 import TitlePage from '../../components/TitlePage';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
+import StackTable from '../../components/DataTable/StackTable';
 function Users(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [usersList,setUsersList] = useState([])
     const {users} = useSelector((state)=>state.user);
     useEffect(()=>{
@@ -111,13 +116,23 @@ function Users(){
                             getData={setUsersList}
                             getOptionSearch={(item)=>item.name}
                         />
-                        <DataTable 
-                            listTitles={listTitles}
-                            listKeys={listKeys}
-                            dataList={usersList}
-                            listButtons={listButtons}
-                            id="idUser"
-                        />
+                        {!isMobile?(
+                            <DataTable 
+                                listTitles={listTitles}
+                                listKeys={listKeys}
+                                dataList={usersList}
+                                listButtons={listButtons}
+                                id="idUser"
+                            />
+                        ):(
+                            <StackTable 
+                                listTitles={listTitles}
+                                listKeys={listKeys}
+                                dataList={usersList}
+                                listButtons={listButtons}
+                                id="idUser"
+                            />
+                        )}
                     </Grid>
                 </Grid>
         </Container>

@@ -9,7 +9,9 @@ import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import {
     Container,
-    Grid
+    Grid,
+    useMediaQuery,
+    useTheme 
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,9 +19,12 @@ import TitlePage from "../../components/TitlePage";
 import SearchAutoComplete from "../../components/SearchAutoComplete"
 import DataTable from "../../components/DataTable/DataTable";
 import FormSize from "./FormSize";
+import StackTable from "../../components/DataTable/StackTable";
 function Size(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const {sizes} = useSelector((state)=>state.size);
     const [t] = useTranslation("global");
     const [sizeList, setSizeList] = useState([]);
@@ -93,13 +98,25 @@ function Size(){
                             getData={setSizeList}
                             getOptionSearch={(item)=>item.nameSize}
                         />
-                        <DataTable 
-                            listTitles={listTitles}
-                            listKeys={listKeys}
-                            dataList={sizeList}
-                            listButtons={listButtons}
-                            id="idSize"
-                        />
+                        {
+                            !isMobile?(
+                                <DataTable 
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={sizeList}
+                                    listButtons={listButtons}
+                                    id="idSize"
+                                />
+                            ):(
+                                <StackTable 
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={sizeList}
+                                    listButtons={listButtons}
+                                    id="idSize"
+                                />
+                            )
+                        }
                     </Grid>
                     <Grid item xs={12} sm={12} md={5} lg={5}>
                         <FormSize />

@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMaterials,deleteMaterial } from "../../reducers/material/material";
 import { useNavigate } from "react-router";
 import DataTable from "../../components/DataTable/DataTable";
+import StackTable from "../../components/DataTable/StackTable";
 import SearchAutoComplete from "../../components/SearchAutoComplete";
 import FormMaterial from "./FormMaterial";
 import {
     Container,
-    Grid
+    Grid,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +20,8 @@ import Swal from 'sweetalert2';
 function Material(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [t] = useTranslation("global");
     const [materialList,setMaterialList] = useState([]);
     const {materials} = useSelector((state)=>state.material);
@@ -89,13 +94,24 @@ function Material(){
                                 getData={setMaterialList}
                                 getOptionSearch={(item)=>item.nameMaterial}
                             />
-                            <DataTable
-                                listTitles={listTitles}
-                                listKeys={listKeys}
-                                dataList={materialList}
-                                listButtons={listButtons}
-                                id="idMaterial"
-                            />
+                            {!isMobile?(
+                                <DataTable
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={materialList}
+                                    listButtons={listButtons}
+                                    id="idMaterial"
+                                />
+                            ):(
+                                <StackTable 
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={materialList}
+                                    listButtons={listButtons}
+                                    id="idMaterial"
+                                />
+
+                            )}
                     </Grid>
                     <Grid item xs={12} sm={12} md={5} lg={5}>
                         <FormMaterial />

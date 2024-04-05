@@ -25,6 +25,9 @@ import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
 import { colors } from '../stylesConfig';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+function maxLength(text,maxLength){
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+}
 function ProductCard({product}){
     const dispatch =  useDispatch();
     const navigate = useNavigate();
@@ -79,7 +82,7 @@ function ProductCard({product}){
     }
     const maxSteps = product?.urlImagenes?.split(',').length;
     return (
-        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} key={product.idProduct}>
+        <Card sx={{ height: '100%',maxHeight:500, display: 'flex', flexDirection: 'column' }} key={product.idProduct}>
             <Box sx={{ flexGrow: 1 }}>
                 <AutoPlaySwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -117,6 +120,7 @@ function ProductCard({product}){
                                     display: 'block',
                                     overflow: 'hidden',
                                     width: '100%',
+                                    height:260,
                                 }}
                                 src={imagenNotFound}
                                 alt={`imagen not found`}
@@ -156,13 +160,14 @@ function ProductCard({product}){
                 />
             </Box>
             <CardContent sx={{ flexGrow: 1 }}>
+                
                 <Typography 
                     variant="h6" 
                     component="div" 
                     gutterBottom
-                    sx={{textTransform:"uppercase"}}
+                    fontSize='1.2rem'
                 >
-                    {product.nameProduct}
+                    {maxLength(product.nameProduct,20)}
                 </Typography>
                 <Typography 
                     variant="body2" 

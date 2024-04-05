@@ -13,10 +13,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import {
     Button,
     Container,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import TitlePage from "../../components/TitlePage";
 import DataTable from "../../components/DataTable/DataTable";
+import StackTable from "../../components/DataTable/StackTable";
 function Subcategory(){
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useDispatch();
     const {subcategories} = useSelector((state)=>state.subcategory);
     const [t] = useTranslation("global");
@@ -104,6 +109,7 @@ function Subcategory(){
                     getData={setSubcategoriesData}
                     getOptionSearch={(item)=>item.tNombre}
                 />
+                {!isMobile?(
                 <DataTable
                     listTitles={listTitles}
                     listKeys={listKeys}
@@ -111,6 +117,15 @@ function Subcategory(){
                     listButtons={listButtons}
                     id="ecodsubcategoria"
                 />
+                ):(
+                    <StackTable 
+                        listTitles={listTitles}
+                        listKeys={listKeys}
+                        dataList={subcategoriesData}
+                        listButtons={listButtons}
+                        id="ecodsubcategoria"
+                    />
+                )}
             </Container>
         </>
     )

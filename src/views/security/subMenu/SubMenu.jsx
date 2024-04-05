@@ -13,7 +13,9 @@ import {
     Grid,
     Button,
     TextField,
-    Container
+    Container,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { colors } from "../../../stylesConfig";
@@ -21,9 +23,12 @@ import SearchAutoComplete from "../../../components/SearchAutoComplete";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import GoBack from "../../../components/goBack";
 import DataTable from "../../../components/DataTable/DataTable";
+import StackTable from "../../../components/DataTable/StackTable";
 function SubMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [t] = useTranslation("global");
     const [subMenuData, setSubmenuData] = useState([]);
     const {status, submenu,menu } = useSelector((state)=>state.security)
@@ -229,13 +234,23 @@ function SubMenu(){
                                 getData={setSubmenuData}
                                 getOptionSearch={(item)=>item.name}
                             />
-                            <DataTable
-                                listTitles={listTitles}
-                                listKeys={listKeys}
-                                dataList={subMenuData}
-                                listButtons={listButtons}
-                                id="idSubMenu"
-                            />
+                            {!isMobile?(
+                                <DataTable
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={subMenuData}
+                                    listButtons={listButtons}
+                                    id="idSubMenu"
+                                />
+                            ):(
+                                <StackTable 
+                                    listTitles={listTitles}
+                                    listKeys={listKeys}
+                                    dataList={subMenuData}
+                                    listButtons={listButtons}
+                                    id="idSubMenu"
+                                />
+                            )}
                         </Grid>
                 </Grid>
             </Container>

@@ -9,13 +9,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {
     Container,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import DataTable from '../../components/DataTable/DataTable';
 import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
+import StackTable from '../../components/DataTable/StackTable';
 function Category(){
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const {categorys} = useSelector((state)=>state.category);
     const [t] = useTranslation("global");
 
@@ -93,13 +98,23 @@ function Category(){
                 getData={setCategories}
                 getOptionSearch={(item)=>item.tNombre}
             />
-            <DataTable
-                listTitles={listTitles}
-                listKeys={listKeys}
-                dataList={categories}
-                listButtons={listButtons}
-                id="ecodCategoria"
-            />
+            {!isMobile?(
+                <DataTable
+                    listTitles={listTitles}
+                    listKeys={listKeys}
+                    dataList={categories}
+                    listButtons={listButtons}
+                    id="ecodCategoria"
+                />
+            ):(
+                <StackTable 
+                    listTitles={listTitles}
+                    listKeys={listKeys}
+                    dataList={categories}
+                    listButtons={listButtons}
+                    id="ecodCategoria"
+                />
+            )}
        </Container>
         </>
     );

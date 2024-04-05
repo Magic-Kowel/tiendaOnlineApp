@@ -1,18 +1,25 @@
 import {
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import { sizeTitle } from '../stylesConfig';
 import PropTypes from 'prop-types';
 function TitlePage({title}){
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    // Define el tamaño de la fuente basado en el tamaño de la pantalla
+    const fontSize = isSmallScreen ? '3rem' : sizeTitle;
     return(
         <>
             <Typography
                     sx={{
-                        fontSize:sizeTitle,
+                        fontSize:fontSize,
                         textTransform:"uppercase"
                     }}
                     textAlign="center"
-                    component="h1" 
+                    variant="h1"
                     gutterBottom
             >
                 {title}

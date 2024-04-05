@@ -17,11 +17,11 @@ const pages = [
   {
     url:"/signin",
     name:"signin"
-  },
-  {
-    url:"/singup",
-    name:"singup"
   }
+  // {
+  //   url:"/singup",
+  //   name:"singup"
+  // }
 ];
 function MenuWithoutSection(){
   const [anchorElNav, setAnchorElNav] = React.useState(null);

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import ActionButtons from "./ActionButtons";
+import NoRecordsFound from "../NoRecordsFound";
 function DataTable({
     listTitles,
     listKeys,
@@ -29,56 +30,63 @@ function DataTable({
     };
     return(
         <>
-            <Paper sx={{
-                    boxShadow:5,
-                    marginTop:'0.5rem',
-                    width: '100%',
-                    overflow: 'hidden',
-                    paddingTop:"0.5rem"
-                }}>
-                <TableContainer sx={{  maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {listTitles.map((title, index) => (
-                                    <TableCell align="center" key={`${title}-${index}`}>
-                                        {title}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {dataList
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row,index) => (
-                                <TableRow hover key={`${id}-${index}`} tabIndex={-1}>
-                                    {listKeys.map((key, index) => (
-                                        <TableCell align="center" key={`${key}-${index}`}>
-                                            {row[key]}
-                                        </TableCell>
+            {
+                dataList.length ? (
+
+                    <Paper sx={{
+                            boxShadow:5,
+                            marginTop:'0.5rem',
+                            width: '100%',
+                            overflow: 'hidden',
+                            paddingTop:"0.5rem"
+                        }}>
+                        <TableContainer sx={{  maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        {listTitles.map((title, index) => (
+                                            <TableCell align="center" key={`${title}-${index}`}>
+                                                {title}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {dataList
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row,index) => (
+                                        <TableRow hover key={`${id}-${index}`} tabIndex={-1}>
+                                            {listKeys.map((key, index) => (
+                                                <TableCell align="center" key={`${key}-${index}`}>
+                                                    {row[key]}
+                                                </TableCell>
+                                            ))}
+                                            {listButtons && (
+                                                <ActionButtons 
+                                                    row={row}
+                                                    listButtons={listButtons}
+                                                    id={id}
+                                                />
+                                            )}
+                                        </TableRow>
                                     ))}
-                                    {listButtons && (
-                                        <ActionButtons 
-                                            row={row}
-                                            listButtons={listButtons}
-                                            id={id}
-                                        />
-                                    )}
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={dataList.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={dataList.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </Paper>
+                ):(
+                    <NoRecordsFound />
+                )
+            }
         </>
     );
 }

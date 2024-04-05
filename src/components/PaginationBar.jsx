@@ -1,10 +1,13 @@
 import {
-    Pagination
+    Pagination,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
 import { colors } from '../stylesConfig';
 import PropTypes from 'prop-types';
 function PaginationBar({setPage,page}){
-
+    const theme = useTheme();
+    const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const handleChange = (event, value) => {
         setPage(value);
         // Aquí puedes realizar alguna acción cuando cambie la página, como cargar datos de la nueva página, etc.
@@ -12,19 +15,20 @@ function PaginationBar({setPage,page}){
     return(
         <>
             <Pagination
-                count={10} // Número total de páginas
-                page={page} // Página actual
-                onChange={handleChange} // Manejador de cambio de página
-                shape="circular" // Forma de los botones
-                color="primary" // Color del paginador
-                sx={{ "& .MuiPaginationItem-root": { // Aplica estilos a los elementos MuiPaginationItem
-                    color: colors.secondaryColor, // Cambia el color del texto de las páginas
-                    "&.Mui-selected": { // Estilos cuando una página está seleccionada
-                        backgroundColor: colors.primaryColor, // Cambia el color de fondo cuando la página está seleccionada
-                        color: "white" // Cambia el color del texto cuando la página está seleccionada
+                count={10}
+                page={page}
+                onChange={handleChange}
+                shape="circular"
+                color="primary"
+                sx={{
+                    "& .MuiPaginationItem-root": {
+                        "&.Mui-selected": {
+                            backgroundColor: colors.primaryColor,
+                            color: "white"
+                        }
                     }
-                }}}
-                size="large" // Tamaño del paginador
+                }}
+                size={!onlySmallScreen ? "small": "large"}
             />
         </>
     )
