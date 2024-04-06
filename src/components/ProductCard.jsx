@@ -24,10 +24,8 @@ import Swal from 'sweetalert2';
 import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
 import { colors } from '../stylesConfig';
+import maxLengthText from '../tools/maxLengthText';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-function maxLength(text,maxLength){
-    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
-}
 function ProductCard({product}){
     const dispatch =  useDispatch();
     const navigate = useNavigate();
@@ -82,7 +80,7 @@ function ProductCard({product}){
     }
     const maxSteps = product?.urlImagenes?.split(',').length;
     return (
-        <Card sx={{ height: '100%',maxHeight:500, display: 'flex', flexDirection: 'column' }} key={product.idProduct}>
+        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} key={product.idProduct}>
             <Box sx={{ flexGrow: 1 }}>
                 <AutoPlaySwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -167,7 +165,7 @@ function ProductCard({product}){
                     gutterBottom
                     fontSize='1.2rem'
                 >
-                    {maxLength(product.nameProduct,20)}
+                    {maxLengthText(product.nameProduct,20)}
                 </Typography>
                 <Typography 
                     variant="body2" 

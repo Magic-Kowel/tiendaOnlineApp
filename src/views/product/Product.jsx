@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import CardSkeleton from "../../components/skeleton/CardSkeleton";
 import PaginationBar from "../../components/PaginationBar";
-import NoRecordsFound from "../../components/NoRecordsFound";
 import SearchInput from "../../components/SearchInput";
 import TitlePage from "../../components/TitlePage";
 function Product(){
@@ -68,11 +67,7 @@ function Product(){
                     </Grid>
                 ))}
             </Grid>
-            {products.length ===0 &&(
-                <NoRecordsFound />
-            )}
- 
-            <Grid 
+            <Grid
                 container
                 alignItems="flex-end"
                 my={4}

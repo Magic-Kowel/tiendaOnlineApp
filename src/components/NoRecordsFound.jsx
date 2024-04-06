@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const NoRecordsFound = ({title}) => {
   const [t] = useTranslation("global");
   return (
-    <Box display="flex" justifyContent="center" flexDirection="row" alignItems="center" height="100vh">
+    <Box display="flex" justifyContent="center" flexDirection="row" alignItems="center" height="auto">
       <Typography variant="h4" textAlign="center" color="textSecondary">
         {title ?  title : t("no-records-found")}
       </Typography>

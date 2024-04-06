@@ -281,13 +281,15 @@ function UpdateProduct(){
                             }
                             <>
                             {
-                                <ImagePreviewList
-                                    files={selectedFiles?.files || []}
-                                    imageUrls={product?.imageUrls || []}
-                                    listImagenes={product.listImagenes || []}
-                                    setSelectedFiles={setSelectedFiles}
-                                    fileInputRef={fileInputRef}
-                                />
+                                (typeof selectedFiles.files === 'object' || product.imageUrls.length > 0)&& (
+                                    <ImagePreviewList
+                                        files={selectedFiles?.files || []}
+                                        imageUrls={product?.imageUrls || []}
+                                        listImagenes={product.listImagenes || []}
+                                        setSelectedFiles={setSelectedFiles}
+                                        fileInputRef={fileInputRef}
+                                    />
+                                )
                             }
                             </>
                     </Grid>

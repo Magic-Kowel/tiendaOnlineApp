@@ -88,6 +88,9 @@ function Material(){
                  title={t("materials")}
             />
             <Grid container spacing={2}>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>
+                        <FormMaterial />
+                    </Grid>
                     <Grid item xs={12} sm={12} md={7} lg={7}>
                             <SearchAutoComplete
                                 data={materials}
@@ -112,9 +115,6 @@ function Material(){
                                 />
 
                             )}
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={5} lg={5}>
-                        <FormMaterial />
                     </Grid>
             </Grid>
         </Container>

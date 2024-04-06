@@ -31,7 +31,7 @@ function DataTable({
     return(
         <>
             {
-                dataList.length ? (
+                dataList.length > 0 ? (
 
                     <Paper sx={{
                             boxShadow:5,

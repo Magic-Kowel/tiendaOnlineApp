@@ -266,12 +266,14 @@ function CreateProduct(){
                         }
                         <>
                         {
+                            (typeof selectedFiles.files === 'object' || product.imageUrls.length > 0)&& (
                                 <ImagePreviewList
                                     files={selectedFiles?.files || []}
                                     imageUrls={product?.imageUrls || []}
                                     setSelectedFiles={setSelectedFiles}
                                     fileInputRef={fileInputRef}
                                 />
+                            )
                         }
                         </>
                     </Grid>

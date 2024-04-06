@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import MainCard from "../../components/MainCard"
-import { Grid,Button } from "@mui/material"
+import { 
+    Grid,
+    Button,
+    useMediaQuery,
+    useTheme
+} from "@mui/material"
 import { useDispatch, useSelector } from 'react-redux';
 import { getSizesVariationDisplay } from "../../reducers/size/size";
 import FormAutocomplete from "../../components/FormAutocomplete";
 import { useTranslation } from 'react-i18next';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DataTable from "../../components/DataTable/DataTable";
+import StackTable from "../../components/DataTable/StackTable";
 import { colors } from "../../stylesConfig";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -20,6 +26,8 @@ function AddSelectSize({
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
     const {sizeVariation} = useSelector((state)=>state.size);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [size,setSize] = useState(null);
     const [sizes,setSizes] = useState([])
     const [listSelectetSize,setListSelectetSize] = useState([]);
@@ -34,21 +42,6 @@ function AddSelectSize({
         if (listSelectetSize.length) {
             const newArray = sizes.filter(obj1 => !listSelectetSize.some(obj2 => obj2.idSizeVariation === obj1.idSizeVariation));
             setSizes(newArray);
-
-            // const isUnique = listSelectetSize.some((item)=>item.idSizeVariation ===idSizeVariation);
-            // if(!isUnique){
-            //     setProduct((prev)=>({
-            //         ...prev,
-            //         sizesList: [
-            //         ...prev.sizesList,
-            //         {
-            //             idSizeVariation:listSelectetSize[0].idSizeVariation,
-            //             price:productVariation.price,
-            //             stock:productVariation.stock,
-            //             isMain:productVariation.isMain
-            //         }]
-            //     }))
-            // }
         }
     }, [listSelectetSize]);
     useEffect(()=>{
@@ -220,15 +213,27 @@ function AddSelectSize({
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <DataTable
-                        listTitles={listTitles}
-                        listKeys={["nameSize","ageGroup","price","stock","textMain"]}
-                        dataList={listSelectetSize}
-                        listButtons={listButtons}
-                        id="idSizeVariation"
-                    />
-                </Grid>
+                 
+                    <Grid item xs={12}>
+                        {!isMobile ? (
+                            <DataTable
+                                listTitles={listTitles}
+                                listKeys={["nameSize","ageGroup","price","stock","textMain"]}
+                                dataList={listSelectetSize}
+                                listButtons={listButtons}
+                                id="idSizeVariation"
+                            />
+                        ) : (
+                            <StackTable 
+                                listTitles={listTitles}
+                                listKeys={["nameSize","ageGroup","price","stock","textMain"]}
+                                dataList={listSelectetSize}
+                                listButtons={listButtons}
+                                id="idSizeVariation"
+                            />
+                        )}
+                    </Grid>
+               
             </Grid>
         </MainCard>
     </>)

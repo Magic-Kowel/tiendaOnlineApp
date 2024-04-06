@@ -120,6 +120,9 @@ function SizeVariation(){
                     title={t("size-categories-clothe")}
                 />
                 <Grid container spacing={2}>
+                    <Grid item sm={12} md={5} lg={5}>
+                        <FormSizeVariation />
+                    </Grid>
                     <Grid item xs={12} sm={12} md={7} lg={7}>
                         <SearchAutoComplete
                             data={sizeVariation}
@@ -145,9 +148,6 @@ function SizeVariation(){
                                />
                             )
                         }
-                    </Grid>
-                    <Grid item sm={12} md={5} lg={5}>
-                        <FormSizeVariation />
                     </Grid>
                 </Grid>
             </Container>
