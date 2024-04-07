@@ -18,14 +18,27 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Seo from "../../components/Seo";
 function Store(){
     const dispatch = useDispatch();
-    const theme = useTheme();
     const [t] = useTranslation("global");
     const {products,loadingProducts} = useSelector((state)=>state.product);
+    const theme = useTheme();
     const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const [page, setPage] = useState(1);
     const [isOpen, setIsOpen] = useState(false);
     const [searchProduct,setSearchProduct] = useState("");
-
+    const [dataFormSearch,setDataFormSearch] = useState({
+        page:page,
+        searchProduct:searchProduct,
+        materialList:[],
+        genderList:[],
+        isChildren:false,
+        isAdult:false,
+        minPrice:0,
+        maxPrice:0,
+        size:0,
+        maxAge:0,
+        minAge:0,
+        searchForPrice:false
+    });
     const handleGetProducts = async () =>{
         await dispatch(getProducts({
             page:page,
@@ -38,12 +51,15 @@ function Store(){
     useEffect(()=>{
         dispatch(clearImagensLists())
         handleGetProducts();
+        setDataFormSearch((prev)=>({
+            ...prev,
+            searchProduct:searchProduct
+        }))
     },[page,searchProduct]);
     return(
         <>
             <Seo />
             <MenuWithoutSection />
-            
             <Container
                 component="main"
                 sx={{height:"100hv"}}
@@ -78,6 +94,8 @@ function Store(){
                         <FormSearchProduct
                             page={page}
                             searchProduct={searchProduct}
+                            setDataFormSearch={setDataFormSearch}
+                            dataFormSearch={dataFormSearch}
                         />
                     </DrawerForm>
                     {
@@ -89,6 +107,8 @@ function Store(){
                                 <FormSearchProduct
                                     page={page}
                                     searchProduct={searchProduct}
+                                    setDataFormSearch={setDataFormSearch}
+                                    dataFormSearch={dataFormSearch}
                                 />
                             </Grid>
                         )

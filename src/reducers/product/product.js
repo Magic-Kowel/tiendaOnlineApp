@@ -50,7 +50,8 @@ export const getProducts = createAsyncThunk(
                     maxAge:data.maxAge,
                     minAge:data.minAge,
                     size:data.size,
-                    publicPerson:data.publicPerson
+                    isChildren:data.isChildren,
+                    isAdult:data.isAdult
                 },
                 headers: {
                     "x-access-token": token,

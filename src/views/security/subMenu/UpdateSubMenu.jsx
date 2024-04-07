@@ -17,6 +17,7 @@ import FormAutocomplete from '../../../components/FormAutocomplete';
 import GoBack from '../../../components/goBack';
 import {colors } from '../../../stylesConfig';
 import { useTranslation } from 'react-i18next';
+import MessageOnlyDeveloper from '../../../components/MessageOnlyDeveloper';
 function UpdateSubMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -221,6 +222,9 @@ function UpdateSubMenu(){
                                         >
                                             {t("edit")}
                                         </Button>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <MessageOnlyDeveloper />
                                     </Grid>
                                 </Grid>
                             </Grid>

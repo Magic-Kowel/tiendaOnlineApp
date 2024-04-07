@@ -1,5 +1,6 @@
 import {useState,useEffect} from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { useMediaQuery, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { NAME_PAGE, MENU_USER ,NAME_USER } from '../../config';
 import { getMenuUser } from '../../reducers/user/user';
@@ -80,6 +82,7 @@ export default function MenuAdmin({children}) {
     const dispatch = useDispatch();
     const [t]= useTranslation("global");
     const theme = useTheme();
+    const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState([]);
     const [userData, setUserData] = useState([]);
@@ -160,9 +163,16 @@ export default function MenuAdmin({children}) {
                   <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                       {NAME_PAGE}
                   </Typography>
-                  <Typography variant="h6" noWrap component="div">
-                    {userData}
-                  </Typography>
+                  {
+                    onlySmallScreen  ? (
+                      <Typography variant="h6" noWrap component="div" style={{ display: 'flex', alignItems: 'center' }}>
+                        {userData}
+                        <AccountCircleIcon sx={{fontSize:32}} />
+                      </Typography>
+                    ):(
+                      <AccountCircleIcon sx={{fontSize:32}} />
+                    )
+                  }
                 </Toolbar>
             </AppBar>
             <Drawer

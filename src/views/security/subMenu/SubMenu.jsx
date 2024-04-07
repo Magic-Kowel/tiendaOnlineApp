@@ -24,6 +24,7 @@ import FormAutocomplete from "../../../components/FormAutocomplete";
 import GoBack from "../../../components/goBack";
 import DataTable from "../../../components/DataTable/DataTable";
 import StackTable from "../../../components/DataTable/StackTable";
+import MessageOnlyDeveloper from "../../../components/MessageOnlyDeveloper";
 function SubMenu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -224,6 +225,9 @@ function SubMenu(){
                                         >
                                             {t("create")}
                                         </Button>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <MessageOnlyDeveloper />
                                     </Grid>
                                 </Grid>
                             </Paper>

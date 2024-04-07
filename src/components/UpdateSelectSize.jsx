@@ -16,7 +16,13 @@ import {
     Button,
     Grid,
     Divider,
-    ButtonGroup
+    ButtonGroup,
+    useTheme,
+    useMediaQuery,
+    ListItem,
+    List,
+    ListItemText,
+    Box
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TextFieldNumber from "./TextFieldNumber";
@@ -33,6 +39,8 @@ function UpdateSelectSize({
     setProduct
 }){
     const dispatch = useDispatch();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [t] = useTranslation("global");
     const {sizeVariation,sizeVariationProduct} = useSelector((state)=>state.size);
    
@@ -62,6 +70,7 @@ function UpdateSelectSize({
         const filterListUpdateSize = sizeVariation?.filter((item) =>
         !listUpdateSize.some((item2) => (item2.idSizeVariation === item.idSizeVariation) && item2.isDelete !==true)
         );
+        console.log(listUpdateSize);
         setProduct((prev)=>({
             ...prev,
             sizesList:listUpdateSize
@@ -76,6 +85,7 @@ function UpdateSelectSize({
         setPage(0);
     };
     const handleDeleteSize = (id) => {
+        console.log("delete",id);
         setListUpdateSize((prevList) => {
             return prevList.map((item) => {
                 if (item.idSizeVariation === id && !item.isMain) {
@@ -226,97 +236,227 @@ function UpdateSelectSize({
                     </Grid>
                 </Grid>
                 <Divider />
-                <TableContainer sx={{  maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center">
-                                    {t("size-clothe")}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {t("size-ranges-clothe")}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {t("price")}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {t("stock")}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {t("actions")}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {t("main")}
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {listUpdateSize
-                            .filter((size)=>!size.isDelete)
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row,index) => (
-                                <TableRow hover key={index+row.idSizeVariation} tabIndex={-1}>
+                {/*tabla descktop*/}
+                {!isMobile?(
+                <>
+                    <TableContainer sx={{  maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
                                     <TableCell align="center">
-                                        {row.nameSize}
+                                        {t("size-clothe")}
                                     </TableCell>
                                     <TableCell align="center">
-                                        {row.ageGroup}
+                                        {t("size-ranges-clothe")}
                                     </TableCell>
                                     <TableCell align="center">
-                                        {row.price}
+                                        {t("price")}
                                     </TableCell>
                                     <TableCell align="center">
-                                        {row.stock}
+                                        {t("stock")}
                                     </TableCell>
                                     <TableCell align="center">
-                                        <ButtonGroup variant="text" sx={{color:colors.primaryColor}}>
-                                            <Tooltip title={t("delete")}>
-                                                <Button 
-                                                    color="error" 
-                                                    onClick={() => handleDeleteSize(row.idSizeVariation)}
-                                                >
-                                                    <DeleteIcon />
-                                                </Button>
-                                            </Tooltip>
-                                            <Tooltip title={t("update")}>
-                                                <Button 
-                                                    color="warning" 
-                                                    onClick={() =>handleClickOpen({
-                                                        price:row.price,
-                                                        stock:row.stock,
-                                                        idSizeVariation:row.idSizeVariation
-                                                    })}
-                                                >
-                                                    <EditIcon />
-                                                </Button>
-                                            </Tooltip>
-                                        </ButtonGroup>
+                                        {t("actions")}
                                     </TableCell>
                                     <TableCell align="center">
-                                        <Tooltip   title={t("main")}>
-                                            <Button 
-                                                variant="contained"
-                                                color="info"
-                                                onClick={() => handleSwitcheMain(row.idSizeVariation)}
-                                            >
-                                                <StarIcon color={row.isMain? 'warning' : "disabled"} />
-                                            </Button>
-                                        </Tooltip>
+                                        {t("main")}
                                     </TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={listUpdateSize.filter((size)=>!size.isDelete).length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                            </TableHead>
+                            <TableBody>
+                                {listUpdateSize
+                                .filter((size)=>!size.isDelete)
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row,index) => (
+                                    <TableRow hover key={index+row.idSizeVariation} tabIndex={-1}>
+                                        <TableCell align="center">
+                                            {row.nameSize}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {row.ageGroup}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {row.price}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {row.stock}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <ButtonGroup variant="contained" sx={{color:colors.primaryColor}}>
+                                                <Tooltip title={t("delete")}>
+                                                    <Button 
+                                                        color="error" 
+                                                        onClick={() => handleDeleteSize(row.idSizeVariation)}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </Button>
+                                                </Tooltip>
+                                                <Tooltip title={t("update")}>
+                                                    <Button 
+                                                        color="warning" 
+                                                        onClick={() =>handleClickOpen({
+                                                            price:row.price,
+                                                            stock:row.stock,
+                                                            idSizeVariation:row.idSizeVariation
+                                                        })}
+                                                    >
+                                                        <EditIcon />
+                                                    </Button>
+                                                </Tooltip>
+                                            </ButtonGroup>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <Tooltip   title={t("main")}>
+                                                <Button 
+                                                    variant="contained"
+                                                    color="info"
+                                                    onClick={() => handleSwitcheMain(row.idSizeVariation)}
+                                                >
+                                                    <StarIcon color={row.isMain? 'warning' : "disabled"} />
+                                                </Button>
+                                            </Tooltip>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={listUpdateSize.filter((size)=>!size.isDelete).length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </>
+                ):(
+                    <List sx={{ width: '100%', bgcolor: 'background.paper' }} aria-label="contacts">
+                                {listUpdateSize.filter((size)=>!size.isDelete).map((row, keyIndex) => (
+                                    <>
+                                        <Box key={`StackTable-${keyIndex}`}>
+                                            <ListItem>
+                                                    <ListItemText
+                                                        primary={t("size-clothe")}
+                                                        sx={{ textAlign: 'center', width: '50%' }}
+                                                    />
+                                                    <ListItemText
+                                                        primary={row.nameSize}
+                                                        sx={{ 
+                                                            textAlign: 'center',
+                                                            width: '50%',
+                                                            wordWrap: 'break-word'
+                                                        }}
+                                                    />
+                                            </ListItem>
+                                            <ListItem
+                                            >
+                                                    <ListItemText
+                                                        primary={t("size-ranges-clothe")}
+                                                        sx={{ textAlign: 'center', width: '50%' }}
+                                                    />
+                                                    <ListItemText
+                                                        primary={row.ageGroup}
+                                                        sx={{ 
+                                                            textAlign: 'center',
+                                                            width: '50%',
+                                                            wordWrap: 'break-word'
+                                                        }}
+                                                    />
+                                            </ListItem>
+                                            <ListItem
+                                            >
+                                                    <ListItemText
+                                                        primary={t("price")}
+                                                        sx={{ textAlign: 'center', width: '50%' }}
+                                                    />
+                                                    <ListItemText
+                                                        primary={row.price}
+                                                        sx={{ 
+                                                            textAlign: 'center',
+                                                            width: '50%',
+                                                            wordWrap: 'break-word'
+                                                        }}
+                                                    />
+                                            </ListItem>
+                                            <ListItem
+                                                key={`StackTable-${keyIndex}-${row.idSizeVariation}`}
+                                            >
+                                                    <ListItemText
+                                                        primary={t("stock")}
+                                                        sx={{ textAlign: 'center', width: '50%' }}
+                                                    />
+                                                    <ListItemText
+                                                        primary={row.stock}
+                                                        sx={{ 
+                                                            textAlign: 'center',
+                                                            width: '50%',
+                                                            wordWrap: 'break-word'
+                                                        }}
+                                                    />
+                                            </ListItem>
+                                            <ListItem disablePadding sx={{
+                                                display:"flex",
+                                                flexDirection:"column"
+                                            }}>
+                                                    <Tooltip title={t("delete")}>
+                                                            <Button variant="contained"
+                                                                fullWidth
+                                                                color="error"
+                                                                sx={{
+                                                                    marginY:1,
+                                                                    justifyContent: 'center',
+                                                                }}
+                                                                onClick={() => handleDeleteSize(row.idSizeVariation)}
+                                                            >
+                                                                <DeleteIcon />
+                                                            </Button>
+                                                        
+                                                    </Tooltip>
+                                                    <Tooltip title={t("update")}>
+                                                        <Button 
+                                                            fullWidth
+                                                            variant="contained"
+                                                            color="warning"
+                                                            sx={{
+                                                                marginY:1,
+                                                                justifyContent: 'center',
+                                                            }}
+                                                            onClick={() =>handleClickOpen({
+                                                                price:row.price,
+                                                                stock:row.stock,
+                                                                idSizeVariation:row.idSizeVariation
+                                                            })}
+                                                        >
+                                                            <EditIcon />
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title={t("main")}>
+                                                        <Button
+                                                            fullWidth
+                                                            variant="contained"
+                                                            sx={{
+                                                                marginY:1,
+                                                                justifyContent: 'center',
+                                                            }}
+                                                            color="info"
+                                                            onClick={() => handleSwitcheMain(row.idSizeVariation)}
+                                                        >
+                                                            <StarIcon color={row.isMain? 'warning' : "disabled"} />
+                                                        </Button>
+                                                    </Tooltip>
+                                            </ListItem>
+                                        </Box>
+                                    </>
+                                ))}
+                                <Divider />
+                                
+                             
+                       
+                    </List>
+                )}
+                {/*tabla movil*/}
             </Paper>
         </>
     )

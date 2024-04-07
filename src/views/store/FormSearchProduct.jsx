@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { 
     Grid,
     List,
@@ -7,8 +6,7 @@ import {
     ListItemText,
     Switch,
     FormControlLabel,
-    Button,
-    Chip
+    Button
 } from "@mui/material";
 import TextFieldNumber from "../../components/TextFieldNumber"
 import Accordion from '@mui/material/Accordion';
@@ -27,58 +25,53 @@ import { colors } from "../../stylesConfig";
 import PropTypes from 'prop-types';
 function FormSearchProduct({
     page,
-    searchProduct
+    searchProduct,
+    setDataFormSearch,
+    dataFormSearch,
 }){
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
     const {materials} = useSelector((state)=>state.material);
     const {genders} = useSelector((state)=>state.gender);
-
     useEffect(()=>{
         dispatch(getMaterials());
         dispatch(getGenders());
     },[])
-    const [dataFormSearch,setDataFormSearch] = useState({
-        page:page,
-        searchProduct:searchProduct,
-        materialList:[],
-        genderList:[],
-        publicPerson:false,
-        minPrice:0,
-        maxPrice:0,
-        size:0,
-        maxAge:0,
-        minAge:0,
-        searchForPrice:false
-    });
-    const handleChange = () => {
+    const handleChildren = () => {
         setDataFormSearch((prev) =>({
             ...prev,
-            publicPerson:!prev.publicPerson
+            isChildren:!prev.isChildren
+        }));
+    };
+    const handleAdult = () => {
+        setDataFormSearch((prev) =>({
+            ...prev,
+            isAdult:!prev.isAdult
         }));
     };
     const handleGetProducts = () =>{
         dispatch(getProducts({
             page:page,
             searchProduct:searchProduct,
-            materialList:dataFormSearch.materialList,
-            genderList:dataFormSearch.genderList,
-            minPrice:dataFormSearch.minPrice,
-            maxPrice:dataFormSearch.maxPrice,
-            size:dataFormSearch.size,
-            publicPerson:dataFormSearch.publicPerson,
-            maxAge:dataFormSearch.maxAge,
-            minAge:dataFormSearch.minAge
+            materialList:dataFormSearch?.materialList,
+            genderList:dataFormSearch?.genderList,
+            minPrice:dataFormSearch?.minPrice,
+            maxPrice:dataFormSearch?.maxPrice,
+            size:dataFormSearch?.size,
+            isChildren:dataFormSearch?.isChildren,
+            isAdult:dataFormSearch?.isAdult,
+            maxAge:dataFormSearch?.maxAge,
+            minAge:dataFormSearch?.minAge
         }));
     }
     useEffect(()=>{
         handleGetProducts();
-        console.log(dataFormSearch.publicPerson);
     },[
         searchProduct,
-        dataFormSearch.materialList,
-        dataFormSearch.publicPerson,
-        dataFormSearch.genderList
+        dataFormSearch?.materialList,
+        dataFormSearch?.isAdult,
+        dataFormSearch?.isChildren,
+        dataFormSearch?.genderList
     ])
     const handleSelectMaterial = (item) => (event) => {
         if (event.target.checked) {
@@ -109,14 +102,6 @@ function FormSearchProduct({
     
     return(
         <Grid container spacing={2} px={3}>
-            {(dataFormSearch.minPrice > 0 && dataFormSearch.maxPrice > 0) && (
-                <Grid item xs={12}>
-                    <Chip
-                        fullWidth
-                        label={`${dataFormSearch.minPrice} - ${dataFormSearch.maxPrice}`}
-                    />
-                </Grid>
-            )}
             <Grid item xs={12}>
                 <TextFieldNumber
                     label={t("priceMin")}
@@ -127,6 +112,7 @@ function FormSearchProduct({
                             minPrice:Number(value)
                         }))
                     }}
+                    onKeyEnter={handleGetProducts}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -139,10 +125,11 @@ function FormSearchProduct({
                             maxPrice:Number(value)
                         }))
                     }}
+                    onKeyEnter={handleGetProducts}
                 />
             </Grid>
             <Grid item xs={12}>
-                <Accordion>
+                <Accordion defaultExpanded>
                     <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="materialsPanel"
@@ -157,7 +144,8 @@ function FormSearchProduct({
                                         <ListItemButton>
                                             <Switch
                                                 onChange={handleSelectMaterial(item)}
-                                                defaultChecked={false} 
+                                                defaultChecked={false}
+                                                checked={dataFormSearch.materialList.find((material)=>material === item.nameMaterial)}
                                             />
                                             <ListItemText primary={item.nameMaterial} />
                                         </ListItemButton>
@@ -169,7 +157,7 @@ function FormSearchProduct({
                 </Accordion>
             </Grid>
             <Grid item xs={12}>
-                <Accordion>
+                <Accordion defaultExpanded>
                     <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="genderPanel"
@@ -184,7 +172,8 @@ function FormSearchProduct({
                                         <ListItemButton>
                                             <Switch
                                                 onChange={handleSelectGender(item)}
-                                                defaultChecked={false} 
+                                                defaultChecked={false}
+                                                checked={dataFormSearch.genderList.find((gender)=>gender === item.nameGender)}
                                             />
                                             <ListItemText primary={item.nameGender} />
                                         </ListItemButton>
@@ -195,30 +184,86 @@ function FormSearchProduct({
                     </AccordionDetails>
                 </Accordion>
             </Grid>
-            <Grid item xs={12}>
-                <FormControlLabel control={
-                        <Switch
-                            checked={dataFormSearch.publicPerson}
-                            onChange={handleChange}
-                            sx={{
-                                width: 100,
-                                height: 50, // Altura del interruptor
-                                '& .MuiSwitch-switchBase': {
-                                    padding: 1.2, // Doble del espaciado interno original
-                                    '&.Mui-checked': {
-                                      transform: 'translateX(50px)', // Doble del desplazamiento original cuando está activado
+            <Grid container item>
+                <Grid item xs={12}>
+                    <FormControlLabel control={
+                            <Switch
+                                checked={dataFormSearch?.isChildren}
+                                onChange={handleChildren}
+                                sx={{
+                                    width: 100,
+                                    height: 50, // Altura del interruptor
+                                    '& .MuiSwitch-switchBase': {
+                                        padding: 1.2, // Doble del espaciado interno original
+                                        '&.Mui-checked': {
+                                        transform: 'translateX(50px)', // Doble del desplazamiento original cuando está activado
+                                        },
+                                        textAlign: 'center', // Centra el contenido horizontalmente
+                                        verticalAlign: 'middle', // Centra el contenido verticalmente
                                     },
-                                    textAlign: 'center', // Centra el contenido horizontalmente
-                                    verticalAlign: 'middle', // Centra el contenido verticalmente
-                                },
-                            }}
-                            icon={<ChildCareIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado no seleccionado
-                            checkedIcon={<FaceIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado seleccionado
-                        />
-                } label={dataFormSearch.publicPerson ? t("adult"):t("childish")} />
+                                }}
+                                icon={<ChildCareIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado no seleccionado
+                                checkedIcon={<ChildCareIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado seleccionado
+                            />
+                    } label={t("childish")} />
+                </Grid>
+                {
+                    dataFormSearch?.isChildren &&(
+                        <>
+                            <Grid item xs={12}>
+                                <TextFieldNumber 
+                                    label={t("min-age")}
+                                    value={dataFormSearch?.minAge}
+                                    onChange={(value)=>{
+                                        setDataFormSearch((prev)=>({
+                                            ...prev,
+                                            minAge:Number(value)
+                                        }))
+                                    }}
+                                    onKeyEnter={handleGetProducts}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                            <TextFieldNumber 
+                                label={t("max-age")}
+                                value={dataFormSearch?.maxAge}
+                                onChange={(value)=>{
+                                    setDataFormSearch((prev)=>({
+                                        ...prev,
+                                        maxAge:Number(value)
+                                    }))
+                                }}
+                                onKeyEnter={handleGetProducts}
+                            />
+                            </Grid>
+                        </>
+                    )
+                }
+                <Grid item xs={12}>
+                    <FormControlLabel control={
+                            <Switch
+                                checked={dataFormSearch?.isAdult}
+                                onChange={handleAdult}
+                                sx={{
+                                    width: 100,
+                                    height: 50, // Altura del interruptor
+                                    '& .MuiSwitch-switchBase': {
+                                        padding: 1.2, // Doble del espaciado interno original
+                                        '&.Mui-checked': {
+                                        transform: 'translateX(50px)', // Doble del desplazamiento original cuando está activado
+                                        },
+                                        textAlign: 'center', // Centra el contenido horizontalmente
+                                        verticalAlign: 'middle', // Centra el contenido verticalmente
+                                    },
+                                }}
+                                icon={<FaceIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado no seleccionado
+                                checkedIcon={<FaceIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado seleccionado
+                            />
+                    } label={t("adult")} />
+                </Grid>
             </Grid>
             {
-                dataFormSearch.publicPerson &&(
+                dataFormSearch?.isAdult &&(
                     <Grid item xs={12}>
                         <TextFieldNumber 
                             label={t("size")}
@@ -231,36 +276,6 @@ function FormSearchProduct({
                             }}
                         />
                     </Grid>
-                )
-            }
-            {
-                !dataFormSearch.publicPerson &&(
-                    <>
-                        <Grid item xs={12}>
-                            <TextFieldNumber 
-                                label={t("min-age")}
-                                value={dataFormSearch?.minAge}
-                                onChange={(value)=>{
-                                    setDataFormSearch((prev)=>({
-                                        ...prev,
-                                        minAge:Number(value)
-                                    }))
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                        <TextFieldNumber 
-                            label={t("max-age")}
-                            value={dataFormSearch?.maxAge}
-                            onChange={(value)=>{
-                                setDataFormSearch((prev)=>({
-                                    ...prev,
-                                    maxAge:Number(value)
-                                }))
-                            }}
-                        />
-                        </Grid>
-                    </>
                 )
             }
             <Grid item xs={12}>
@@ -285,5 +300,7 @@ function FormSearchProduct({
 FormSearchProduct.propTypes = {
     page: PropTypes.string.isRequired,
     searchProduct: PropTypes.string.isRequired,
+    setDataFormSearch:PropTypes.func.isRequired,
+    dataFormSearch: PropTypes.object.isRequired,
 };
 export default FormSearchProduct;

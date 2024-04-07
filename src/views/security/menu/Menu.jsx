@@ -28,6 +28,7 @@ import Swal from 'sweetalert2';
 import GoBack from '../../../components/goBack';
 import TitlePage from '../../../components/TitlePage';
 import StackTable from '../../../components/DataTable/StackTable';
+import MessageOnlyDeveloper from '../../../components/MessageOnlyDeveloper';
 function Menu(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -167,6 +168,9 @@ function Menu(){
                                         >
                                             {t("create")}
                                         </Button>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                            <MessageOnlyDeveloper />
                                     </Grid>
                                 </Grid>
                             </form>

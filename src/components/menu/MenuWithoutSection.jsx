@@ -13,6 +13,7 @@ import { colors } from '../../stylesConfig';
 import { Link } from "react-router-dom";
 import { Link as MuiLink } from '@mui/material';
 import { NAME_PAGE } from '../../config';
+import { useTranslation } from 'react-i18next';
 const pages = [
   {
     url:"/signin",
@@ -24,6 +25,7 @@ const pages = [
   // }
 ];
 function MenuWithoutSection(){
+  const [t] = useTranslation("global");
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -104,7 +106,7 @@ function MenuWithoutSection(){
                       to={`${page.url}`} 
                       underline="none"
                     >
-                      {page.name}
+                      {t(page.name)}
                     </MuiLink>
                   </Typography>
                 </MenuItem>
@@ -138,7 +140,7 @@ function MenuWithoutSection(){
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: '#fff', display: 'block' }}
               >
-                {page.name}
+                {t(page.name)}
               </Button>
             ))}
           </Box>

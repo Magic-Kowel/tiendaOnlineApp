@@ -124,5 +124,6 @@
   "child":"Niño",
   "childish":"Infantil",
   "adult":"Adulto",
-  "filter":"Filtrar"
+  "filter":"Filtrar",
+  "MessageOnlyDeveloper":"Esta sección es para uso del desarrollador"
 }
