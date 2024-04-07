@@ -15,6 +15,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import FaceIcon from '@mui/icons-material/Face';
+import SwitchTematic from "../../components/SwitchTematic";
 import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from "react-redux";
@@ -52,7 +53,7 @@ function FormSearchProduct({
     const handleGetProducts = () =>{
         dispatch(getProducts({
             page:page,
-            searchProduct:searchProduct,
+            nameProduct:searchProduct,
             materialList:dataFormSearch?.materialList,
             genderList:dataFormSearch?.genderList,
             minPrice:dataFormSearch?.minPrice,
@@ -187,23 +188,11 @@ function FormSearchProduct({
             <Grid container item>
                 <Grid item xs={12}>
                     <FormControlLabel control={
-                            <Switch
+                            <SwitchTematic
                                 checked={dataFormSearch?.isChildren}
                                 onChange={handleChildren}
-                                sx={{
-                                    width: 100,
-                                    height: 50, // Altura del interruptor
-                                    '& .MuiSwitch-switchBase': {
-                                        padding: 1.2, // Doble del espaciado interno original
-                                        '&.Mui-checked': {
-                                        transform: 'translateX(50px)', // Doble del desplazamiento original cuando está activado
-                                        },
-                                        textAlign: 'center', // Centra el contenido horizontalmente
-                                        verticalAlign: 'middle', // Centra el contenido verticalmente
-                                    },
-                                }}
+                                colorRielCheck={colors.primaryColor}
                                 icon={<ChildCareIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado no seleccionado
-                                checkedIcon={<ChildCareIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado seleccionado
                             />
                     } label={t("childish")} />
                 </Grid>
@@ -241,23 +230,11 @@ function FormSearchProduct({
                 }
                 <Grid item xs={12}>
                     <FormControlLabel control={
-                            <Switch
+                            <SwitchTematic
                                 checked={dataFormSearch?.isAdult}
                                 onChange={handleAdult}
-                                sx={{
-                                    width: 100,
-                                    height: 50, // Altura del interruptor
-                                    '& .MuiSwitch-switchBase': {
-                                        padding: 1.2, // Doble del espaciado interno original
-                                        '&.Mui-checked': {
-                                        transform: 'translateX(50px)', // Doble del desplazamiento original cuando está activado
-                                        },
-                                        textAlign: 'center', // Centra el contenido horizontalmente
-                                        verticalAlign: 'middle', // Centra el contenido verticalmente
-                                    },
-                                }}
+                                colorRielCheck={colors.primaryColor}
                                 icon={<FaceIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado no seleccionado
-                                checkedIcon={<FaceIcon sx={{ fontSize: 32 }} />} // Icono cuando el switch está en estado seleccionado
                             />
                     } label={t("adult")} />
                 </Grid>

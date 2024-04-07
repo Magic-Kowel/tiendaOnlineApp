@@ -18,6 +18,7 @@ function Product(){
     const [page, setPage] = useState(1);
     const [searchProduct,setSearchProduct] = useState("");
     const handleGetProducts = async () =>{
+        console.log("searchProduct",searchProduct);
         await dispatch(getProducts({
             page:page,
             nameProduct:searchProduct
