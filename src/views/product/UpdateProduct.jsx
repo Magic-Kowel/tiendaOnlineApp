@@ -281,7 +281,9 @@ function UpdateProduct(){
                             }
                             <>
                             {
-                                (typeof selectedFiles.files === 'object' || product.imageUrls.length > 0)&& (
+                                (typeof selectedFiles.files === 'object' || 
+                                product.imageUrls.length > 0 || 
+                                product.listImagenes.length > 0)&& (
                                     <ImagePreviewList
                                         files={selectedFiles?.files || []}
                                         imageUrls={product?.imageUrls || []}

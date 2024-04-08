@@ -191,6 +191,7 @@ function UpdateSelectSize({
                             }}
                             error={formik.touched.price && Boolean(formik.errors.price)}
                             helperText={formik.touched.price && formik.errors.price}
+                            limit={6}
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -205,6 +206,7 @@ function UpdateSelectSize({
                             }}
                             error={formik.touched.stock && Boolean(formik.errors.stock)}
                             helperText={formik.touched.stock && formik.errors.stock}
+                            limit={6}
                         />
                     </Grid>
                     <Grid item xs={12}>

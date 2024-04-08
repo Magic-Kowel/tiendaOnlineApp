@@ -6,16 +6,17 @@ function TextFieldNumber({
   onChange,
   error,
   helperText,
-  onKeyEnter
+  onKeyEnter,
+  limit
 }){
     const handleInputChange = (event) => {
+      if (!limit || event.target.value.length <= limit) {
         const inputValue = event.target.value.replace(/[^0-9]/g, "");
         onChange(inputValue);
+      }
     };
     const handleKeyPress = (event) => {
-      console.log("key");
       if (event.key === 'Enter') {
-        console.log("key enter");
         onKeyEnter()
       }
     };
@@ -44,6 +45,7 @@ TextFieldNumber.propTypes = {
     error:PropTypes.bool,
     helperText:PropTypes.string,
     onKeyEnter:PropTypes.func,
+    limit:PropTypes.number,
 };
 
 export default TextFieldNumber;

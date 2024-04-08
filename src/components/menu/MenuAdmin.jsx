@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react';
 import { styled } from '@mui/material/styles';
-import { useMediaQuery, useTheme } from '@mui/material';
+import {useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,21 +13,17 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+ 
 import { NAME_PAGE, MENU_USER ,NAME_USER } from '../../config';
 import { getMenuUser } from '../../reducers/user/user';
 import { colors } from '../../stylesConfig';
-import { useTranslation } from "react-i18next";
+
 import { useDispatch } from 'react-redux';
 import getIdUser from '../../tools/getIdUser';
 import ItemMenuAdmin from './ItemMenuAdmin';
 import PropTypes from 'prop-types';
 import Footer  from './../Footer';
+import UserMenuHeader from './UserMenuHeader';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -75,14 +71,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
-import { useNavigate } from "react-router-dom";
 
 export default function MenuAdmin({children}) {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [t]= useTranslation("global");
+
     const theme = useTheme();
-    const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState([]);
     const [userData, setUserData] = useState([]);
@@ -133,10 +126,6 @@ export default function MenuAdmin({children}) {
         });
       }
     });
-    function exitSistem(){
-        sessionStorage.clear();
-        navigate("/");
-    }
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -163,16 +152,7 @@ export default function MenuAdmin({children}) {
                   <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                       {NAME_PAGE}
                   </Typography>
-                  {
-                    onlySmallScreen  ? (
-                      <Typography variant="h6" noWrap component="div" style={{ display: 'flex', alignItems: 'center' }}>
-                        {userData}
-                        <AccountCircleIcon sx={{fontSize:32}} />
-                      </Typography>
-                    ):(
-                      <AccountCircleIcon sx={{fontSize:32}} />
-                    )
-                  }
+                  <UserMenuHeader userData={userData} />
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -195,16 +175,6 @@ export default function MenuAdmin({children}) {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <ListItem disablePadding>
-                      <ListItemButton
-                          onClick={exitSistem}
-                      >
-                          <ListItemIcon>
-                          <PowerSettingsNewIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={t("exit")}/>
-                      </ListItemButton>
-                    </ListItem>
                     {
                       menuItems?.map((item,index)=>(
                           <ItemMenuAdmin 
@@ -221,13 +191,16 @@ export default function MenuAdmin({children}) {
                   <DrawerHeader />
                     <Box
                     component="main"
-                      sx={{minHeight: "100vh"}}
+                      sx={{
+                        minHeight: 'calc(100vh - 250px)', // Altura mínima para llenar el espacio disponible
+                        //  paddingBottom: '100px', // Ajusta el padding inferior para dejar espacio para el pie de página
+                      }}
                     >
                       {children}
                     </Box>
-              <Footer /> 
             </Main>
           </Box>
+              <Footer /> 
         </>
       );
 }

@@ -189,6 +189,16 @@ export const resetPasswort = createAsyncThunk(
       }
   }
 );
+export const sendConfirmationUser = createAsyncThunk(
+  "send/confirmation/user", async(idUser,thunkAPI) =>{
+    try {
+      const response = await axios.post(`${API_BASE_URL}/user/send/confirmation`,{idUser:idUser});
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+)
 const initialState = {
   users: [],
   usersTypes: [],

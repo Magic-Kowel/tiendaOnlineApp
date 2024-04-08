@@ -45,7 +45,7 @@ function ProductCard({product}){
         setActiveStep(step);
     };
     const handleUpdate = (id) =>{
-        navigate(`edit/${id}`);
+        navigate(`/product/edit/${id}`);
     }
     const handleDescription = (id) =>{
         navigate(`/product/description/${id}`);

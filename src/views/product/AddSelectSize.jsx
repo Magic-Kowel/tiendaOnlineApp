@@ -162,9 +162,10 @@ function AddSelectSize({
                             onChange={(value)=>{
                                 setProductVariation((prev)=>({
                                     ...prev,
-                                    price:Number(value)
+                                    price:(value)
                                 }))
                             }}
+                            limit={6}
                             error={formik.touched.price && Boolean(formik.errors.price)}
                             helperText={formik.touched.price && formik.errors.price}
                         />
@@ -176,9 +177,10 @@ function AddSelectSize({
                             onChange={(value)=>{
                                 setProductVariation((prev)=>({
                                     ...prev,
-                                    stock:Number(value)
+                                    stock:(value)
                                 }))
                             }}
+                            limit={6}
                             error={formik.touched.stock && Boolean(formik.errors.stock)}
                             helperText={formik.touched.stock && formik.errors.stock}
                         />

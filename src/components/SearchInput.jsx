@@ -37,7 +37,12 @@ function SearchInput({setSearchProduct}){
                     placeholder={t("search-products")}
                     inputProps={{ 'aria-label': t("search-products") }}
                 />
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <IconButton 
+                    type="button" 
+                    sx={{ p: '10px' }} 
+                    aria-label="search"
+                    onClick={()=>setSearchProduct(search)}
+                >
                     <SearchIcon />
                 </IconButton>
                 </Paper>

@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Footer  from './../components/Footer';
+import MenuWithoutSection from '../components/menu/MenuWithoutSection';
 import {
   Typography,
   Container,
@@ -44,8 +45,11 @@ const validateUserForm = async (e)=>{
     const [t]= useTranslation("global");
     return(
           <>
-            <Container  style={{ 
-                height: '100vh',
+            <MenuWithoutSection />
+            <Container
+            component="main"
+            sx={{
+                height: 'calc(100vh - 260px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'

@@ -227,6 +227,7 @@ function FormSizeVariation(){
                                                     onChange={handleGetMinAge}
                                                     error={formik.touched.minAge && Boolean(formik.errors.minAge)}
                                                     helperText={formik.touched.minAge && formik.errors.minAge}
+                                                    limit={2}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -236,6 +237,7 @@ function FormSizeVariation(){
                                                     onChange={handleGetMaxAge}
                                                     error={formik.touched.maxAge && Boolean(formik.errors.maxAge)}
                                                     helperText={formik.touched.maxAge && formik.errors.maxAge}
+                                                    limit={2}
                                                 />
                                             </Grid>
                                         </>  

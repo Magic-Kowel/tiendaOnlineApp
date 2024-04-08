@@ -77,7 +77,7 @@ function App() {
         />
         <Route path="/user/validate/:uid" element={<ValidateUser />} />
         <Route path="/user/reset/password/:idUser" element={<ResetPassword />} />
-        <Route path='/product' element={
+        <Route path='/products' element={
           <ProtectedRoute
             permission='product'
           >

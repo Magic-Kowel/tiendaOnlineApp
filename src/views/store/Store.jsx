@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import MenuWithoutSection from "../../components/menu/MenuWithoutSection";
 import Footer from "../../components/Footer";
-import { Grid, Container,Stack, Chip } from "@mui/material";
+import { Grid, Container,Stack, Chip} from "@mui/material";
 import DrawerForm from "../../components/DrawerForm";
 import { useMediaQuery, useTheme } from '@mui/material';
 import TitlePage from "../../components/TitlePage";
@@ -62,7 +62,9 @@ function Store(){
             <MenuWithoutSection />
             <Container
                 component="main"
-                sx={{height:"100hv"}}
+                sx={{
+                    minHeight:"calc(100vh - 260px)",
+                }}
             >
                 <TitlePage
                     title={t("products")}
@@ -86,7 +88,7 @@ function Store(){
                             />
                     </Stack>
                 )}
-                <Grid container justifyContent="center">
+                <Grid container justifyContent="center" >
                     <DrawerForm
                         open={isOpen}
                         onClose={openDrawer}
@@ -117,9 +119,8 @@ function Store(){
                         container 
                         item 
                         spacing={1} 
-                        xs={9} 
-                       
-  
+                        xs={9}
+                        alignItems="flex-start"
                     >
                         {loadingProducts === true && [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]?.map((product, index) => (
                         <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
@@ -144,31 +145,27 @@ function Store(){
                                 item
                                 justifyContent="center"
                                 alignItems="center"
+                                sx={{height:"calc(100vh - 260px)"}}
                             >
                                 <NoRecordsFound />
                             </Grid>
                         )}
                     </Grid>
-                </Grid>
-     
-                    <Grid 
-                        container
+                    <Grid
+                        item
                         alignItems="flex-end"
+                        display="flex" 
+                        justifyContent="center" 
+                        xs={12}
                         my={4}
                     >
-                        <Grid
-                            item
-                            container
-                            alignItems="flex-end"
-                            display="flex" justifyContent="center" 
-                            xs={12}
-                        >
-                            <PaginationBar
+                        <PaginationBar
                             setPage={setPage}
                             page={page}
-                            />
-                        </Grid>
+                            count={Math.ceil(products.length / 30)}
+                        />
                     </Grid>
+                </Grid>
             </Container>
             <Footer />
         </>

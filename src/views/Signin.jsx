@@ -12,6 +12,7 @@ import {
     Alert
 } from "@mui/material";
 import MenuWithoutSection from "../components/menu/MenuWithoutSection";
+import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
 import {colors} from "../stylesConfig";
 import { loginValidate } from "../reducers/user/user";
@@ -50,7 +51,7 @@ function Signin(){
         <>
             <MenuWithoutSection />
             <Container  style={{ 
-                height: '100vh',
+                height: 'calc(100vh - 280px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -128,6 +129,7 @@ function Signin(){
                     </CardContent>
                 </Card>
             </Container>
+            <Footer />
         </>
     );
 }

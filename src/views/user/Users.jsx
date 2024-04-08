@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers, deleteUser,sendResetPasswort } from '../../reducers/user/user';
+import { 
+    getUsers,
+    deleteUser,
+    sendResetPasswort,
+    sendConfirmationUser
+} from '../../reducers/user/user';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router";
 import Swal from 'sweetalert2';
@@ -18,6 +23,7 @@ import DataTable from '../../components/DataTable/DataTable';
 import TitlePage from '../../components/TitlePage';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
 import StackTable from '../../components/DataTable/StackTable';
+import MailIcon from '@mui/icons-material/Mail';
 function Users(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
@@ -58,6 +64,21 @@ function Users(){
                     });
                 })
             }
+        });
+    }
+    const handleSendConfirmationUser= async (idUser) =>{
+        const response = await dispatch(sendConfirmationUser(idUser));
+        console.log(response);
+        if(response.payload.send === true){
+            Swal.fire({
+                title:t("form-submitted-successfully"),
+                icon:"success"
+            });
+            return false;
+        }
+        Swal.fire({
+            title:t("something-went-wrong"),
+            icon:"error"
         });
     }
     const handleSendResetPasswort = async (idUser) =>{
@@ -101,6 +122,12 @@ function Users(){
             tooltipTitle: t("restore-password"),
             onClick: (idUser) => handleSendResetPasswort(idUser),
             icon: <ReplyIcon />,
+            customColor:colors.primaryColor
+        },
+        {
+            tooltipTitle: t("confirmacion-of-user"),
+            onClick: (idUser) => handleSendConfirmationUser(idUser),
+            icon: <MailIcon />,
             customColor:colors.primaryColor
         }
     ];

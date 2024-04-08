@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { colors } from '../stylesConfig';
 import PropTypes from 'prop-types';
-function PaginationBar({setPage,page}){
+function PaginationBar({setPage,page,count}){
     const theme = useTheme();
     const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const handleChange = (event, value) => {
@@ -15,7 +15,7 @@ function PaginationBar({setPage,page}){
     return(
         <>
             <Pagination
-                count={10}
+                count={count || 1}
                 page={page}
                 onChange={handleChange}
                 shape="circular"
@@ -35,6 +35,7 @@ function PaginationBar({setPage,page}){
 }
 PaginationBar.propTypes = {
     page:PropTypes.number.isRequired,
-    setPage:PropTypes.func.isRequired
+    setPage:PropTypes.func.isRequired,
+    count:PropTypes.number.isRequired,
 };
 export default PaginationBar;

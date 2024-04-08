@@ -110,10 +110,11 @@ function FormSearchProduct({
                     onChange={(value)=>{
                         setDataFormSearch((prev)=>({
                             ...prev,
-                            minPrice:Number(value)
+                            minPrice:(value)
                         }))
                     }}
                     onKeyEnter={handleGetProducts}
+                    limit={6}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -123,10 +124,11 @@ function FormSearchProduct({
                     onChange={(value)=>{
                         setDataFormSearch((prev)=>({
                             ...prev,
-                            maxPrice:Number(value)
+                            maxPrice:(value)
                         }))
                     }}
                     onKeyEnter={handleGetProducts}
+                    limit={6}
                 />
             </Grid>
             <Grid item xs={12}>
@@ -206,9 +208,10 @@ function FormSearchProduct({
                                     onChange={(value)=>{
                                         setDataFormSearch((prev)=>({
                                             ...prev,
-                                            minAge:Number(value)
+                                            minAge:(value)
                                         }))
                                     }}
+                                    limit={2}
                                     onKeyEnter={handleGetProducts}
                                 />
                             </Grid>
@@ -222,6 +225,7 @@ function FormSearchProduct({
                                         maxAge:Number(value)
                                     }))
                                 }}
+                                limit={2}
                                 onKeyEnter={handleGetProducts}
                             />
                             </Grid>
@@ -251,6 +255,7 @@ function FormSearchProduct({
                                     size:Number(value)
                                 }))
                             }}
+                            limit={3}
                         />
                     </Grid>
                 )

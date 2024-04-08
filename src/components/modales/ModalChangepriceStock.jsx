@@ -48,11 +48,13 @@ function ModalChangepriceStock({
                     label={t("price")}
                     value={price}
                     onChange={setPrice}
+                    limit={6}
                 />
                 <TextFieldNumber
                     label={t("stock")}
                     value={stock}
                     onChange={setStock}
+                    limit={6}
                 />
             </DialogContent>
             <DialogActions>
