@@ -56,9 +56,8 @@ function Seo(){
                 </meta>
                 {/* <meta name="twitter:image" content="https://www.ejemplo.com/imagenes/tienda-en-linea.jpg"> */}
                 {/* <meta name="twitter:site" content="@tuusuario"></meta> 
-                <meta http-equiv="refresh" content="5; url=https://www.ejemplo.com/nueva-pagina">
-
                 */}
+                <meta rel="canonical" href="https://pijamasbonitas.com/"></meta>
             </Helmet>
         </>
     )

@@ -217,7 +217,7 @@ const initialState = {
     sizeVariationProduct:[],
     variationValidate:false,
     loadingSize:false,
-    error:null
+    errorSize:null
 }
 const sizeSlice = createSlice({
     name:"size",
@@ -231,7 +231,7 @@ const sizeSlice = createSlice({
         builder
             .addCase(getSizes.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSizes.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -239,12 +239,12 @@ const sizeSlice = createSlice({
             })
             .addCase(getSizes.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(getSize.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSize.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -252,48 +252,48 @@ const sizeSlice = createSlice({
             })
             .addCase(getSize.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(createSize.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(createSize.fulfilled, (state) => {
             state.loadingSize = false;
             })
             .addCase(createSize.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(deleteSize.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(deleteSize.fulfilled, (state) => {
             state.loadingSize = false;
             })
             .addCase(deleteSize.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(updateSize.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(updateSize.fulfilled, (state) => {
             state.loadingSize = false;
             })
             .addCase(updateSize.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(getSizesVariation.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSizesVariation.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -302,37 +302,37 @@ const sizeSlice = createSlice({
             })
             .addCase(getSizesVariation.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             // ... Otros casos ...
             .addCase(createSizesVariation.pending, (state) => {
                 state.loadingSize = true;
-                state.error = null;
+                state.errorSize = null;
             })
             .addCase(createSizesVariation.fulfilled, (state) => {
                 state.loadingSize = false;
             })
             .addCase(createSizesVariation.rejected, (state, action) => {
                 state.loadingSize = false;
-                state.error = action.payload;
+                state.errorSize = action.payload;
             });
         builder
             .addCase(deleteSizesVariation.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(deleteSizesVariation.fulfilled, (state) => {
             state.loadingSize = false;
             })
             .addCase(deleteSizesVariation.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(getSizeVariation.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSizeVariation.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -340,24 +340,24 @@ const sizeSlice = createSlice({
             })
             .addCase(getSizeVariation.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(updateSizeVariation.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(updateSizeVariation.fulfilled, (state) => {
             state.loadingSize = false;
             })
             .addCase(updateSizeVariation.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(sizeVariationValidate.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(sizeVariationValidate.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -365,12 +365,12 @@ const sizeSlice = createSlice({
             })
             .addCase(sizeVariationValidate.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(getSizesVariationDisplay.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSizesVariationDisplay.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -378,12 +378,12 @@ const sizeSlice = createSlice({
             })
             .addCase(getSizesVariationDisplay.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
         builder
             .addCase(getSizeVariationProdruct.pending, (state) => {
             state.loadingSize = true;
-            state.error = null;
+            state.errorSize = null;
             })
             .addCase(getSizeVariationProdruct.fulfilled, (state, action) => {
             state.loadingSize = false;
@@ -391,7 +391,7 @@ const sizeSlice = createSlice({
             })
             .addCase(getSizeVariationProdruct.rejected, (state, action) => {
             state.loadingSize = false;
-            state.error = action.payload;
+            state.errorSize = action.payload;
             });
     }
 })

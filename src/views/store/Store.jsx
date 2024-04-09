@@ -135,11 +135,11 @@ function Store(){
                                 md={3} 
                                 lg={searchProduct ?4:3} 
                                 key={product.idProduct}
-                            >
+                            > 
                                 <ProductCard product={product} />
                             </Grid>
                         ))}
-                        {products.length === 0 && (
+                        {(products.length === 0)  && (
                             <Grid
                                 container
                                 item

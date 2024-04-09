@@ -24,7 +24,7 @@ function Material(){
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [t] = useTranslation("global");
     const [materialList,setMaterialList] = useState([]);
-    const {materials} = useSelector((state)=>state.material);
+    const {materials , loadingMaterial} = useSelector((state)=>state.material);
     const handleGetMaterials = async () =>{
         await dispatch(getMaterials());
     }
@@ -96,6 +96,7 @@ function Material(){
                                 data={materials}
                                 getData={setMaterialList}
                                 getOptionSearch={(item)=>item.nameMaterial}
+                                loading={loadingMaterial}
                             />
                             {!isMobile?(
                                 <DataTable

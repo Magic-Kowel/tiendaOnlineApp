@@ -69,6 +69,20 @@ function CreateProduct(){
                 icon:'success',
                 timer: 1500
             });
+            formik.resetForm();
+            setProduct({
+                nameProduct:"",
+                description:"",
+                idCategory:"",
+                idSubCategory:"",
+                idMaterial:"",
+                idGender:"",
+                sizesList:[],
+                files: [],
+                imageUrls:[]
+            });
+            setUrlImagen("");
+            setSelectedFiles([]);
             return false;
         }
         Swal.fire({

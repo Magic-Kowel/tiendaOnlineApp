@@ -75,8 +75,8 @@ export const deleteCategory = createAsyncThunk(
 
 const initialState = {
     categorys:[],
-    loading:false,
-    error:null
+    loadingCategory:false,
+    errorCategory:null
 }
 const categorySlice = createSlice({
     name:"category",
@@ -85,65 +85,65 @@ const categorySlice = createSlice({
     extraReducers:(builder) =>{
         builder
           .addCase(getCategories.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingCategory = true;
+            state.errorCategory = null;
           })
           .addCase(getCategories.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingCategory = false;
             state.categorys = action.payload.length > 0 ? action.payload : [];
           })
           .addCase(getCategories.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingCategory = false;
+            state.errorCategory = action.payload;
           });
         builder
           .addCase(getCategory.pending,(state) => {
-              state.loading = true;
-              state.error = null;
+              state.loadingCategory = true;
+              state.errorCategory = null;
           })
           .addCase(getCategory.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.loadingCategory = false;
             state.categorys = action.payload.length > 0 ? action.payload : [];
           })
           .addCase(getCategory.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingCategory = false;
+            state.errorCategory = action.payload;
           })
         builder
           .addCase(deleteCategory.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingCategory = true;
+            state.errorCategory = null;
           })
           .addCase(deleteCategory.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingCategory = false;
           })
           .addCase(deleteCategory.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingCategory = false;
+            state.errorCategory = action.payload;
           });
         builder
           .addCase(createCategory.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingCategory = true;
+            state.errorCategory = null;
           })
           .addCase(createCategory.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingCategory = false;
           })
           .addCase(createCategory.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingCategory = false;
+            state.errorCategory = action.payload;
           });
         builder
           .addCase(updateCategory.pending,(state) => {
-            state.loading = true;
-            state.error =null
+            state.loadingCategory = true;
+            state.errorCategory =null
           })
           .addCase(updateCategory.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingCategory = false;
           })
           .addCase(updateCategory.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingCategory = false;
+            state.errorCategory = action.payload;
           });
     }
 });

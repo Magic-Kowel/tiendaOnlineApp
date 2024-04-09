@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import PropTypes from 'prop-types';
+import ClearIcon from '@mui/icons-material/Clear';
 import { useTranslation } from 'react-i18next';
 function SearchAutoComplete({
         valueDefault,//valos que se pondra por defecto selecionado
@@ -12,7 +13,8 @@ function SearchAutoComplete({
         getData,//STATE PARA ACTUALIZAR EL VALOR
         getOptionSearch,//PARAMETROS PARA BUSCAR
         title,//titulo que poner 
-        isForm//para saver si se esta usando en un foremulario
+        isForm,//para saver si se esta usando en un foremulario
+        loading = false
     }){
     const [t] = useTranslation("global");
     const [isEmpty,setIsEmpty] = useState(false);
@@ -30,11 +32,13 @@ function SearchAutoComplete({
         <>
             <Autocomplete
                 value={valueDefault}
-                loading={data.length<=0}
+                loading={loading}
                 disablePortal
                 options={data || []}
                 getOptionLabel={getOptionSearch}
                 clearOnEscape
+                clearIcon={<ClearIcon />}
+                noOptionsText={t("no-results-found")}
                 renderInput={(params) => (
                     <TextField 
                         {...params}
@@ -42,8 +46,8 @@ function SearchAutoComplete({
                         InputProps={{
                             ...params.InputProps,
                             endAdornment: <>{
-                                    data.length<=0 && <CircularProgress color="inherit" size={20} />
-                                }</>,
+                                (loading) && <CircularProgress color="inherit" size={20} />
+                            }</>,
                         }}
                     />
                 )}
@@ -81,6 +85,7 @@ SearchAutoComplete.propTypes = {
     getData: PropTypes.func.isRequired, // getData debe ser una función y es requerido
     getOptionSearch:PropTypes.func.isRequired,
     title:PropTypes.string,
-    isForm:PropTypes.bool
+    isForm:PropTypes.bool,
+    loading:PropTypes.bool
 };
 export default SearchAutoComplete;

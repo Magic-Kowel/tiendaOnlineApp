@@ -83,8 +83,8 @@ export const updateMaterial = createAsyncThunk(
 );
 const initialState = {
     materials:[],
-    loading:false,
-    error:null
+    loadingMaterial:false,
+    errorMaterial:null
 }
 const materialSlice = createSlice({
     name:"materials",
@@ -93,65 +93,65 @@ const materialSlice = createSlice({
     extraReducers:(builder) =>{
         builder
             .addCase(getMaterials.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingMaterial = true;
+            state.errorMaterial = null;
             })
             .addCase(getMaterials.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingMaterial = false;
             state.materials = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getMaterials.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingMaterial = false;
+            state.errorMaterial = action.payload;
             })
         builder
             .addCase(getMaterial.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingMaterial = true;
+            state.errorMaterial = null;
             })
             .addCase(getMaterial.fulfilled, (state, action) => {
-            state.loading = false;
+            state.loadingMaterial = false;
             state.materials = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getMaterial.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingMaterial = false;
+            state.errorMaterial = action.payload;
             })
         builder
             .addCase(createMaterial.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingMaterial = true;
+            state.errorMaterial = null;
             })
             .addCase(createMaterial.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingMaterial = false;
             })
             .addCase(createMaterial.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingMaterial = false;
+            state.errorMaterial = action.payload;
             });
         builder
             .addCase(deleteMaterial.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingMaterial = true;
+            state.errorMaterial = null;
             })
             .addCase(deleteMaterial.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingMaterial = false;
             })
             .addCase(deleteMaterial.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingMaterial = false;
+            state.errorMaterial = action.payload;
             });
         builder
             .addCase(updateMaterial.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loadingMaterial = true;
+            state.errorMaterial = null;
             })
             .addCase(updateMaterial.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingMaterial = false;
             })
             .addCase(updateMaterial.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loadingMaterial = false;
+            state.errorMaterial = action.payload;
             });
         
     }

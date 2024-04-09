@@ -76,7 +76,7 @@ export const deleteCategory = createAsyncThunk(
   )
 const initialState = {
     subcategories:[],
-    loading:false,
+    loadingSubcategory:false,
     error:null
 }
 const subcategorySlice = createSlice({
@@ -86,52 +86,52 @@ const subcategorySlice = createSlice({
     extraReducers:(builder) =>{
       builder
         .addCase(getSubcategories.pending, (state) => {
-          state.loading = true;
+          state.loadingSubcategory = true;
           state.error = null;
         })
         .addCase(getSubcategories.fulfilled, (state, action) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
           state.subcategories = action.payload.length > 0 ? action.payload : [];
         })
         .addCase(getSubcategories.rejected, (state, action) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
           state.error = action.payload;
         });
       builder
         .addCase(getSubcategory.pending, (state) => {
-          state.loading = true;
+          state.loadingSubcategory = true;
           state.error = null;
         })
         .addCase(getSubcategory.fulfilled, (state, action) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
           state.subcategories = action.payload.length > 0 ? action.payload : [];
         })
         .addCase(getSubcategory.rejected, (state, action) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
           state.error = action.payload;
         });
     builder
         .addCase(createSubcategory.pending,(state) => {
-          state.loading = true;
+          state.loadingSubcategory = true;
           state.error =null
         })
         .addCase(createSubcategory.fulfilled, (state) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
         })
         .addCase(createSubcategory.rejected, (state, action) => {
-          state.loading = false;
+          state.loadingSubcategory = false;
           state.error = action.payload;
         });
     builder
         .addCase(deleteCategory.pending,(state) => {
-            state.loading = true;
+            state.loadingSubcategory = true;
             state.error =null
         })
         .addCase(deleteCategory.fulfilled, (state) => {
-            state.loading = false;
+            state.loadingSubcategory = false;
         })
         .addCase(deleteCategory.rejected, (state, action) => {
-            state.loading = false;
+            state.loadingSubcategory = false;
             state.error = action.payload;
         });
     }

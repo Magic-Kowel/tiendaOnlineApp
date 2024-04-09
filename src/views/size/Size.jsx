@@ -25,7 +25,7 @@ function Size(){
     const dispatch = useDispatch();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const {sizes} = useSelector((state)=>state.size);
+    const {sizes, loadingSize} = useSelector((state)=>state.size);
     const [t] = useTranslation("global");
     const [sizeList, setSizeList] = useState([]);
 
@@ -100,6 +100,7 @@ function Size(){
                             data={sizes}
                             getData={setSizeList}
                             getOptionSearch={(item)=>item.nameSize}
+                            loading={loadingSize}
                         />
                         {
                             !isMobile?(

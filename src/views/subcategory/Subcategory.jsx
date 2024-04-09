@@ -23,7 +23,7 @@ function Subcategory(){
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useDispatch();
-    const {subcategories} = useSelector((state)=>state.subcategory);
+    const {subcategories,loadingSubcategory} = useSelector((state)=>state.subcategory);
     const [t] = useTranslation("global");
     const params = useParams();
     const navigate = useNavigate();
@@ -108,6 +108,7 @@ function Subcategory(){
                     data={subcategories}
                     getData={setSubcategoriesData}
                     getOptionSearch={(item)=>item.tNombre}
+                    loading={loadingSubcategory}
                 />
                 {!isMobile?(
                 <DataTable

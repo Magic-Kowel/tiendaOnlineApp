@@ -21,7 +21,7 @@ function Category(){
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const {categorys} = useSelector((state)=>state.category);
+    const {categorys,loadingCategory} = useSelector((state)=>state.category);
     const [t] = useTranslation("global");
 
     const dispatch = useDispatch();
@@ -97,6 +97,7 @@ function Category(){
                 data={categorys}
                 getData={setCategories}
                 getOptionSearch={(item)=>item.tNombre}
+                loading={loadingCategory}
             />
             {!isMobile?(
                 <DataTable

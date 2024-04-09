@@ -25,7 +25,7 @@ function SizeVariation(){
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const {sizeVariation} = useSelector((state)=>state.size);
+    const {sizeVariation,loadingSize} = useSelector((state)=>state.size);
     const [t] = useTranslation("global");
     const [sizeVariationList, setSizeVariationList] = useState([]);
     const getSizeVariationData = async () =>{
@@ -35,7 +35,7 @@ function SizeVariation(){
         getSizeVariationData();
     },[]);
     useEffect(()=>{
-        const data = sizeVariation.map((item)=>{
+        const data = sizeVariation?.map((item)=>{
             if(item.maxAge && item.minAge){
                 return {
                     ...item,
@@ -128,6 +128,7 @@ function SizeVariation(){
                             data={sizeVariation}
                             getData={setSizeVariationList}
                             getOptionSearch={(item)=>item.nameSize}
+                            loading={loadingSize}
                         />
                         {
                             !isMobile?(
