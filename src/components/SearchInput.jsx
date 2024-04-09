@@ -18,7 +18,7 @@ function SearchInput({setSearchProduct}){
     return(
     <>
         <Grid my={5} container justifyContent="center">
-            <Grid item xs={9}>
+            <Grid item xs={12} md={9}>
                 <Paper
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', maxWidth: "60rem" }}
                 >

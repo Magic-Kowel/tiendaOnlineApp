@@ -10,7 +10,7 @@ function TitlePage({title}){
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     // Define el tamaño de la fuente basado en el tamaño de la pantalla
-    const fontSize = isSmallScreen ? '3rem' : sizeTitle;
+    const fontSize = isSmallScreen ? '10vmin' : sizeTitle;
     return(
         <>
             <Typography

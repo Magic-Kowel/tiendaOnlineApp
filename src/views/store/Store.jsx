@@ -88,7 +88,7 @@ function Store(){
                             />
                     </Stack>
                 )}
-                <Grid container justifyContent="center" >
+                <Grid container alignItems="flex-start" justifyContent="center" >
                     <DrawerForm
                         open={isOpen}
                         onClose={openDrawer}
@@ -120,7 +120,7 @@ function Store(){
                         item 
                         spacing={1} 
                         xs={9}
-                        alignItems="flex-start"
+                        alignItems="stretch"
                     >
                         {loadingProducts === true && [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]?.map((product, index) => (
                         <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
