@@ -19,7 +19,7 @@ import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
@@ -210,20 +210,25 @@ function ProductCard({product}){
                         </>
                     )}
                     <Grid item container xs={12}>
-                        <Tooltip title={t("see-more")}>
-                                <Button
-                                    variant="contained"
-                                    fullWidth
-                                    sx={{
-                                        backgroundColor:colors.primaryColor,
-                                        '&:hover':{
-                                            backgroundColor:colors.primaryColor
-                                        }
-                                    }}
-                                    onClick={()=>handleDescription(product.idProduct)}
+                        <Tooltip title={t("see-more")} >
+                                <Link 
+                                    to={`/product/description/${product.idProduct}`}
+                                    style={{width:"100%"}}
                                 >
-                                    {t("see-more")}
-                                </Button>
+                                    <Button
+                                        variant="contained"
+                                        fullWidth
+                                        sx={{
+                                            backgroundColor:colors.primaryColor,
+                                            '&:hover':{
+                                                backgroundColor:colors.primaryColor
+                                            }
+                                        }}
+                                        onClick={()=>handleDescription(product.idProduct)}
+                                    >
+                                        {t("see-more")}
+                                    </Button>
+                                </Link>
                         </Tooltip>
                     </Grid>
                 </Grid>

@@ -16,7 +16,9 @@ import PaginationBar from "../../components/PaginationBar";
 import FormSearchProduct from "./FormSearchProduct";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Seo from "../../components/Seo";
+import { useSearchParams } from 'react-router-dom';
 function Store(){
+    const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
     const {products,loadingProducts} = useSelector((state)=>state.product);
@@ -39,21 +41,41 @@ function Store(){
         minAge:0,
         searchForPrice:false
     });
+    
     const handleGetProducts = async () =>{
         await dispatch(getProducts({
             page:page,
-            nameProduct:searchProduct
+            nameProduct:searchProduct || ""
         }));
     }
     const openDrawer = () =>{
         setIsOpen(!isOpen);
     }
     useEffect(()=>{
+        console.log("parametro");
+        setSearchProduct(searchParams.get('nameProduct')||"")
+        setDataFormSearch((prev) => ({
+            ...prev,
+            // searchProduct: searchParams.get('nameProduct')||"",
+            materialList: searchParams.getAll('materialList[]')||[],
+            genderList: searchParams.getAll('genderList[]') || [],
+            isChildren: searchParams.get('isChildren')|| false,
+            isAdult: searchParams.get('isAdult') || false,
+            minPrice: searchParams.get('minPrice') || 0,
+            maxPrice: searchParams.get('maxPrice') || 0,
+            size: searchParams.get('size') || 0,
+            maxAge: searchParams.get('maxAge') || 0,
+            minAge: searchParams.get('minAge') || 0,
+        }));
+    },[searchParams])
+    useEffect(()=>{
         dispatch(clearImagensLists())
-        handleGetProducts();
+        if(!searchParams.get('nameProduct')){
+            handleGetProducts();
+        }
         setDataFormSearch((prev)=>({
             ...prev,
-            searchProduct:searchProduct
+            searchProduct:searchProduct || searchParams.get('nameProduct')
         }))
     },[page,searchProduct]);
     return(
@@ -73,7 +95,7 @@ function Store(){
                     setSearchProduct={setSearchProduct}
                 />
                 {  (searchProduct.length > 0 && !onlySmallScreen) &&(
-                    <Stack 
+                    <Stack
                         direction="row"
                         justifyContent="flex-end"
                         alignItems="flex-start"
@@ -122,7 +144,7 @@ function Store(){
                         xs={9}
                         alignItems="stretch"
                     >
-                        {loadingProducts === true && [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]?.map((product, index) => (
+                        {(loadingProducts === true && products.length === 0 ) && [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]?.map((product, index) => (
                         <Grid item xs={12} sm={6} md={3} lg={2} key={index}>
                             <CardSkeleton />
                         </Grid>

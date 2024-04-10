@@ -24,16 +24,19 @@ import { getProducts } from "../../reducers/product/product";
 import { getGenders } from "../../reducers/gender/gender";
 import { colors } from "../../stylesConfig";
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 function FormSearchProduct({
     page,
     searchProduct,
     setDataFormSearch,
     dataFormSearch,
 }){
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
     const {materials} = useSelector((state)=>state.material);
     const {genders} = useSelector((state)=>state.gender);
+
     useEffect(()=>{
         dispatch(getMaterials());
         dispatch(getGenders());
@@ -51,6 +54,40 @@ function FormSearchProduct({
         }));
     };
     const handleGetProducts = () =>{
+        const queryParams = new URLSearchParams();
+        if (searchProduct && searchProduct.length > 0) {
+            queryParams.append('nameProduct', searchProduct);
+        }
+        if (dataFormSearch?.materialList && dataFormSearch.materialList.length > 0) {
+            queryParams.append('materialList[]', dataFormSearch.materialList);
+        }
+        if (dataFormSearch?.genderList && dataFormSearch.genderList.length > 0) {
+            queryParams.append('genderList[]', dataFormSearch?.genderList);
+        }
+        if (dataFormSearch?.isChildren) {
+            queryParams.append('isChildren', dataFormSearch?.isChildren);
+        }
+        if (dataFormSearch?.isAdult) {
+            queryParams.append('isAdult', dataFormSearch?.isAdult);
+        }
+        if (dataFormSearch?.minPrice) {
+            queryParams.append('minPrice', dataFormSearch?.minPrice);
+        }
+        if (dataFormSearch?.maxPrice) {
+            queryParams.append('maxPrice', dataFormSearch?.maxPrice);
+        }
+        if (dataFormSearch?.maxAge) {
+            queryParams.append('maxAge', dataFormSearch?.maxAge);
+        }
+        if (dataFormSearch?.minAge) {
+            queryParams.append('minAge', dataFormSearch?.minAge);       
+        }
+        if (dataFormSearch?.size) {
+            queryParams.append('size', dataFormSearch?.size);
+        }
+        
+        const queryString = queryParams.toString();
+        navigate(`/?${queryString}`, { replace: true }); 
         dispatch(getProducts({
             page:page,
             nameProduct:searchProduct,
@@ -148,9 +185,9 @@ function FormSearchProduct({
                                             <Switch
                                                 onChange={handleSelectMaterial(item)}
                                                 defaultChecked={false}
-                                                checked={dataFormSearch.materialList.find((material)=>material === item.nameMaterial)}
+                                                checked={dataFormSearch?.materialList?.find((material)=>material === item.nameMaterial)}
                                             />
-                                            <ListItemText primary={item.nameMaterial} />
+                                            <ListItemText primary={item?.nameMaterial} />
                                         </ListItemButton>
                                     </ListItem>
                                 ))
@@ -176,9 +213,9 @@ function FormSearchProduct({
                                             <Switch
                                                 onChange={handleSelectGender(item)}
                                                 defaultChecked={false}
-                                                checked={dataFormSearch.genderList.find((gender)=>gender === item.nameGender)}
+                                                checked={dataFormSearch?.genderList?.find((gender)=>gender === item.nameGender)}
                                             />
-                                            <ListItemText primary={item.nameGender} />
+                                            <ListItemText primary={item?.nameGender} />
                                         </ListItemButton>
                                     </ListItem>
                                 ))
@@ -280,7 +317,7 @@ function FormSearchProduct({
     )
 }
 FormSearchProduct.propTypes = {
-    page: PropTypes.string.isRequired,
+    page: PropTypes.number.isRequired,
     searchProduct: PropTypes.string.isRequired,
     setDataFormSearch:PropTypes.func.isRequired,
     dataFormSearch: PropTypes.object.isRequired,
