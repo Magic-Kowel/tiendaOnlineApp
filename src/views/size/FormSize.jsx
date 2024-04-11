@@ -15,7 +15,8 @@ import {
     Card,
     CardContent,
     CardActions,
-    Typography
+    Typography,
+    FormHelperText
 } from '@mui/material';
 import { colors,sizeTitleForm } from "../../stylesConfig";
 function FormSize (){
@@ -86,12 +87,14 @@ function FormSize (){
                                         nameSize: e.target.value,
                                     }));
                                 }}
+                                inputProps={{ maxLength: 30 }}
                                 fullWidth
                                 label={t("size-clothe")} 
                                 variant="outlined" 
                                 error={formik.touched.nameSize && Boolean(formik.errors.nameSize)}
                                 helperText={formik.touched.nameSize && formik.errors.nameSize}
                             />
+                            <FormHelperText>{sizeForm.nameSize.length}/30</FormHelperText>
                         </Grid>
                     </Grid>
             </CardContent>

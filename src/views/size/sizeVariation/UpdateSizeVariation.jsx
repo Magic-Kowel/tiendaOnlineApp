@@ -24,7 +24,8 @@ import {
     Grid,
     CardActions,
     Button,
-    Alert
+    Alert,
+    FormHelperText
 } from '@mui/material';
 import FormAutocomplete from "../../../components/FormAutocomplete";
 function UpdateSizeVariation(){
@@ -196,6 +197,22 @@ function UpdateSizeVariation(){
         });
     }, [sizeVariationForm]);
     useEffect(()=>{
+        if (sizeVariationForm.isChildren) {
+            setSizeVariationForm((prev)=>({
+                ...prev,
+                size:''
+            }));
+        }else{
+            setSizeVariationForm((prev)=>({
+                ...prev,
+                minAge: '',
+                maxAge: '',
+            }));
+        }
+    },[
+        sizeVariationForm.isChildren
+    ]);
+    useEffect(()=>{
         if(sizeVariation[0]?.idSize === size?.idSize && sizeVariation[0]?.idAgeGroup === ageGroup?.idAgeGroup){
             dispatch(cancelVariationValidate());
             return;
@@ -284,24 +301,25 @@ function UpdateSizeVariation(){
                                         <>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
-                                                    value={String(sizeVariationForm?.minAge)}
+                                                    value={String(sizeVariationForm?.minAge || "")}
                                                     label={t("min-age")}
                                                     onChange={handleGetMinAge}
                                                     error={formik.touched.minAge && Boolean(formik.errors.minAge)}
                                                     helperText={formik.touched.minAge && formik.errors.minAge}
                                                     limit={2}
                                                 />
+                                                <FormHelperText>{sizeVariationForm.minAge !== null ? String(sizeVariationForm.minAge).length : 0}/2</FormHelperText>   
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
-                                                    value={String(sizeVariationForm?.maxAge)}
+                                                    value={sizeVariationForm?.maxAge !== null ? String(sizeVariationForm?.maxAge) : ""}
                                                     label={t("max-age")}
                                                     onChange={handleGetMaxAge}
                                                     error={formik.touched.maxAge && Boolean(formik.errors.maxAge)}
                                                     helperText={formik.touched.maxAge && formik.errors.maxAge}
                                                     limit={2}
                                                 />
-                                            </Grid>
+                                                <FormHelperText>{sizeVariationForm.maxAge !== null ? String(sizeVariationForm.maxAge).length : 0}/2</FormHelperText>                                            </Grid>
                                         </>
                                     )
                                 }
@@ -310,13 +328,14 @@ function UpdateSizeVariation(){
                                         <>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
-                                                    value={sizeVariationForm?.size}
+                                                    value={sizeVariationForm?.size || ""}
                                                     label={t("size-clothe")}
                                                     onChange={handleGetsize}
                                                     error={formik.touched.size && Boolean(formik.errors.size)}
                                                     helperText={formik.touched.size && formik.errors.size}
-                                                    limit={3}
+                                                    limit={2}
                                                 />
+                                                <FormHelperText>{sizeVariationForm.size !== null ? String(sizeVariationForm.size).length : 0}/2</FormHelperText> 
                                             </Grid>
                                         </>
                                     )

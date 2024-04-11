@@ -19,7 +19,8 @@ import {
     CardContent,
     CardActions,
     Typography,
-    Alert
+    Alert,
+    FormHelperText
 } from '@mui/material';
 import TextFieldNumber from "../../../components/TextFieldNumber";
 import FormAutocomplete from "../../../components/FormAutocomplete";
@@ -161,6 +162,22 @@ function FormSizeVariation(){
     },[
         sizeVariationForm
     ]);
+    useEffect(()=>{
+        if (sizeVariationForm.isChildren) {
+            setSizeVariationForm((prev)=>({
+                ...prev,
+                size:''
+            }));
+        }else{
+            setSizeVariationForm((prev)=>({
+                ...prev,
+                minAge: '',
+                maxAge: '',
+            }));
+        }
+    },[
+        sizeVariationForm.isChildren
+    ]);
     return(
         <>
             <Card
@@ -229,6 +246,7 @@ function FormSizeVariation(){
                                                     helperText={formik.touched.minAge && formik.errors.minAge}
                                                     limit={2}
                                                 />
+                                                <FormHelperText>{sizeVariationForm.minAge.length}/2</FormHelperText>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextFieldNumber
@@ -239,6 +257,7 @@ function FormSizeVariation(){
                                                     helperText={formik.touched.maxAge && formik.errors.maxAge}
                                                     limit={2}
                                                 />
+                                                <FormHelperText>{sizeVariationForm.maxAge.length}/2</FormHelperText>
                                             </Grid>
                                         </>  
                                     ):(
@@ -250,7 +269,9 @@ function FormSizeVariation(){
                                                     onChange={handleGetZise}
                                                     error={formik.touched.size && Boolean(formik.errors.size)}
                                                     helperText={formik.touched.size && formik.errors.size}
+                                                    limit={2}
                                                 />
+                                                <FormHelperText>{sizeVariationForm.size.length}/2</FormHelperText>
                                             </Grid>
                                         </>
                                     )

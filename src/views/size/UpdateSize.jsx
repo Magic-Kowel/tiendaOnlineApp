@@ -7,7 +7,8 @@ import {
     CardContent,
     Grid,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import GoBack from '../../components/goBack';
 import TitlePage from '../../components/TitlePage';
@@ -100,12 +101,14 @@ function UpdateSize(){
                                                 nameSize:e.target.value
                                             }))
                                         }}
+                                        inputProps={{ maxLength: 30 }}
                                         fullWidth
                                         label={t("size-clothe")} 
                                         variant="outlined" 
                                         error={formik.touched.nameSize && Boolean(formik.errors.nameSize)}
                                         helperText={formik.touched.nameSize && formik.errors.nameSize}
                                     />
+                                    <FormHelperText>{sizeForm.nameSize.length}/30</FormHelperText>
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
                                     <Button
