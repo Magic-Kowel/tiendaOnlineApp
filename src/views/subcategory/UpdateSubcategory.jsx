@@ -6,7 +6,8 @@ import {
     CardContent,
     Grid,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import TitlePage from '../../components/TitlePage';
 import GoBack from '../../components/goBack';
@@ -104,9 +105,11 @@ function UpdateSubcategory(){
                                                 name:e.target.value
                                             })
                                         }}
+                                        inputProps={{ maxLength: 30 }}
                                         error={formik.touched.name && Boolean(formik.errors.name)}
                                         helperText={formik.touched.name && formik.errors.name}
                                     />
+                                    <FormHelperText>{subcategory.name.length}/30</FormHelperText>
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
                                     <Button

@@ -13,7 +13,8 @@ import {
     TextField,
     Button,
     useMediaQuery,
-    useTheme
+    useTheme,
+    FormHelperText
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -150,9 +151,12 @@ function Menu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            inputProps={{ maxLength: 30 }}
                                             error={formik.touched.name && Boolean(formik.errors.name)}
                                             helperText={formik.touched.name && formik.errors.name}
                                         />
+                                        <FormHelperText>{menuForm.name.length}/30</FormHelperText>
+
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button

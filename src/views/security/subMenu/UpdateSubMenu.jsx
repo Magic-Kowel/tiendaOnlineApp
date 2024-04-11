@@ -10,7 +10,8 @@ import {
     Grid,
     Paper,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import TitlePage from '../../../components/TitlePage';
 import FormAutocomplete from '../../../components/FormAutocomplete';
@@ -188,9 +189,11 @@ function UpdateSubMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            inputProps={{ maxLength: 30 }}
                                             error={formik.touched.name && Boolean(formik.errors.name)}
                                             helperText={formik.touched.name && formik.errors.name}
                                         />
+                                        <FormHelperText>{submenu.name.length}/30</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -198,6 +201,7 @@ function UpdateSubMenu(){
                                             label={t("url")}
                                             fullWidth
                                             variant="outlined"
+                                            inputProps={{ maxLength: 50 }}
                                             onChange={(e)=>{
                                                 setSubmenu({
                                                     ...submenu,
@@ -207,6 +211,7 @@ function UpdateSubMenu(){
                                             error={formik.touched.url && Boolean(formik.errors.url)}
                                             helperText={formik.touched.url && formik.errors.url}
                                         />
+                                         <FormHelperText>{submenu.url.length}/50</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button

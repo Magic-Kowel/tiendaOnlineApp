@@ -13,7 +13,8 @@ import {
     CardContent,
     CardActions,
     TextField,
-    Container
+    Container,
+    FormHelperText
 } from '@mui/material';
 import TitlePage from '../../components/TitlePage';
 import GoBack from '../../components/goBack';
@@ -98,9 +99,11 @@ function UpdateMaterial(){
                                         error={formik.touched.nameMaterial && Boolean(formik.errors.nameMaterial)}
                                         helperText={formik.touched.nameMaterial && formik.errors.nameMaterial}
                                         fullWidth
+                                        inputProps={{ maxLength: 30 }}
                                         label={t('material')}
                                         variant="outlined"
                                     />
+                                    <FormHelperText>{material.nameMaterial.length}/30</FormHelperText>
                                 </Grid>
                             </Grid>
                     </CardContent>

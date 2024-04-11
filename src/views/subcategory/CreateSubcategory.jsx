@@ -6,7 +6,8 @@ import {
     CardContent,
     Grid,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import GoBack from '../../components/goBack';
@@ -96,9 +97,11 @@ function CreateSubcategory(){
                                                 name:e.target.value
                                             });
                                         }}
+                                        inputProps={{ maxLength: 30 }}
                                         error={formik.touched.name && Boolean(formik.errors.name)}
                                         helperText={formik.touched.name && formik.errors.name}
                                     />
+                                    <FormHelperText>{subcategoria.name.length}/30</FormHelperText>
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
                                     <Button

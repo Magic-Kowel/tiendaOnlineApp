@@ -78,7 +78,7 @@ export default function MenuAdmin({children}) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState([]);
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState("");
     useEffect(()=>{
       const user= sessionStorage.getItem(NAME_USER)
       setUserData(user)

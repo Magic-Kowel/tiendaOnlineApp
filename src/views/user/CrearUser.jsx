@@ -5,7 +5,8 @@ import {
     TextField,
     Button,
     CardContent,
-    Card
+    Card,
+    FormHelperText
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
@@ -104,9 +105,11 @@ function CrearUser(){
                                             nameUser:e.target.value
                                         }))
                                     }}
+                                    inputProps={{ maxLength: 40 }}
                                     error={formik.touched.nameUser && Boolean(formik.errors.nameUser)}
                                     helperText={formik.touched.nameUser && formik.errors.nameUser}
                                 />
+                                <FormHelperText>{userForm.nameUser.length}/30</FormHelperText>
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
                                 <TextField
@@ -119,9 +122,11 @@ function CrearUser(){
                                             lastName:e.target.value
                                         }))
                                     }}
+                                    inputProps={{ maxLength: 40 }}
                                     error={formik.touched.lastName && Boolean(formik.errors.lastName)}
                                     helperText={formik.touched.lastName && formik.errors.lastName}
                                 />
+                                <FormHelperText>{userForm.lastName.length}/30</FormHelperText>
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
                                 <TextField
@@ -134,9 +139,11 @@ function CrearUser(){
                                             email:e.target.value
                                         }))
                                     }}
+                                    inputProps={{ maxLength: 40 }}
                                     error={formik.touched.email && Boolean(formik.errors.email)}
                                     helperText={formik.touched.email && formik.errors.email}
                                 />
+                                <FormHelperText>{userForm.email.length}/30</FormHelperText>
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
                                 <TextField

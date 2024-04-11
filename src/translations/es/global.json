@@ -126,5 +126,6 @@
   "adult":"Adulto",
   "filter":"Filtrar",
   "MessageOnlyDeveloper":"Esta sección es para uso del desarrollador",
-  "confirmacion-of-user":"Confirmacion de usuaria"
+  "confirmacion-of-user":"Confirmacion de usuaria",
+  "not-is-active-user":"No es un usuario activo"
 }

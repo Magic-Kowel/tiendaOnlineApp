@@ -21,7 +21,7 @@ function StackTable({
     return(
         <>
             {
-                dataList.length > 0 ? (
+                dataList?.length > 0 ? (
 
                     <Paper sx={{
                             boxShadow:5,

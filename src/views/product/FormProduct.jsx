@@ -1,6 +1,7 @@
 import {
     Grid,
-    TextField
+    TextField,
+    FormHelperText
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import FormAutocomplete from '../../components/FormAutocomplete';
@@ -83,11 +84,13 @@ function FormProduct({
                         }));
                     }}
                     fullWidth
+                    inputProps={{ maxLength: 30 }}
                     error={formik.touched.nameProduct && Boolean(formik.errors.nameProduct)}
                     helperText={formik.touched.nameProduct && formik.errors.nameProduct}
                     label={t('name')}
                     variant="outlined"
                 />
+                <FormHelperText>{product.nameProduct.length}/250</FormHelperText>
             </Grid>
             <Grid item
                 xs={12}
@@ -105,12 +108,14 @@ function FormProduct({
                             description: e.target.value
                         }));
                     }}
+                    inputProps={{ maxLength: 250 }}
                     fullWidth
                     error={formik.touched.description && Boolean(formik.errors.description)}
                     helperText={formik.touched.description && formik.errors.description}
                     label={t('description')}
                     variant="outlined"
                 />
+                <FormHelperText>{product.description.length}/250</FormHelperText>
             </Grid>
             <Grid 
                 item 

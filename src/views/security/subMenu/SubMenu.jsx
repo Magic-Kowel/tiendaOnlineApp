@@ -15,7 +15,8 @@ import {
     TextField,
     Container,
     useMediaQuery,
-    useTheme
+    useTheme,
+    FormHelperText
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { colors } from "../../../stylesConfig";
@@ -191,9 +192,12 @@ function SubMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            inputProps={{ maxLength: 30 }}
                                             error={formik.touched.name && Boolean(formik.errors.name)}
                                             helperText={formik.touched.name && formik.errors.name}
                                         />
+                                        <FormHelperText>{submenuForm.name.length}/30</FormHelperText>
+
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -207,9 +211,12 @@ function SubMenu(){
                                                     url:e.target.value
                                                 })
                                             }}
+                                            inputProps={{ maxLength: 30 }}
                                             error={formik.touched.url && Boolean(formik.errors.url)}
                                             helperText={formik.touched.url && formik.errors.url}
                                         />
+                                        <FormHelperText>{submenuForm.url.length}/50</FormHelperText>
+
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button

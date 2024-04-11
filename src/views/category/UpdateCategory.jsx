@@ -6,7 +6,8 @@ import {
     CardContent,
     Grid,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import GoBack from '../../components/goBack';
 import TitlePage from '../../components/TitlePage';
@@ -106,9 +107,11 @@ function UpdateCategory(){
                                                 name:e.target.value.trim()
                                             })
                                         })}
+                                        inputProps={{ maxLength: 30 }}
                                         error={formik.touched.name && Boolean(formik.errors.name)}
                                         helperText={formik.touched.name && formik.errors.name}
                                     />
+                                    <FormHelperText>{category.name.length}/30</FormHelperText>
                                 </Grid>
                                 <Grid item xs={12} mt={2}>
                                     <Button

@@ -109,6 +109,6 @@ function UserMenuHeader({userData}){
     )
 }
 UserMenuHeader.propTypes = {
-    userData: PropTypes.array.isRequired,
+    userData: PropTypes.string.isRequired,
 };
 export default UserMenuHeader

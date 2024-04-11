@@ -34,6 +34,7 @@ function CreateProduct(){
     const [urlImagen,setUrlImagen] = useState("");
     const [urlError,setUrlError] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [listSelectetSize,setListSelectetSize] = useState([]);
     const [product,setProduct] = useState({
         nameProduct:"",
         description:"",
@@ -81,6 +82,7 @@ function CreateProduct(){
                 files: [],
                 imageUrls:[]
             });
+            setListSelectetSize([]);
             setUrlImagen("");
             setSelectedFiles([]);
             return false;
@@ -320,6 +322,8 @@ function CreateProduct(){
                     >
                         <AddSelectSize
                             setProduct={setProduct}
+                            setListSelectetSize={setListSelectetSize}
+                            listSelectetSize={listSelectetSize}
                         />
                         {
                             formik.touched.sizesList && Boolean(formik.errors.sizesList) && (

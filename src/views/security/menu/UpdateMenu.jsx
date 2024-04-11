@@ -9,7 +9,8 @@ import {
     Grid,
     Paper,
     TextField,
-    Button
+    Button,
+    FormHelperText
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import TitlePage from '../../../components/TitlePage';
@@ -136,9 +137,11 @@ function UpdateMenu(){
                                                     name:e.target.value
                                                 })
                                             }}
+                                            inputProps={{ maxLength: 30 }}
                                             error={formik.touched.name && Boolean(formik.errors.name)}
                                             helperText={formik.touched.name && formik.errors.name}
                                         />
+                                        <FormHelperText>{menuData.name.length}/30</FormHelperText>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button

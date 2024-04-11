@@ -21,7 +21,9 @@ import StarIcon from '@mui/icons-material/Star';
 import TextFieldNumber from "../../components/TextFieldNumber"
 import PropTypes from 'prop-types';
 function AddSelectSize({
-    setProduct
+    setProduct,
+    setListSelectetSize,
+    listSelectetSize,
 }){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
@@ -30,8 +32,7 @@ function AddSelectSize({
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [size,setSize] = useState(null);
     const [sizes,setSizes] = useState([])
-    const [listSelectetSize,setListSelectetSize] = useState([]);
-    const [productVariation,setProductVariation] = useState({
+     const [productVariation,setProductVariation] = useState({
         stock:"0",
         price:"0"
     });
@@ -39,7 +40,7 @@ function AddSelectSize({
         dispatch(getSizesVariationDisplay())
     },[])
     useEffect(() => {
-        if (listSelectetSize.length) {
+        if (listSelectetSize?.length) {
             const newArray = sizes.filter(obj1 => !listSelectetSize.some(obj2 => obj2.idSizeVariation === obj1.idSizeVariation));
             setSizes(newArray);
         }
@@ -241,6 +242,8 @@ function AddSelectSize({
     </>)
 }
 AddSelectSize.propTypes = {
-    setProduct: PropTypes.func.isRequired
+    setProduct: PropTypes.func.isRequired,
+    setListSelectetSize: PropTypes.func.isRequired,
+    listSelectetSize:PropTypes.array.isRequired
 };
 export default AddSelectSize
