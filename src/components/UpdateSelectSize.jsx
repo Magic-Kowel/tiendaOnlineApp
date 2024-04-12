@@ -22,7 +22,8 @@ import {
     ListItem,
     List,
     ListItemText,
-    Box
+    Box,
+    FormHelperText
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TextFieldNumber from "./TextFieldNumber";
@@ -186,13 +187,14 @@ function UpdateSelectSize({
                             onChange={(value)=>{
                                 setProductVariation((prev)=>({
                                     ...prev,
-                                    price:Number(value)
+                                    price:String(value)
                                 }))
                             }}
                             error={formik.touched.price && Boolean(formik.errors.price)}
                             helperText={formik.touched.price && formik.errors.price}
                             limit={6}
                         />
+                        <FormHelperText>{String(productVariation.price).length}/6</FormHelperText>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TextFieldNumber
@@ -201,13 +203,14 @@ function UpdateSelectSize({
                             onChange={(value)=>{
                                 setProductVariation((prev)=>({
                                     ...prev,
-                                    stock:Number(value)
+                                    stock:String(value)
                                 }))
                             }}
                             error={formik.touched.stock && Boolean(formik.errors.stock)}
                             helperText={formik.touched.stock && formik.errors.stock}
                             limit={6}
                         />
+                        <FormHelperText>{String(productVariation.price).length}/6</FormHelperText>
                     </Grid>
                     <Grid item xs={12}>
                         <FormAutocomplete

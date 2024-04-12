@@ -10,7 +10,7 @@ import {
     CardContent,
     Chip,
     Stack
- } from '@mui/material';
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
@@ -38,6 +38,7 @@ import Seo from '../../components/Seo';
 import productDescriptionSeo from '../../tools/seo/productDescriptionSeo';
 import TitlePage from '../../components/TitlePage';
 import ProductDescriptinInfo from '../../components/ProductDescriptinInfo';
+import WhatsAppButton from '../../components/WhatsAppButton';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function ProductDescription(){
     const theme = useTheme();
@@ -369,6 +370,9 @@ function ProductDescription(){
                                             </Grid>
                                         ))
                                     }
+                                </Grid>
+                                <Grid container spacing={1} item mt={{xs:5, md:0}} xs={12} justifyContent="center">
+                                    <WhatsAppButton />
                                 </Grid>
                             </Grid>
                         </Grid>

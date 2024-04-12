@@ -4,7 +4,8 @@ import {
     Grid,
     Button,
     useMediaQuery,
-    useTheme
+    useTheme,
+    FormHelperText
 } from "@mui/material"
 import { useDispatch, useSelector } from 'react-redux';
 import { getSizesVariationDisplay } from "../../reducers/size/size";
@@ -170,6 +171,7 @@ function AddSelectSize({
                             error={formik.touched.price && Boolean(formik.errors.price)}
                             helperText={formik.touched.price && formik.errors.price}
                         />
+                        <FormHelperText>{String(productVariation.price).length}/6</FormHelperText>   
                     </Grid>
                     <Grid item xs={6}>
                         <TextFieldNumber
@@ -185,6 +187,7 @@ function AddSelectSize({
                             error={formik.touched.stock && Boolean(formik.errors.stock)}
                             helperText={formik.touched.stock && formik.errors.stock}
                         />
+                        <FormHelperText>{String(productVariation.stock).length}/6</FormHelperText>
                     </Grid>
                     <Grid item xs={12}>
                         <FormAutocomplete

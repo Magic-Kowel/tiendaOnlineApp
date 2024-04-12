@@ -45,6 +45,7 @@ export const getProducts = createAsyncThunk(
                     nameProduct: data.nameProduct,
                     materialList: data.materialList,
                     genderList: data.genderList,
+                    sizeList: data.sizeList,
                     minPrice: data.minPrice,
                     maxPrice: data.maxPrice,
                     maxAge:data.maxAge,

@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMaterials } from "../../reducers/material/material";
 import { getProducts } from "../../reducers/product/product";
 import { getGenders } from "../../reducers/gender/gender";
+import { getSizesListsWitch } from "../../reducers/size/size";
 import { colors } from "../../stylesConfig";
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
@@ -36,10 +37,11 @@ function FormSearchProduct({
     const [t] = useTranslation("global");
     const {materials} = useSelector((state)=>state.material);
     const {genders} = useSelector((state)=>state.gender);
-
+    const {sizesListsWitch} = useSelector((state)=>state.size);
     useEffect(()=>{
         dispatch(getMaterials());
         dispatch(getGenders());
+        dispatch(getSizesListsWitch());
     },[])
     const handleChildren = () => {
         setDataFormSearch((prev) =>({
@@ -48,6 +50,12 @@ function FormSearchProduct({
         }));
     };
     const handleAdult = () => {
+        setDataFormSearch((prev) =>({
+            ...prev,
+            isAdult:!prev.isAdult
+        }));
+    };
+    const handleSize = () => {
         setDataFormSearch((prev) =>({
             ...prev,
             isAdult:!prev.isAdult
@@ -63,6 +71,9 @@ function FormSearchProduct({
         }
         if (dataFormSearch?.genderList && dataFormSearch.genderList.length > 0) {
             queryParams.append('genderList[]', dataFormSearch?.genderList);
+        }
+        if (dataFormSearch?.sizeList && dataFormSearch.sizeList.length > 0) {
+            queryParams.append('sizeList[]', dataFormSearch?.sizeList);
         }
         if (dataFormSearch?.isChildren) {
             queryParams.append('isChildren', dataFormSearch?.isChildren);
@@ -93,6 +104,7 @@ function FormSearchProduct({
             nameProduct:searchProduct,
             materialList:dataFormSearch?.materialList,
             genderList:dataFormSearch?.genderList,
+            sizeList:dataFormSearch?.sizeList,
             minPrice:dataFormSearch?.minPrice,
             maxPrice:dataFormSearch?.maxPrice,
             size:dataFormSearch?.size,
@@ -109,7 +121,8 @@ function FormSearchProduct({
         dataFormSearch?.materialList,
         dataFormSearch?.isAdult,
         dataFormSearch?.isChildren,
-        dataFormSearch?.genderList
+        dataFormSearch?.genderList,
+        dataFormSearch?.sizeList
     ])
     const handleSelectMaterial = (item) => (event) => {
         if (event.target.checked) {
@@ -123,6 +136,7 @@ function FormSearchProduct({
             ...prev,
             materialList: prev.materialList.filter(material => material !== item.nameMaterial)
         }));
+        
     };
     const handleSelectGender = (item) => (event) => {
         if (event.target.checked) {
@@ -137,7 +151,19 @@ function FormSearchProduct({
             genderList: prev.genderList.filter(material => material !== item.nameGender)
         }));
     };
-    
+    const handleSelectSize = (item) => (event) => {
+        if (event.target.checked) {
+            setDataFormSearch((prev) => ({
+                ...prev,
+                sizeList: [...prev.sizeList, item.sizeName] // Agrega el nuevo tamaño seleccionado al array existente
+            }));
+            return;
+        }
+        setDataFormSearch((prev) => ({
+            ...prev,
+            sizeList: prev.sizeList.filter(size => size !== item.sizeName)
+        }));
+    };
     return(
         <Grid container spacing={2} px={3}>
             <Grid item xs={12}>
@@ -297,6 +323,34 @@ function FormSearchProduct({
                     </Grid>
                 )
             }
+            <Grid item xs={12}>
+                <Accordion defaultExpanded>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="genderPanel"
+                    >
+                        {t("size")}
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <List>
+                            {
+                                sizesListsWitch.map((item,index)=>(
+                                    <ListItem key={index} disablePadding>
+                                        <ListItemButton>
+                                            <Switch
+                                                onChange={handleSelectSize(item)}
+                                                defaultChecked={false}
+                                                checked={dataFormSearch?.sizeList?.find((size)=>size === item.sizeName)}
+                                            />
+                                            <ListItemText primary={item?.sizeName} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))
+                            }
+                        </List>
+                    </AccordionDetails>
+                </Accordion>
+            </Grid>
             <Grid item xs={12}>
                 <Button
                     fullWidth

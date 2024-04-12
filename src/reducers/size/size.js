@@ -211,8 +211,20 @@ export const getSizeVariationProdruct = createAsyncThunk(
         }
     }
 );
+export const getSizesListsWitch = createAsyncThunk(
+    "/sizes/lists/switch", // esta api es para los usuarios que buscaran en la pagina
+    async(thunkAPI) =>{
+        try {
+            const response = await axios.get(`${API_BASE_URL}/sizes/lists/switch`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 const initialState = {
     sizes:[],
+    sizesListsWitch:[],
     sizeVariation:[],
     sizeVariationProduct:[],
     variationValidate:false,
@@ -228,6 +240,19 @@ const sizeSlice = createSlice({
         },
     },
     extraReducers:(builder) =>{
+        builder
+            .addCase(getSizesListsWitch.pending, (state) => {
+            state.loadingSize = true;
+            state.errorSize = null;
+            })
+            .addCase(getSizesListsWitch.fulfilled, (state, action) => {
+            state.loadingSize = false;
+            state.sizesListsWitch = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getSizesListsWitch.rejected, (state, action) => {
+            state.loadingSize = false;
+            state.errorSize = action.payload;
+        });
         builder
             .addCase(getSizes.pending, (state) => {
             state.loadingSize = true;
