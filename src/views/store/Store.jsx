@@ -69,6 +69,7 @@ function Store(){
             maxAge: searchParams.get('maxAge') || 0,
             minAge: searchParams.get('minAge') || 0,
         }));
+        console.log(dataFormSearch);
     },[searchParams])
     useEffect(()=>{
         dispatch(clearImagensLists())

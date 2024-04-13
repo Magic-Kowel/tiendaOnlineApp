@@ -1,27 +1,35 @@
 import { useEffect } from "react";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { validateToken } from "../tools/validateToken";
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from "react-redux";
 import { permissionsTypeUserLogin } from "../reducers/security/security";
 function ProtectedRoute({ children, redirectTo="/", permission="" }){
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {userPermissions} = useSelector((state)=>state.security);
-    useEffect(()=>{
-        dispatch(permissionsTypeUserLogin(sessionStorage.getItem("typeUser")))
-    },[])
+    let permissions;
+    // useEffect(() => {
+    //     console.log("permission",permission);
+    //     console.log("permission",permission);
+    //     dispatch(permissionsTypeUserLogin(sessionStorage.getItem("typeUser"))).then((response) => {
+    //         const permissionsList = response.payload;
+    //         console.log("permissionsList", response);
+    //         const isAuthorized = permissionsList?.find((item) => item.permission === permission);
+    //         console.log("isAuthorized", isAuthorized);
+    //         if (!isAuthorized) {
+    //             console.log("No está autorizado");
+    //             navigate("/"); // Realizar la redirección aquí
+    //         }
+    //     });
+    // }, []);
     const auth = validateToken();
     if(!auth){
         return <Navigate to={redirectTo}/>
     }
-    console.log(permission);
-    const isAuthorized = userPermissions?.find((item)=> item.permission === permission);
-    console.log(isAuthorized);
-    if(userPermissions?.length > 0){
-        if(!isAuthorized){
-            return <Navigate to="/home"/>
-        }
-    }
+    console.log(permissions?.length);
+    
+    console.log("es children");
     return children;
 }
 ProtectedRoute.propTypes = {

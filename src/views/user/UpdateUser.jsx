@@ -15,30 +15,36 @@ import { colors } from '../../stylesConfig';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import FormAutocomplete from '../../components/FormAutocomplete';
 import TitlePage from '../../components/TitlePage';
-
+import { getTypeUsers } from '../../reducers/typeUser/typeUser';
 import { validateEmailExist, getUser,updateUser } from '../../reducers/user/user';
 function UpdateUser(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [t] = useTranslation("global");
     const {users} = useSelector((state)=>state.user);
+    const {typeUsers} = useSelector((state)=>state.typeUser);
     const params = useParams();
     const { idUser } = params;
 
     const [isRepitEmail,setIsRepitEmail] = useState(false);
+    const [selectTypeUser,setselectTypeUser] = useState([]);
     const [userForm, setUserForm] = useState({
         idUser:idUser,
         nameUser:"",
         lastName:"",
         email:"",
-        birthdate:""
+        birthdate:"",
+        typeUser:"",
+        idTypeUser:""
     })
     const handleGetUser = async () =>{
         await dispatch(getUser(idUser));
     }
     useEffect(()=>{
         handleGetUser();
+        dispatch(getTypeUsers())
     },[])
     useEffect(()=>{
         setUserForm(users[0]);
@@ -76,6 +82,7 @@ function UpdateUser(){
             lastName: userForm?.lastName ||"",
             email: userForm?.email ||"",
             birthdate: userForm?.birthdate ||"",
+            typeUser: userForm?.idTypeUser || ""
         },
         validationSchema: userSchema,
         onSubmit: handleUpdateUser
@@ -86,8 +93,9 @@ function UpdateUser(){
             lastName: userForm?.lastName ||"",
             email: userForm?.email ||"",
             birthdate: userForm?.birthdate ||"",
+            typeUser: userForm?.idTypeUser || ""
         });
-    }, [userForm]);
+    }, [userForm,selectTypeUser]);
     const handleValidateEmail = async () =>{
         if(userForm?.email && idUser){
             const isValidate =  await dispatch(validateEmailExist({
@@ -100,6 +108,11 @@ function UpdateUser(){
     useEffect(()=>{
         handleValidateEmail();
     },[userForm?.email])
+    useEffect(() => {
+        if (typeUsers.length > 0 && userForm) {
+            setselectTypeUser(typeUsers.find((item) => item.idTypeUser === userForm?.idTypeUser));
+        }
+    }, [userForm,typeUsers]);
     return(
         <Container>
             <TitlePage 
@@ -158,6 +171,22 @@ function UpdateUser(){
                                 }}
                                 error={formik.touched.email && Boolean(formik.errors.email)}
                                 helperText={formik.touched.email && formik.errors.email}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                             <FormAutocomplete
+                                valueDefault={selectTypeUser || null}
+                                data={typeUsers}
+                                getData={(newValue) => 
+                                    setUserForm((prevMenu) => 
+                                    ({ ...prevMenu,
+                                        idTypeUser: newValue?.idTypeUser
+                                    })
+                                )}
+                                getOptionSearch={(item)=>item.typeUser}
+                                title={t("menu")}
+                                error={formik.touched.idMenu && Boolean(formik.errors.idMenu)}
+                                helperText={formik.touched.idMenu && formik.errors.idMenu}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>

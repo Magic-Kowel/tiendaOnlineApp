@@ -55,25 +55,34 @@ function FormSearchProduct({
             isAdult:!prev.isAdult
         }));
     };
-    const handleSize = () => {
-        setDataFormSearch((prev) =>({
-            ...prev,
-            isAdult:!prev.isAdult
-        }));
-    };
+    // const handleSize = () => {
+    //     setDataFormSearch((prev) =>({
+    //         ...prev,
+    //         isAdult:!prev.isAdult
+    //     }));
+    // };
     const handleGetProducts = () =>{
         const queryParams = new URLSearchParams();
         if (searchProduct && searchProduct.length > 0) {
             queryParams.append('nameProduct', searchProduct);
         }
         if (dataFormSearch?.materialList && dataFormSearch.materialList.length > 0) {
-            queryParams.append('materialList[]', dataFormSearch.materialList);
+            const uniqueMaterialList = Array.from(new Set(dataFormSearch?.materialList));
+            uniqueMaterialList.forEach(material => {
+                queryParams.append('materialList[]', material);
+            });
         }
         if (dataFormSearch?.genderList && dataFormSearch.genderList.length > 0) {
-            queryParams.append('genderList[]', dataFormSearch?.genderList);
+            const uniqueGenderList = Array.from(new Set(dataFormSearch?.genderList));
+            uniqueGenderList.forEach(gender => {
+                queryParams.append('genderList[]', gender);
+            });
         }
         if (dataFormSearch?.sizeList && dataFormSearch.sizeList.length > 0) {
-            queryParams.append('sizeList[]', dataFormSearch?.sizeList);
+            const uniqueSizeList = Array.from(new Set(dataFormSearch?.sizeList));
+            uniqueSizeList.forEach(size => {
+                queryParams.append('sizeList[]', size);
+            });
         }
         if (dataFormSearch?.isChildren) {
             queryParams.append('isChildren', dataFormSearch?.isChildren);
@@ -306,7 +315,7 @@ function FormSearchProduct({
                     } label={t("adult")} />
                 </Grid>
             </Grid>
-            {
+            {/* {
                 dataFormSearch?.isAdult &&(
                     <Grid item xs={12}>
                         <TextFieldNumber 
@@ -322,7 +331,7 @@ function FormSearchProduct({
                         />
                     </Grid>
                 )
-            }
+            } */}
             <Grid item xs={12}>
                 <Accordion defaultExpanded>
                     <AccordionSummary

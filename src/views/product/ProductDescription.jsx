@@ -371,7 +371,7 @@ function ProductDescription(){
                                         ))
                                     }
                                 </Grid>
-                                <Grid container spacing={1} item mt={{xs:5, md:0}} xs={12} justifyContent="center">
+                                <Grid container spacing={1} item mt={{xs:5, md:1}} xs={12} justifyContent="center">
                                     <WhatsAppButton />
                                 </Grid>
                             </Grid>

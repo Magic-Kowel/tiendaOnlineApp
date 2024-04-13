@@ -47,9 +47,9 @@ function ProductCard({product}){
     const handleUpdate = (id) =>{
         navigate(`/product/edit/${id}`);
     }
-    const handleDescription = (id) =>{
-        navigate(`/product/description/${id}`);
-    }
+    // const handleDescription = (id) =>{
+    //     navigate(`/product/description/${id}`);
+    // }
     const handleDeleteProduct = async (id) =>{
         Swal.fire({
             title: t("want-to-delete-material"),
@@ -224,7 +224,7 @@ function ProductCard({product}){
                                                 backgroundColor:colors.primaryColor
                                             }
                                         }}
-                                        onClick={()=>handleDescription(product.idProduct)}
+                                        // onClick={()=>handleDescription(product.idProduct)}
                                     >
                                         {t("see-more")}
                                     </Button>

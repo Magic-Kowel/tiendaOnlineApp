@@ -46,6 +46,12 @@ function CrearUser(){
                 icon:'success',
                 timer: 1500
             });
+            setUserForm({
+                nameUser:"",
+                lastName:"",
+                email:"",
+                birthDate:""
+            })
             formik.resetForm();
             return false;
         }
