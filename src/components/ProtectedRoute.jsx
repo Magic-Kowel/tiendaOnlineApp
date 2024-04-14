@@ -19,7 +19,7 @@ function ProtectedRoute({ children, redirectTo="/", permission="" }){
     //         console.log("isAuthorized", isAuthorized);
     //         if (!isAuthorized) {
     //             console.log("No está autorizado");
-    //             navigate("/"); // Realizar la redirección aquí
+    //             navigate("/permission/missing");
     //         }
     //     });
     // }, []);

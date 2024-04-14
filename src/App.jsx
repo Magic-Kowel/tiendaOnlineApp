@@ -40,7 +40,7 @@ const UpdateProduct = lazy(()=>import("./views/product/UpdateProduct.jsx"));
 const Users = lazy(()=>import("./views/user/Users.jsx"));
 const CrearUser = lazy(()=>import("./views/user/CrearUser.jsx"));
 const UpdateUser = lazy(()=>import("./views/user/UpdateUser.jsx"));
-
+const PermissionsMissing = lazy(()=>import("./views/PermissionsMissing.jsx"));
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 // import UserValidate from './components/UserValidate.jsx';
 import MenuAdmin from './components/menu/MenuAdmin.jsx';
@@ -54,6 +54,12 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Store />
           </Suspense>}
+        />
+        <Route path="/permission/missing" element={
+            <MenuAdmin>
+              <PermissionsMissing />
+            </MenuAdmin>
+          } 
         />
         <Route path="/home" element={
           <ProtectedRoute
