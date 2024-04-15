@@ -12,7 +12,7 @@ function SearchInput({setSearchProduct}){
     const [search,setSearch] = useState("");
     const handleSearch = (e) =>{
         if (e?.key === 'Enter') {
-            setSearchProduct(search)
+            setSearchProduct(search);
         }
     }
     return(
@@ -41,7 +41,9 @@ function SearchInput({setSearchProduct}){
                     type="button" 
                     sx={{ p: '10px' }} 
                     aria-label="search"
-                    onClick={()=>setSearchProduct(search)}
+                    onClick={()=>{
+                        setSearchProduct(search)
+                    }}
                 >
                     <SearchIcon />
                 </IconButton>

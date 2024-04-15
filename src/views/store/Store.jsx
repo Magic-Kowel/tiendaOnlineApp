@@ -73,9 +73,7 @@ function Store(){
     },[searchParams])
     useEffect(()=>{
         dispatch(clearImagensLists())
-        if(!searchParams.get('nameProduct')){
             handleGetProducts();
-        }
         setDataFormSearch((prev)=>({
             ...prev,
             searchProduct:searchProduct || searchParams.get('nameProduct')

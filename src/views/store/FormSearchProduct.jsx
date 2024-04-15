@@ -338,7 +338,7 @@ function FormSearchProduct({
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="genderPanel"
                     >
-                        {t("size")}
+                        {t("size-clothes")}
                     </AccordionSummary>
                     <AccordionDetails>
                         <List>

@@ -364,8 +364,8 @@ function ProductDescription(){
                                                             borderColor:colors.primaryColor
                                                         }
                                                     }}
-                                                    >
-                                                    {item.namesize}
+                                                >   
+                                                    {`${item?.public} ${item.namesize}`}
                                                 </Button>
                                             </Grid>
                                         ))

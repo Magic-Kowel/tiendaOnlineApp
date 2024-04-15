@@ -7,7 +7,8 @@ import {
     InputAdornment,
     Button
 } from '@mui/material';
-import ImagePreviewList from "../../components/ImagePreviewList"
+import ImagePreviewList from "../../components/ImagePreviewList";
+import GoBack from '../../components/goBack';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
@@ -161,6 +162,7 @@ function CreateProduct(){
                 <TitlePage
                     title={t("create-new-product")}
                 />
+                <GoBack />
                 <Grid container spacing={2}>
                     <Grid 
                         item

@@ -9,27 +9,24 @@ function ProtectedRoute({ children, redirectTo="/", permission="" }){
     const navigate = useNavigate();
     const {userPermissions} = useSelector((state)=>state.security);
     let permissions;
-    // useEffect(() => {
-    //     console.log("permission",permission);
-    //     console.log("permission",permission);
-    //     dispatch(permissionsTypeUserLogin(sessionStorage.getItem("typeUser"))).then((response) => {
-    //         const permissionsList = response.payload;
-    //         console.log("permissionsList", response);
-    //         const isAuthorized = permissionsList?.find((item) => item.permission === permission);
-    //         console.log("isAuthorized", isAuthorized);
-    //         if (!isAuthorized) {
-    //             console.log("No está autorizado");
-    //             navigate("/permission/missing");
-    //         }
-    //     });
-    // }, []);
+    useEffect(() => {
+        console.log("permission",permission);
+        console.log("permission",permission);
+        dispatch(permissionsTypeUserLogin(sessionStorage.getItem("typeUser"))).then((response) => {
+            const permissionsList = response.payload;
+            console.log("permissionsList", response);
+            const isAuthorized = permissionsList?.find((item) => item.permission === permission);
+            console.log("isAuthorized", isAuthorized);
+            if (!isAuthorized) {
+                console.log("No está autorizado");
+                navigate("/permission/missing");
+            }
+        });
+    }, []);
     const auth = validateToken();
     if(!auth){
         return <Navigate to={redirectTo}/>
     }
-    console.log(permissions?.length);
-    
-    console.log("es children");
     return children;
 }
 ProtectedRoute.propTypes = {

@@ -257,6 +257,22 @@ export const createAccessControlMenu = createAsyncThunk(
         }
     }
 );
+export const deleteAccessControlMenu = createAsyncThunk(
+    "delete/user/access/control/menu",
+    async(idPermission,thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.delete(`${API_BASE_URL}/user/access/control/menu/${idPermission}`,{
+                headers: { 
+                    "x-access-token": token
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getAccessControlMenuPermissions = createAsyncThunk(
     "create/type/access/control/menu/permissions",
     async(typeUser,thunkAPI) =>{
@@ -610,10 +626,22 @@ const securitySlice = createSlice({
               state.error = null;
             })
             .addCase(permissionsTypeUserLogin.fulfilled, (state,action) => {
-              state.loading = false;
+              state.loadingUser = false;
               state.userPermissions = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(permissionsTypeUserLogin.rejected, (state, action) => {
+              state.loadingUser = false;
+              state.error = action.payload;
+            });
+        builder
+            .addCase(deleteAccessControlMenu.pending, (state) => {
+              state.loadingUser = true;
+              state.error = null;
+            })
+            .addCase(deleteAccessControlMenu.fulfilled, (state) => {
+              state.loadingUser = false;
+            })
+            .addCase(deleteAccessControlMenu.rejected, (state, action) => {
               state.loadingUser = false;
               state.error = action.payload;
             });

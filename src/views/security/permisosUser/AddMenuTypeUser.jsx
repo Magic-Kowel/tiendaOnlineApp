@@ -6,17 +6,20 @@ import {
     getAccessControlMenu,
     createAccessControlMenu,
     getAccessControlMenuPermissions,
-    clearListTransferPermission
+    clearListTransferPermission,
+    deleteAccessControlMenu
 } from "../../../reducers/security/security";
 import {
     Container,
     Grid,
     Button
 } from '@mui/material';
-import TransferList from "../../../components/TransferList";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { colors } from "../../../stylesConfig";
 import GoBack from "../../../components/goBack";
 import Swal from "sweetalert2";
+import DataTable from "../../../components/DataTable/DataTable";
 function AddMenuTypeUser(){
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
@@ -28,11 +31,13 @@ function AddMenuTypeUser(){
         await dispatch(getAccessControlMenu(idTypeUser));
         await dispatch(getAccessControlMenuPermissions(idTypeUser))
     }
-    const handleCreate = async()=>{
+    const handleCreate = async(idMenuPermission)=>{
+        console.log("idMenuPermission",idMenuPermission);
         const response = await dispatch(createAccessControlMenu({
             idTypeUser:idTypeUser,
-            listAccessControlMenu:listRight
+            idPermission:idMenuPermission
         }));
+        handleGedData()
         if(response.payload.created){
             Swal.fire({
                 title:t("successfully-created"),
@@ -53,6 +58,9 @@ function AddMenuTypeUser(){
         handleGedData()
     },[])
     useEffect(()=>{
+        console.log(listLeft);
+    },[listLeft])
+    useEffect(()=>{
         setListLeft(listAccessControlMenu.filter(item =>
             !listAccessControlMenuPermissions.some(algun => algun.idMenuPermission === item.idMenuPermission)
         ));
@@ -61,7 +69,42 @@ function AddMenuTypeUser(){
         if(listAccessControlMenuPermissions.length>0){
             setListRight(listAccessControlMenuPermissions);
         }
-    },[listAccessControlMenuPermissions,])
+    },[listAccessControlMenuPermissions,listAccessControlMenu])
+    const deletePermission = async (id) => {
+        const response = await dispatch(deleteAccessControlMenu(id));
+        if(response.payload?.delete){
+            Swal.fire({
+                title:t("successfully-created"),
+                icon:'success',
+                timer: 1500
+            });
+            handleGedData();
+            return false;
+        }
+        Swal.fire({
+            title:t("something-went-wrong"),
+            icon:"error"
+        });
+    }
+    const listTitlesLeft=[t("permission"),t("add")];
+    const listTitlesRight=[t("permission"),t("delete")];
+    const listKeys=["permission"];
+    const listButtonsLeft = [
+        {
+            tooltipTitle: t("add"),
+            onClick: (idMenuPermission) => handleCreate(idMenuPermission),
+            icon: <AddCircleIcon />,
+            color:"success"
+        },
+    ];
+    const listButtonsRight = [
+        {
+            tooltipTitle: t("delete"),
+            onClick: (idPermission) =>deletePermission(idPermission),
+            icon: <DeleteIcon />,
+            color:"error"
+        },
+    ];
     return(
         <>
         <Container>
@@ -69,33 +112,26 @@ function AddMenuTypeUser(){
             <Grid 
             container 
             justifyContent="center" 
-            alignItems="center"
+            alignItems="flex-start"
             spacing={2}
             >
-                <Grid item xs={10}>
-                    <TransferList
-                        listLeft={listLeft}
-                        listRight={listRight}
-                        setListLeft={setListLeft}
-                        setListRight={setListRight}
-                        index="permission"
+                <Grid item xs={6}>
+                    <DataTable
+                        listTitles={listTitlesLeft}
+                        listKeys={listKeys}
+                        dataList={listLeft}
+                        listButtons={listButtonsLeft}
+                        id="idMenuPermission"
                     />
                 </Grid>
-                <Grid item xs={9}>
-                    <Button
-                        onClick={handleCreate}
-                        fullWidth
-                        variant="contained"
-                        type="submit"
-                        sx={{
-                            backgroundColor:colors.primaryColor,
-                            '&:hover':{
-                                backgroundColor:colors.primaryColor
-                            }
-                        }}
-                    >
-                            {t("transfer")}
-                    </Button>
+                <Grid item xs={6}>
+                    <DataTable
+                        listTitles={listTitlesRight}
+                        listKeys={listKeys}
+                        dataList={listAccessControlMenuPermissions}
+                        listButtons={listButtonsRight}
+                        id="idPermission"
+                    />
                 </Grid>
             </Grid>
         </Container>
