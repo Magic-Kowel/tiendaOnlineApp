@@ -4,7 +4,6 @@ import { getSubcategories, deleteCategory } from "../../reducers/subCategory/sub
 import { useParams, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { colors } from '../../stylesConfig';
-import Swal from 'sweetalert2';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
 import GoBack from "../../components/goBack";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -19,6 +18,7 @@ import {
 import TitlePage from "../../components/TitlePage";
 import DataTable from "../../components/DataTable/DataTable";
 import StackTable from "../../components/DataTable/StackTable";
+import messageIsDelete from "../../tools/messages/messageIsDelete";
 function Subcategory(){
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -39,30 +39,14 @@ function Subcategory(){
         navigate(`/category/subcategory/edit/${id}`)
     }
     const handleDeleteSubcategory = (id) =>{
-        Swal.fire({
-            title: t("want-to-delete-subcategory"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-          }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteCategory(id))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        handleGetSubcategories()
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
+        messageIsDelete({
+            titleMessage:t("want-to-delete-subcategory"),
+            textDelete:t("delete"),
+            textCancel:t("cancel"),
+            funDelete:() => dispatch(deleteCategory(id)),
+            funGetData:handleGetSubcategories,
+            messageSuccess:t("successfully-removed"),
+            messageError:t("something-went-wrong")
         });
     }
     useEffect(()=>{

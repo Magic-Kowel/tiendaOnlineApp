@@ -18,7 +18,6 @@ function Product(){
     const [page, setPage] = useState(1);
     const [searchProduct,setSearchProduct] = useState("");
     const handleGetProducts = async () =>{
-        console.log("searchProduct",searchProduct);
         await dispatch(getProducts({
             page:page,
             nameProduct:searchProduct
@@ -64,6 +63,7 @@ function Product(){
                         key={product.idProduct}
                     >
                         <ProductCard
+                            page={page}
                             product={product}
                         />
                     </Grid>
@@ -82,8 +82,8 @@ function Product(){
                     xs={12}
                 >
                     <PaginationBar
-                    setPage={setPage}
-                    page={page}
+                        setPage={setPage}
+                        page={page}
                     />
                 </Grid>
             </Grid>

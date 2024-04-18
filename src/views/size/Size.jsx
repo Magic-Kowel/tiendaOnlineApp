@@ -6,7 +6,6 @@ import {
     deleteSize
 } from "../../reducers/size/size";
 import { useTranslation } from 'react-i18next';
-import Swal from 'sweetalert2';
 import {
     Container,
     Grid,
@@ -20,6 +19,7 @@ import SearchAutoComplete from "../../components/SearchAutoComplete"
 import DataTable from "../../components/DataTable/DataTable";
 import FormSize from "./FormSize";
 import StackTable from "../../components/DataTable/StackTable";
+import messageIsDelete from "../../tools/messages/messageIsDelete";
 function Size(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,31 +40,15 @@ function Size(){
     },[sizes]);
 
     const handleDeleteSize = (idSize) =>{
-        Swal.fire({
-            title: t("want-to-delete-size-clothe"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-          }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteSize(idSize))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        getSizeData();
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
-        });
+        messageIsDelete({
+            titleMessage:t("want-to-delete-size-clothe"),
+            textDelete:t("delete"),
+            textCancel:t("cancel"),
+            funDelete:() => dispatch(deleteSize(idSize)),
+            funGetData:getSizeData,
+            messageSuccess:t("successfully-removed"),
+            messageError:t("something-went-wrong")
+        })
     }
     const handleUpdateSize = async (idSize) =>{
         navigate(`/size/edit/${idSize}`);

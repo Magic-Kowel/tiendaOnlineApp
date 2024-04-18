@@ -96,6 +96,22 @@ export const getProduct = createAsyncThunk(
         }
     }
 );
+export const getProductTotalPages = createAsyncThunk(
+    "get/product/total/pages",
+    async(thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/products/total/page/`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getProductImagens = createAsyncThunk(
     "get/product/imagens",
     async(idProduct,thunkAPI) =>{

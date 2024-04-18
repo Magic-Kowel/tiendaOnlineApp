@@ -6,7 +6,9 @@ import {
     TextField,
     Button,
     CardContent,
-    Card
+    Card,
+    Switch,
+    FormControlLabel
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import GoBack from '../../components/goBack';
@@ -30,6 +32,7 @@ function UpdateUser(){
 
     const [isRepitEmail,setIsRepitEmail] = useState(false);
     const [selectTypeUser,setselectTypeUser] = useState([]);
+    const [isCheckedStatus, setIsCheckedStatus] = useState(false);
     const [userForm, setUserForm] = useState({
         idUser:idUser,
         nameUser:"",
@@ -37,7 +40,9 @@ function UpdateUser(){
         email:"",
         birthdate:"",
         typeUser:"",
-        idTypeUser:""
+        idTypeUser:"",
+        status:"",
+        statusCheck:false
     })
     const handleGetUser = async () =>{
         await dispatch(getUser(idUser));
@@ -48,6 +53,11 @@ function UpdateUser(){
     },[])
     useEffect(()=>{
         setUserForm(users[0]);
+        setIsCheckedStatus(users[0]?.status !== "Eliminado")
+        setUserForm((prev)=>({
+            ...prev,
+            statusCheck:users[0]?.status !== "Eliminado"
+        }))
     },[users])
     const userSchema = Yup.object().shape({
         nameUser: Yup.string().required(t("this-field-is-required")),
@@ -104,6 +114,13 @@ function UpdateUser(){
             }));
             setIsRepitEmail(isValidate.payload.exists);
         }
+    }
+    const handleCheckActive = (event) =>{
+        setIsCheckedStatus(event.target.checked)
+        setUserForm((prev)=>({
+            ...prev,
+            statusCheck:event.target.checked
+        }))
     }
     useEffect(()=>{
         handleValidateEmail();
@@ -187,6 +204,16 @@ function UpdateUser(){
                                 title={t("menu")}
                                 error={formik.touched.idMenu && Boolean(formik.errors.idMenu)}
                                 helperText={formik.touched.idMenu && formik.errors.idMenu}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <FormControlLabel control={
+                                <Switch 
+                                    checked={isCheckedStatus}
+                                    onChange={handleCheckActive}
+                                />
+                            } 
+                            label={t("status")} 
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>

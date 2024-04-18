@@ -84,7 +84,7 @@ function Users(){
     const handleSendResetPasswort = async (idUser) =>{
         const response = await dispatch(sendResetPasswort(idUser));
         console.log(response);
-        if(response.payload.activeUser === true){
+        if(response.payload.send === true){
             Swal.fire({
                 title:t("form-submitted-successfully"),
                 icon:"success"

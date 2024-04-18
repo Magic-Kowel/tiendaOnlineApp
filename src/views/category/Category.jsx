@@ -7,13 +7,13 @@ import SearchAutoComplete from '../../components/SearchAutoComplete';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import messageIsDelete from '../../tools/messages/messageIsDelete';
 import {
     Container,
     useMediaQuery,
     useTheme
 } from '@mui/material';
 import DataTable from '../../components/DataTable/DataTable';
-import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import TitlePage from '../../components/TitlePage';
 import StackTable from '../../components/DataTable/StackTable';
@@ -36,30 +36,14 @@ function Category(){
         navigate(`/category/subcategory/${id}`);
     }
     const handleDeleteCategory = async (id) =>{
-        Swal.fire({
-            title: t("want-to-delete-category"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-          }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteCategory(id))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        getCategoryData();
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
+        messageIsDelete({
+            titleMessage:t("want-to-delete-category"),
+            textDelete:t("delete"),
+            textCancel:t("cancel"),
+            funDelete:() => dispatch(deleteCategory(id)),
+            funGetData:getCategoryData,
+            messageSuccess:t("successfully-removed"),
+            messageError:t("something-went-wrong")
         });
     }
     const handleUpdateCategory = (id) =>{

@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from 'react-i18next';
 import TitlePage from "../../components/TitlePage";
-import Swal from 'sweetalert2';
+import messageIsDelete from "../../tools/messages/messageIsDelete";
 function Material(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -38,32 +38,15 @@ function Material(){
     const listKeys=["nameMaterial"];
   
     const handleDeleteMaterial = async (idMaterial) =>{
-        Swal.fire({
-            title: t("want-to-delete-material"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-        }).then((result) => {
-            console.log(3);
-            if (result.isConfirmed) {
-                dispatch(deleteMaterial(idMaterial))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        handleGetMaterials();
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
-        });
+        messageIsDelete({
+            titleMessage:t("want-to-delete-material"),
+            textDelete:t("delete"),
+            textCancel:t("cancel"),
+            funDelete:() => dispatch(deleteMaterial(idMaterial)),
+            funGetData:handleGetMaterials,
+            messageSuccess:t("successfully-removed"),
+            messageError:t("something-went-wrong")
+        })
     }
     const handleUpdteMaterial = async (idMaterial) =>{
         navigate(`edit/${idMaterial}`)

@@ -18,8 +18,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import TitlePage from "../../../components/TitlePage";
 import SearchAutoComplete from "../../../components/SearchAutoComplete";
 import FormSizeVariation from "./FormSizeVariation";
-import Swal from 'sweetalert2';
 import StackTable from "../../../components/DataTable/StackTable";
+import messageIsDelete from "../../../tools/messages/messageIsDelete";
 function SizeVariation(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -57,31 +57,15 @@ function SizeVariation(){
         setSizeVariationList(data);
     },[sizeVariation]);
     const handleDeleteSizeVariation =  (idSizeVariation) =>{
-        Swal.fire({
-            title: t("want-to-delete-size-clothe"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-          }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteSizesVariation(idSizeVariation))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        getSizeVariationData();
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
-        });
+        messageIsDelete({
+            titleMessage:t("want-to-delete-size-clothe"),
+            textDelete:t("delete"),
+            textCancel:t("cancel"),
+            funDelete:() => dispatch(deleteSizesVariation(idSizeVariation)),
+            funGetData:getSizeVariationData,
+            messageSuccess:t("successfully-removed"),
+            messageError:t("something-went-wrong")
+        })
     }
     const handleUpdateSizeVariation = async (idSizeVariation) =>{
         await navigate(`/size/variation/edit/${idSizeVariation}`);

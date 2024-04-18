@@ -20,13 +20,13 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import imagenNotFound from "./../assets/img/imagenNotFound.svg"
 import { deleteProduct,getProducts } from '../reducers/product/product';
 import { colors } from '../stylesConfig';
 import maxLengthText from '../tools/maxLengthText';
+import messageIsDelete from '../tools/messages/messageIsDelete';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-function ProductCard({product}){
+function ProductCard({product,page}){
     const dispatch =  useDispatch();
     const navigate = useNavigate();
     const [t] = useTranslation("global");
@@ -47,35 +47,18 @@ function ProductCard({product}){
     const handleUpdate = (id) =>{
         navigate(`/product/edit/${id}`);
     }
-    // const handleDescription = (id) =>{
-    //     navigate(`/product/description/${id}`);
-    // }
-    const handleDeleteProduct = async (id) =>{
-        Swal.fire({
-            title: t("want-to-delete-material"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-        }).then((result) => {
-            console.log(3);
-            if (result.isConfirmed) {
-                dispatch(deleteProduct(id))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        dispatch(getProducts());
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
+    const handleGetSubcategories = async () => {
+        await dispatch(getProducts({page:page}));
+    }
+    const handleDeleteProduct = async (id) => {
+        messageIsDelete({
+            titleMessage: t("want-to-delete-product"),
+            textDelete: t("delete"),
+            textCancel: t("cancel"),
+            funDelete: () => dispatch(deleteProduct(id)),
+            funGetData: handleGetSubcategories,
+            messageSuccess: t("successfully-removed"),
+            messageError: t("something-went-wrong")
         });
     }
     const maxSteps = product?.urlImagenes?.split(',').length;
@@ -126,39 +109,40 @@ function ProductCard({product}){
                         )
                     }
                 </AutoPlaySwipeableViews>
-                <MobileStepper
-                    steps={maxSteps || 0}
-                    position="static"
-                    activeStep={activeStep}
-                    sx={{
-                        '& .MuiMobileStepper-dotActive': {
-                          backgroundColor: colors.primaryColor, // Cambia el color de fondo del punto activo
-                        },
-                    }}
-                    nextButton={
-                        <Button
-                            size="small"
-                            onClick={ handleNext}
-                            disabled={activeStep === maxSteps - 1}
-                            sx={{color:colors.primaryColor}}
-                        >
-                            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                        </Button>
-                    }
-                    backButton={
-                        <Button 
-                            size="small" 
-                            onClick={handleBack} 
-                            disabled={activeStep === 0}
-                            sx={{color:colors.primaryColor}}
-                        >
-                            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                        </Button>
-                    }
-                />
+                {maxSteps>1 && (
+                    <MobileStepper
+                        steps={maxSteps || 0}
+                        position="static"
+                        activeStep={activeStep}
+                        sx={{
+                            '& .MuiMobileStepper-dotActive': {
+                              backgroundColor: colors.primaryColor, // Cambia el color de fondo del punto activo
+                            },
+                        }}
+                        nextButton={
+                            <Button
+                                size="small"
+                                onClick={ handleNext}
+                                disabled={activeStep === maxSteps - 1}
+                                sx={{color:colors.primaryColor}}
+                            >
+                                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                            </Button>
+                        }
+                        backButton={
+                            <Button 
+                                size="small" 
+                                onClick={handleBack} 
+                                disabled={activeStep === 0}
+                                sx={{color:colors.primaryColor}}
+                            >
+                                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                            </Button>
+                        }
+                    />
+                )}
             </Box>
             <CardContent sx={{ flexGrow: 1 }}>
-                
                 <Typography 
                     variant="h6" 
                     component="div" 
@@ -238,5 +222,6 @@ function ProductCard({product}){
 }
 ProductCard.propTypes = {
     product: PropTypes.object.isRequired,
+    page: PropTypes.number.isRequired,
 };
 export default ProductCard;

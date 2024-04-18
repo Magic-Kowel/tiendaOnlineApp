@@ -130,5 +130,6 @@
   "not-is-active-user":"No es un usuario activo",
   "buy-on-whatsapp":"Comprar en whatsapp",
   "interest-product":"Hola me interesa este producto",
-  "no-permission-enter-part":"No tienes permiso para entrar a esta parte"
+  "no-permission-enter-part":"No tienes permiso para entrar a esta parte",
+  "want-to-delete-product":"Desea eliminar producto"
 }
