@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
-import { getProducts,clearImagensLists } from "../../reducers/product/product";
+import { getProducts,clearImagensLists,getProductTotalPages } from "../../reducers/product/product";
 import MenuWithoutSection from "../../components/menu/MenuWithoutSection";
 import Footer from "../../components/Footer";
 import { Grid, Container,Stack, Chip} from "@mui/material";
@@ -21,7 +21,7 @@ function Store(){
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
-    const {products,loadingProducts} = useSelector((state)=>state.product);
+    const {products,loadingProducts,totalPgesProducts} = useSelector((state)=>state.product);
     const theme = useTheme();
     const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const [page, setPage] = useState(1);
@@ -53,7 +53,6 @@ function Store(){
         setIsOpen(!isOpen);
     }
     useEffect(()=>{
-        console.log("parametro");
         setSearchProduct(searchParams.get('nameProduct')||"")
         setDataFormSearch((prev) => ({
             ...prev,
@@ -73,11 +72,12 @@ function Store(){
     },[searchParams])
     useEffect(()=>{
         dispatch(clearImagensLists())
-            handleGetProducts();
+        handleGetProducts();
         setDataFormSearch((prev)=>({
             ...prev,
             searchProduct:searchProduct || searchParams.get('nameProduct')
-        }))
+        }));
+        dispatch(getProductTotalPages())
     },[page,searchProduct]);
     return(
         <>
@@ -185,7 +185,7 @@ function Store(){
                         <PaginationBar
                             setPage={setPage}
                             page={page}
-                            count={Math.ceil(products.length / 30)}
+                            count={totalPgesProducts}
                         />
                     </Grid>
                 </Grid>

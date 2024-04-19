@@ -10,6 +10,7 @@ function PaginationBar({setPage,page,count}){
     const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const handleChange = (event, value) => {
         setPage(value);
+        // Aquí puedes realizar alguna acción cuando cambie la página, como cargar datos de la nueva página, etc.
     };
     return(
         <>
@@ -19,6 +20,7 @@ function PaginationBar({setPage,page,count}){
                 onChange={handleChange}
                 shape="circular"
                 color="primary"
+                siblingCount={0}
                 sx={{
                     "& .MuiPaginationItem-root": {
                         "&.Mui-selected": {

@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
-import { getProducts,clearImagensLists } from "../../reducers/product/product";
+import { getProducts,clearImagensLists, getProductTotalPages } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
 import {
     Grid,
@@ -14,7 +14,7 @@ import TitlePage from "../../components/TitlePage";
 function Product(){
     const dispatch = useDispatch();
     const [t] = useTranslation("global");
-    const {products,loadingProducts} = useSelector((state)=>state.product);
+    const {products,loadingProducts,totalPgesProducts} = useSelector((state)=>state.product);
     const [page, setPage] = useState(1);
     const [searchProduct,setSearchProduct] = useState("");
     const handleGetProducts = async () =>{
@@ -26,6 +26,7 @@ function Product(){
     useEffect(()=>{
         dispatch(clearImagensLists())
         handleGetProducts();
+        dispatch(getProductTotalPages())
     },[page,searchProduct]);
     return (
         <Container>
@@ -82,6 +83,7 @@ function Product(){
                     xs={12}
                 >
                     <PaginationBar
+                        count={totalPgesProducts}
                         setPage={setPage}
                         page={page}
                     />

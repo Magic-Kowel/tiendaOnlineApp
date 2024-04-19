@@ -164,7 +164,8 @@ const initialState = {
     products:[],
     imagensProduct:[],
     loadingProducts:false,
-    error:null
+    error:null,
+    totalPgesProducts:1
 }
 const materialSlice = createSlice({
     name:"products",
@@ -261,6 +262,19 @@ const materialSlice = createSlice({
             state.loadingProducts = false;
             })
             .addCase(deleteImagenProduct.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(getProductTotalPages.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(getProductTotalPages.fulfilled, (state,action) => {
+            state.loadingProducts = false;
+            state.totalPgesProducts = action.payload[0].total;
+            })
+            .addCase(getProductTotalPages.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
             });
