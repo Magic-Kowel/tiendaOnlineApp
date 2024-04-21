@@ -56,7 +56,7 @@ function Store(){
         setSearchProduct(searchParams.get('nameProduct')||"")
         setDataFormSearch((prev) => ({
             ...prev,
-            // searchProduct: searchParams.get('nameProduct')||"",
+            searchProduct: searchParams.get('nameProduct')||"",
             materialList: searchParams.getAll('materialList[]')||[],
             genderList: searchParams.getAll('genderList[]') || [],
             sizeList: searchParams.getAll('sizeList[]') || [],
@@ -94,6 +94,7 @@ function Store(){
                 />
                 <SearchInput
                     setSearchProduct={setSearchProduct}
+                    searchProduct={searchProduct}
                 />
                 {  (searchProduct.length > 0 && !onlySmallScreen) &&(
                     <Stack
