@@ -787,13 +787,6 @@
   resolved "https://registry.yarnpkg.com/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz#b6725d5f4af24ace33b36fafd295136e75509f43"
   integrity sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==
 
-"@unicef/material-ui-currency-textfield@^0.8.6":
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/@unicef/material-ui-currency-textfield/-/material-ui-currency-textfield-0.8.6.tgz#a14e33a134a894e8e799cf6cec002864dceb541b"
-  integrity sha512-zXhwJbz8mRa4xVZ6zkkyn9UyXHT4CXFn1JuvkVhDFqtqPkjQXBg+/dWMlJAfX6m1CvwfxwiF9giJxJqFEsTUqg==
-  dependencies:
-    autonumeric "^4.5.4"
-
 "@vitejs/plugin-react@^4.0.3":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-4.0.4.tgz#31c3f779dc534e045c4b134e7cf7b150af0a7646"
@@ -922,11 +915,6 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
-
-autonumeric@^4.5.4:
-  version "4.10.5"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.10.5.tgz#a6b71daceb8e31f49c4580f1c18925e2ff35d103"
-  integrity sha512-t7h1poYH37eVi/pDTdO0UBb8qk8A9gUHzABP/wUoqSw4w5aDFJr2gxfZPl+agta4ifb5OfBm4Bylv1G/dCC2zQ==
 
 available-typed-arrays@^1.0.5:
   version "1.0.5"
