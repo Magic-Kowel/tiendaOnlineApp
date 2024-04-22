@@ -18,6 +18,17 @@ export const createProduct = createAsyncThunk(
         }
     }
 );
+export const registerVisitProduct = createAsyncThunk(
+    "register/visit/product",
+    async(data,thunkAPI) =>{
+        try {
+            const response = await axios.post(`${API_BASE_URL}/product/visit`,data);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const updateProduct = createAsyncThunk(
     "update/product",
     async(data,thunkAPI) => {
@@ -96,6 +107,22 @@ export const getProduct = createAsyncThunk(
         }
     }
 );
+export const getVisitProducts = createAsyncThunk(
+    "get/visit/products",
+    async(thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/product/visit/`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getProductTotalPages = createAsyncThunk(
     "get/product/total/pages",
     async(thunkAPI) =>{
@@ -162,6 +189,7 @@ export const deleteImagenProduct = createAsyncThunk(
 );
 const initialState = {
     products:[],
+    visitproducts:[],
     imagensProduct:[],
     loadingProducts:false,
     error:null,
@@ -186,6 +214,18 @@ const materialSlice = createSlice({
             state.loadingProducts = false;
             })
             .addCase(createProduct.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(registerVisitProduct.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(registerVisitProduct.fulfilled, (state) => {
+            state.loadingProducts = false;
+            })
+            .addCase(registerVisitProduct.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
             });
@@ -224,6 +264,19 @@ const materialSlice = createSlice({
             state.products = action.payload.length > 0 ? action.payload : [];
             })
             .addCase(getProduct.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(getVisitProducts.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(getVisitProducts.fulfilled, (state, action) => {
+            state.loadingProducts = false;
+            state.visitproducts = action.payload.length > 0 ? action.payload : [];
+            })
+            .addCase(getVisitProducts.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
             });

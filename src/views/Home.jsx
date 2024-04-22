@@ -1,7 +1,14 @@
+
+import ChartVisitProducts from "../components/chart/ChartVisitProducts";
+import { Grid } from "@mui/material";
 function Home(){
   return(
     <>
-        <h1>Hola</h1>
+      <Grid container>
+        <Grid item xs={12} smxs={12} md={6} lg={6} >
+          <ChartVisitProducts />
+        </Grid>
+      </Grid>
     </>
   );
 }

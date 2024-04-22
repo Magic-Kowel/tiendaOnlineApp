@@ -20,7 +20,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import imagenNotFound from "../../assets/img/imagenNotFound.svg"
 import { useTranslation } from 'react-i18next';
 import { useDispatch,useSelector } from "react-redux";
-import { getProductDescription, getProductImagens } from '../../reducers/product/product';
+import { getProductDescription, getProductImagens, registerVisitProduct } from '../../reducers/product/product';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
@@ -53,7 +53,8 @@ function ProductDescription(){
     useEffect(()=>{
         dispatch(getProductDescription(idProduct));
         dispatch(getProductImagens(idProduct));
-    },[]);
+        dispatch(registerVisitProduct({idProduct}))
+    },[ ]);
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
