@@ -6,14 +6,15 @@ function SwitchTematic({
     checked,
     onChange,
     colorRielCheck,
-    icon
+    icon,
+    checkedIcon
 }){
     return(
         <Switch 
             checked={checked}
             onChange={onChange}
             icon={icon}
-            checkedIcon={icon}
+            checkedIcon={!checkedIcon ? icon : checkedIcon}
             sx={{
                 width: 100,
                 height: 50, // Altura del interruptor
@@ -57,5 +58,6 @@ SwitchTematic.propTypes = {
     onChange:PropTypes.func.isRequired,
     colorRielCheck: PropTypes.string.isRequired,
     icon: PropTypes.node.isRequired,
+    checkedIcon: PropTypes.node,
 };
 export default SwitchTematic;

@@ -11,12 +11,11 @@ import {
 } from "../../../reducers/security/security";
 import {
     Container,
-    Grid,
-    Button
+    Grid
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { colors } from "../../../stylesConfig";
+ 
 import GoBack from "../../../components/goBack";
 import Swal from "sweetalert2";
 import DataTable from "../../../components/DataTable/DataTable";
@@ -57,9 +56,6 @@ function AddMenuTypeUser(){
         setListLeft([]);
         handleGedData()
     },[])
-    useEffect(()=>{
-        console.log(listLeft);
-    },[listLeft])
     useEffect(()=>{
         setListLeft(listAccessControlMenu.filter(item =>
             !listAccessControlMenuPermissions.some(algun => algun.idMenuPermission === item.idMenuPermission)
@@ -128,7 +124,7 @@ function AddMenuTypeUser(){
                     <DataTable
                         listTitles={listTitlesRight}
                         listKeys={listKeys}
-                        dataList={listAccessControlMenuPermissions}
+                        dataList={listRight}
                         listButtons={listButtonsRight}
                         id="idPermission"
                     />

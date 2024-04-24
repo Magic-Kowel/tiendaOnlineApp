@@ -7,7 +7,6 @@ import {
     Button,
     CardContent,
     Card,
-    Switch,
     FormControlLabel
 } from '@mui/material';
 import Swal from 'sweetalert2';
@@ -21,6 +20,9 @@ import FormAutocomplete from '../../components/FormAutocomplete';
 import TitlePage from '../../components/TitlePage';
 import { getTypeUsers } from '../../reducers/typeUser/typeUser';
 import { validateEmailExist, getUser,updateUser } from '../../reducers/user/user';
+import SwitchTematic from './../../components/SwitchTematic';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 function UpdateUser(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -208,12 +210,15 @@ function UpdateUser(){
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>
                             <FormControlLabel control={
-                                <Switch 
+                                <SwitchTematic
                                     checked={isCheckedStatus}
                                     onChange={handleCheckActive}
+                                    icon={<NoAccountsIcon sx={{ fontSize: 32 }} />}
+                                    checkedIcon={<AccountCircleIcon sx={{ fontSize: 32 }} />}
+                                    colorRielCheck={colors.primaryColor}
                                 />
                             } 
-                            label={t("status")} 
+                            label={isCheckedStatus?t("active"):t("removed")} 
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>

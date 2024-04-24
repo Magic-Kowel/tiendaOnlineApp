@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import {colors} from "../stylesConfig";
 import { loginValidate } from "../reducers/user/user";
 import { NAME_TOKEN,NAME_USER } from "../config";
+import TextFieldPassword from "../components/TextFieldPassword";
 function Signin(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Signin(){
         email:"",
         password:""
     });
+    const [password, setPassword] = useState("");
     const [message,setMessage] = useState(false);
     const [t] = useTranslation("global");
     const SigninUser = async (e) =>{
@@ -46,7 +48,13 @@ function Signin(){
         if(token){
             navigate('/home');
         }
-    },[])
+    },[]);
+    useEffect(()=>{
+        setUser((prev)=>({
+            ...prev,
+            password:password
+        }))
+    },[password]);
     return(
         <>
             <MenuWithoutSection />
@@ -80,7 +88,7 @@ function Signin(){
                                             onChange={(e)=>{
                                                 setUser({
                                                     ...user,
-                                                    email:e.target.value
+                                                    email:e.target.value.trim()
                                                 });
                                             }}
                                             fullWidth
@@ -88,17 +96,10 @@ function Signin(){
                                         />
                                     </Grid>
                                     <Grid item>
-                                        <TextField
-                                            value={user.password}
-                                            onChange={(e)=>{
-                                                setUser({
-                                                    ...user,
-                                                    password:e.target.value
-                                                });
-                                            }}
-                                            fullWidth
-                                            type="password"
+                                        <TextFieldPassword
                                             label={t("password")}
+                                            value={user.password}
+                                            onChange={setPassword}
                                         />
                                     </Grid>
                                     <Grid item>

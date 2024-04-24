@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
     getUsers,
-    deleteUser,
     sendResetPasswort,
     sendConfirmationUser
 } from '../../reducers/user/user';
@@ -16,7 +15,6 @@ import {
     useMediaQuery,
     useTheme
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ReplyIcon from '@mui/icons-material/Reply';
 import EditIcon from '@mui/icons-material/Edit';
 import DataTable from '../../components/DataTable/DataTable';
@@ -38,34 +36,6 @@ function Users(){
     useEffect(()=>{
         setUsersList(users)
     },[users]);
-    const handleDeleteUser = async (idUser) =>{
-        Swal.fire({
-            title: t("want-to-delete-material"),
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: t("delete"),
-            denyButtonText: t("cancel"),
-        }).then((result) => {
-            console.log(3);
-            if (result.isConfirmed) {
-                dispatch(deleteUser(idUser))
-                .then((response)=>{
-                    if(response.payload.delete){
-                        Swal.fire({
-                            title:t("successfully-removed"),
-                            icon:'success'
-                        });
-                        dispatch(getUsers());
-                        return false;
-                    }
-                    Swal.fire({
-                        title:t("something-went-wrong"),
-                        icon:"error"
-                    });
-                })
-            }
-        });
-    }
     const handleSendConfirmationUser= async (idUser) =>{
         const response = await dispatch(sendConfirmationUser(idUser));
         console.log(response);
@@ -113,12 +83,6 @@ function Users(){
     ];
     const listKeys=["name","lastName","email","typeUser","status"];
     const listButtons = [
-        {
-            tooltipTitle: t("delete"),
-            onClick: (idUser) => handleDeleteUser(idUser),
-            icon: <DeleteIcon />,
-            color:"error"
-        },
         {
             tooltipTitle: t("update"),
             onClick: (idUser) => navigate(`edit/${idUser}`),

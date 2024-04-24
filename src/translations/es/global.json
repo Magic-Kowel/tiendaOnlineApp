@@ -133,5 +133,7 @@
   "no-permission-enter-part":"No tienes permiso para entrar a esta parte",
   "want-to-delete-product":"Desea eliminar producto",
   "visits-description-products":"Visitas descripción productos",
-  "visits":"Visitas"
+  "visits":"Visitas",
+  "active":"Activo",
+  "removed":"Eliminado"
 }
