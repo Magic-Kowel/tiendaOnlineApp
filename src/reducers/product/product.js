@@ -123,6 +123,22 @@ export const getVisitProducts = createAsyncThunk(
         }
     }
 );
+export const getTopVisitsProducts = createAsyncThunk(
+    "get/product/top/visit/",
+    async(thunkAPI) =>{
+        try {
+            const token = sessionStorage.getItem(NAME_TOKEN);
+            const response = await axios.get(`${API_BASE_URL}/product/top/visit/`,{
+                headers: {
+                    "x-access-token": token,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
 export const getProductTotalPages = createAsyncThunk(
     "get/product/total/pages",
     async(thunkAPI) =>{
@@ -190,6 +206,7 @@ export const deleteImagenProduct = createAsyncThunk(
 const initialState = {
     products:[],
     visitproducts:[],
+    visitTopProducts:[],
     imagensProduct:[],
     loadingProducts:false,
     error:null,
@@ -328,6 +345,19 @@ const materialSlice = createSlice({
             state.totalPgesProducts = action.payload[0].total;
             })
             .addCase(getProductTotalPages.rejected, (state, action) => {
+            state.loadingProducts = false;
+            state.error = action.payload;
+            });
+        builder
+            .addCase(getTopVisitsProducts.pending, (state) => {
+            state.loadingProducts = true;
+            state.error = null;
+            })
+            .addCase(getTopVisitsProducts.fulfilled, (state,action) => {
+            state.loadingProducts = false;
+            state.visitTopProducts = action.payload
+            })
+            .addCase(getTopVisitsProducts.rejected, (state, action) => {
             state.loadingProducts = false;
             state.error = action.payload;
             });

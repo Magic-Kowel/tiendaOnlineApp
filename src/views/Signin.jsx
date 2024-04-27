@@ -27,6 +27,7 @@ function Signin(){
     });
     const [password, setPassword] = useState("");
     const [message,setMessage] = useState(false);
+    const [isUserActive,setIsUserActive] = useState(true);
     const [t] = useTranslation("global");
     const SigninUser = async (e) =>{
         e.preventDefault();
@@ -39,6 +40,9 @@ function Signin(){
                 return false;
             }
             setMessage(true);
+            if( "active" in response.payload){
+                setIsUserActive(false)
+            }
         } catch (error) {
             console.error(error);
         }
@@ -118,11 +122,19 @@ function Signin(){
                                         </Button>
                                     </Grid>
                                     {
-                                        message &&
+                                        !isUserActive &&
                                         <Grid item>
-                                        <Alert variant="filled" severity="error">
-                                            {t("incorrect-username-or-password")}
-                                        </Alert>
+                                            <Alert variant="filled" severity="info">
+                                                {t("user-not-is-active")}
+                                            </Alert>
+                                        </Grid>
+                                    }
+                                    {
+                                        isUserActive && message &&
+                                        <Grid item>
+                                            <Alert variant="filled" severity="error">
+                                                {t("incorrect-username-or-password")}
+                                            </Alert>
                                         </Grid>
                                     }
                                 </Grid>

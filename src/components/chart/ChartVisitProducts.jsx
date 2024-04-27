@@ -74,9 +74,9 @@ import {
       };
       
       return(<>
-          <Box sx={{ width: '100%', height: '400px' }}>
-                <Line data={data} options={options} />
-          </Box>
+            <Box sx={{ width: '100%', height: '400px' }}>
+                    <Line data={data} options={options} />
+            </Box>
       </>)
   }
   export default ChartVisitProducts;

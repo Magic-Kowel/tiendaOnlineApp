@@ -29,7 +29,7 @@ function SearchInput({setSearchProduct,searchProduct}){
         if(search.trim() === ""){
             clearSearchParams();
         }
-        setSearchProduct(search);
+        setSearchProduct(search.trim());
     }
     return(
     <>

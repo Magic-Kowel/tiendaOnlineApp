@@ -135,5 +135,7 @@
   "visits-description-products":"Visitas descripción productos",
   "visits":"Visitas",
   "active":"Activo",
-  "removed":"Eliminado"
+  "removed":"Eliminado",
+  "user-not-is-active":"El usuario no está activo",
+  "most-viewed-products":"Productos más vistos"
 }
