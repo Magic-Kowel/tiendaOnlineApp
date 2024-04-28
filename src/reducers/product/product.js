@@ -265,7 +265,8 @@ const materialSlice = createSlice({
             })
             .addCase(getProducts.fulfilled, (state, action) => {
             state.loadingProducts = false;
-            state.products = action.payload.length > 0 ? action.payload : [];
+            state.products = action.payload.products.length > 0 ? action.payload.products : [];
+            state.totalPgesProducts = action.payload.total[0].total;
             })
             .addCase(getProducts.rejected, (state, action) => {
             state.loadingProducts = false;
@@ -278,7 +279,7 @@ const materialSlice = createSlice({
             })
             .addCase(getProduct.fulfilled, (state, action) => {
             state.loadingProducts = false;
-            state.products = action.payload.length > 0 ? action.payload : [];
+            state.products = action.payload.length > 0 ? action.payload.products : [];
             })
             .addCase(getProduct.rejected, (state, action) => {
             state.loadingProducts = false;

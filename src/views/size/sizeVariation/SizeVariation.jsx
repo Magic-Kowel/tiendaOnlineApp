@@ -20,6 +20,7 @@ import SearchAutoComplete from "../../../components/SearchAutoComplete";
 import FormSizeVariation from "./FormSizeVariation";
 import StackTable from "../../../components/DataTable/StackTable";
 import messageIsDelete from "../../../tools/messages/messageIsDelete";
+import { createFilterOptions } from '@mui/material/Autocomplete';
 function SizeVariation(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -97,6 +98,10 @@ function SizeVariation(){
             color:"warning"
         }
     ];
+    const filterOptions = createFilterOptions({
+        matchFrom: 'any',
+        stringify: (option) => `${option.nameSize} ${option.ageGroup}`,
+    });
     return(
         <>
             <Container>
@@ -111,8 +116,14 @@ function SizeVariation(){
                         <SearchAutoComplete
                             data={sizeVariation}
                             getData={setSizeVariationList}
-                            getOptionSearch={(item)=>item.nameSize}
+                            getOptionSearch={(item)=>`${item.nameSize} ${item.ageGroup}`}
                             loading={loadingSize}
+                            filterOptions={filterOptions}
+                            renderOption={(props, option) => (
+                                <li {...props}>
+                                  <div>{option.nameSize} {option.ageGroup}</div>
+                                </li>
+                            )}
                         />
                         {
                             !isMobile?(

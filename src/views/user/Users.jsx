@@ -22,6 +22,7 @@ import TitlePage from '../../components/TitlePage';
 import SearchAutoComplete from '../../components/SearchAutoComplete';
 import StackTable from '../../components/DataTable/StackTable';
 import MailIcon from '@mui/icons-material/Mail';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 function Users(){
     const [t] = useTranslation("global");
     const dispatch = useDispatch();
@@ -102,6 +103,10 @@ function Users(){
             customColor:colors.primaryColor
         }
     ];
+    const filterOptions = createFilterOptions({
+        matchFrom: 'any',
+        stringify: (option) => `${option.name} ${option.lastName} ${option.email} ${option.typeUser}`,
+    });
     return(
         <Container>
                 <TitlePage 
@@ -112,7 +117,13 @@ function Users(){
                         <SearchAutoComplete
                             data={users}
                             getData={setUsersList}
-                            getOptionSearch={(item)=>item.name}
+                            getOptionSearch={(item)=>`${item.name} ${item.lastName}`}
+                            renderOption={(props, option) => (
+                                <li {...props}>
+                                  <div>{option.name} {option.lastName}</div>
+                                </li>
+                            )}
+                            filterOptions={filterOptions}
                         />
                         {!isMobile?(
                             <DataTable 

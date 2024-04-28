@@ -39,9 +39,15 @@ function FormSearchProduct({
     const {genders} = useSelector((state)=>state.gender);
     const {sizesListsWitch} = useSelector((state)=>state.size);
     useEffect(()=>{
-        dispatch(getMaterials());
-        dispatch(getGenders());
-        dispatch(getSizesListsWitch());
+        if(!materials.length){
+            dispatch(getMaterials());
+        }
+        if(!genders.length){
+            dispatch(getGenders());
+        }
+        if(!sizesListsWitch.length){
+            dispatch(getSizesListsWitch());
+        }
     },[])
     const handleChildren = () => {
         setDataFormSearch((prev) =>({
@@ -124,14 +130,17 @@ function FormSearchProduct({
         }));
     }
     useEffect(()=>{
+        console.log("page",page);
         handleGetProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[
         searchProduct,
         dataFormSearch?.materialList,
         dataFormSearch?.isAdult,
         dataFormSearch?.isChildren,
         dataFormSearch?.genderList,
-        dataFormSearch?.sizeList
+        dataFormSearch?.sizeList,
+        page
     ])
     const handleSelectMaterial = (item) => (event) => {
         if (event.target.checked) {

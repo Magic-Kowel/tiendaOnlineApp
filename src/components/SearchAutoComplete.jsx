@@ -14,7 +14,9 @@ function SearchAutoComplete({
         getOptionSearch,//PARAMETROS PARA BUSCAR
         title,//titulo que poner 
         isForm,//para saver si se esta usando en un foremulario
-        loading = false
+        loading = false,
+        renderOption,
+        filterOptions
     }){
     const [t] = useTranslation("global");
     const [isEmpty,setIsEmpty] = useState(false);
@@ -36,6 +38,8 @@ function SearchAutoComplete({
                 disablePortal
                 options={data || []}
                 getOptionLabel={getOptionSearch}
+                renderOption={renderOption}
+                filterOptions={filterOptions}
                 clearOnEscape
                 clearIcon={<ClearIcon />}
                 noOptionsText={t("no-results-found")}
@@ -84,8 +88,10 @@ SearchAutoComplete.propTypes = {
     itemKeyForId: PropTypes.string,
     getData: PropTypes.func.isRequired, // getData debe ser una función y es requerido
     getOptionSearch:PropTypes.func.isRequired,
+    filterOptions:PropTypes.func.isRequired,
     title:PropTypes.string,
     isForm:PropTypes.bool,
-    loading:PropTypes.bool
+    loading:PropTypes.bool,
+    renderOption:PropTypes.func
 };
 export default SearchAutoComplete;

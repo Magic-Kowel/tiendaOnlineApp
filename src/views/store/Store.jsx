@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
-import { getProducts,clearImagensLists,getProductTotalPages } from "../../reducers/product/product";
+import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import MenuWithoutSection from "../../components/menu/MenuWithoutSection";
 import Footer from "../../components/Footer";
 import { Grid, Container,Stack, Chip} from "@mui/material";
@@ -46,7 +46,8 @@ function Store(){
     const handleGetProducts = async () =>{
         await dispatch(getProducts({
             page:page,
-            nameProduct:searchProduct || ""
+            nameProduct:searchProduct || "",
+            ...dataFormSearch
         }));
     }
     const openDrawer = () =>{
@@ -77,7 +78,6 @@ function Store(){
             ...prev,
             searchProduct:searchProduct || searchParams.get('nameProduct')
         }));
-        dispatch(getProductTotalPages())
     },[page,searchProduct]);
     return(
         <>

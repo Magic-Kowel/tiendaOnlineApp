@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
-import { getProducts,clearImagensLists, getProductTotalPages } from "../../reducers/product/product";
+import { getProducts,clearImagensLists } from "../../reducers/product/product";
 import ProductCard from "../../components/ProductCard";
 import {
     Grid,
@@ -26,7 +26,6 @@ function Product(){
     useEffect(()=>{
         dispatch(clearImagensLists())
         handleGetProducts();
-        dispatch(getProductTotalPages())
     },[page,searchProduct]);
     return (
         <Container>
