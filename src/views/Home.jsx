@@ -5,11 +5,14 @@ import { Grid } from "@mui/material";
 function Home(){
   return(
     <>
-      <Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+      <Grid
+      container 
+      justifyContent="center"
+      alignItems="stretch">
+        <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
           <ChartVisitProducts />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+        <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
            <ChartTopVisitProducts />
         </Grid>
       </Grid>

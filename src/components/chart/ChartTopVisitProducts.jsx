@@ -38,15 +38,22 @@ function ChartTopVisitProducts(){
     },[visitTopProducts])
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
-            position: 'top'  ,
+            position: 'top',
           },
           title: {
             display: true,
             text: t("most-viewed-products"),
           },
         },
+        scales: {
+            y: {
+              min: 0,
+              max: 100,
+            }
+        }
     };  
     const data = {
         labels,

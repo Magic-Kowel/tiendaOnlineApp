@@ -52,8 +52,8 @@ function MenuWithoutSection(){
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={Link}
+            to={`/`}
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -64,7 +64,7 @@ function MenuWithoutSection(){
               textDecoration: 'none',
             }}
           >
-            {NAME_PAGE}
+              {NAME_PAGE}
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -101,7 +101,8 @@ function MenuWithoutSection(){
                   <Typography 
                   sx={{color:"#fff"}} 
                   textAlign="center">
-                    <MuiLink 
+                    <MuiLink
+                      sx={{color:"black"}} 
                       component={Link} 
                       to={`${page.url}`} 
                       underline="none"
@@ -116,8 +117,8 @@ function MenuWithoutSection(){
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href=""
+            component={Link}
+            to={`/`}
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },

@@ -2,6 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { colors } from '../stylesConfig';
 function Loader(){
     const [t]= useTranslation("global");
     return(
@@ -14,6 +15,7 @@ function Loader(){
         >
             <CircularProgress 
                 size={100}
+                sx={{color:colors.primaryColor}}
             />
             <Typography variant="h6">
                 {t("loading")}

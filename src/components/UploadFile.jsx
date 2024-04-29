@@ -20,7 +20,7 @@ function UploadFile({
     const [error, setError] = useState(null);
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-    
+        fileInputRef.current = null;
         // File type validation
         const invalidFileType = files.some(file => !ALLOWED_FILE_TYPES.includes(file.type));
         if (invalidFileType) {
@@ -34,7 +34,7 @@ function UploadFile({
             setError(t("file-size-exceeds", {fileSize: MAX_FILE_SIZE_MB }));
             return;
         }
-  
+        event.target.value = null;
         setSelectedFiles((prev) => ({
             ...prev,
             files: [...(prev.files ?? []), ...files],

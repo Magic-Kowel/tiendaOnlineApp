@@ -25,7 +25,11 @@ function PaginationBar({setPage,page,count}){
                     "& .MuiPaginationItem-root": {
                         "&.Mui-selected": {
                             backgroundColor: colors.primaryColor,
-                            color: "white"
+                            color: "white",
+                            '&:hover': {
+                                backgroundColor: colors.primaryColor,
+                                color: "white"
+                            },
                         },
                         '&:hover': {
                             backgroundColor: colors.primaryColor,

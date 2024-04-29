@@ -28,7 +28,7 @@ function Store(){
     const [isOpen, setIsOpen] = useState(false);
     const [searchProduct,setSearchProduct] = useState("");
     const [dataFormSearch,setDataFormSearch] = useState({
-        page:page,
+        page:page||1,
         searchProduct:searchProduct,
         materialList:[],
         genderList:[],
