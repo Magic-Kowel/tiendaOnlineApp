@@ -30,7 +30,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
     flex:1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(0),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -136,7 +136,7 @@ export default function MenuAdmin({children}) {
 
       return (
         <>
-          <Box sx={{margin:0, display: 'flex'}}>
+          <Box sx={{margin:0,padding:0, display: 'flex'}}>
             <CssBaseline />
             <AppBar sx={{backgroundColor:colors.primaryColor}} position="fixed" open={open}>
                 <Toolbar>
@@ -189,16 +189,16 @@ export default function MenuAdmin({children}) {
             </Drawer>
             <Main open={open}>
                   <DrawerHeader />
-                    <Box
-                    component="main"
-                      sx={{
-                        minHeight: 'calc(100vh - 250px)', // Altura mínima para llenar el espacio disponible
-                        //  paddingBottom: '100px', // Ajusta el padding inferior para dejar espacio para el pie de página
-                      }}
-                    >
-                      {children}
-                    </Box>
-            <Footer /> 
+                  <Box
+                    sx={{
+                      marginBottom:5,
+                      minHeight: 'calc(100vh - 180px)', // Altura mínima para llenar el espacio disponible
+                      //  paddingBottom: '100px', // Ajusta el padding inferior para dejar espacio para el pie de página
+                    }}
+                  >
+                    {children}
+                  </Box>
+              <Footer /> 
             </Main>
           </Box>
         </>

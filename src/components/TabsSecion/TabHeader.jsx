@@ -10,7 +10,19 @@ function TabHeader({
     listTitles
 }){
     return (
-        <Tabs value={value} onChange={handleChange} centered>
+        <Tabs 
+        value={value} 
+        onChange={handleChange} 
+        centered
+        textColor={colors.primaryColor} // Color del texto cuando está inactivo
+        sx={{ 
+            '& .Mui-selected': { // Estilo del tab seleccionado
+              color: colors.primaryColor, // Color del texto personalizado
+            },
+            '& .MuiTabs-indicator': { // Estilo de la línea indicadora
+              backgroundColor: colors.primaryColor, // Color de la línea indicadora personalizado
+            },
+        }}>
           {listTitles.map((title, index) => (
             <Tab key={index} label={title}  sx={{color:colors.primaryColor}} />
           ))}

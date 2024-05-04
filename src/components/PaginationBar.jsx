@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { colors } from '../stylesConfig';
 import PropTypes from 'prop-types';
-function PaginationBar({setPage,page,count}){
+function PaginationBar({setPage,page,count=1}){
     const theme = useTheme();
     const onlySmallScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const handleChange = (event, value) => {
@@ -15,7 +15,7 @@ function PaginationBar({setPage,page,count}){
     return(
         <>
             <Pagination
-                count={count || 1}
+                count={count}
                 page={page}
                 onChange={handleChange}
                 shape="circular"

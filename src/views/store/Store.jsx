@@ -45,9 +45,9 @@ function Store(){
     
     const handleGetProducts = async () =>{
         await dispatch(getProducts({
+            ...dataFormSearch,
             page:page,
-            nameProduct:searchProduct || "",
-            ...dataFormSearch
+            nameProduct:searchProduct || ""
         }));
     }
     const openDrawer = () =>{
