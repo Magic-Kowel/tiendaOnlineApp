@@ -1,6 +1,7 @@
 import { lazy,Suspense } from 'react';
 import Loader from './components/Loader.jsx';
 const Home = lazy(() => import('./views/Home.jsx'));
+// import Home from './views/Home.jsx';
 const Store = lazy(()=> import('./views/store/Store.jsx'));
 const Singup = lazy(() => import('./views/Singup.jsx'));
 const Signin = lazy(()=> import('./views/Signin.jsx'));
@@ -65,9 +66,11 @@ function App() {
           <ProtectedRoute
             permission="home"
           >
-            <MenuAdmin>
-              <Home />
-            </MenuAdmin>
+            <Suspense fallback={<Loader />}>
+              <MenuAdmin>
+                <Home />
+              </MenuAdmin>
+            </Suspense>
           </ProtectedRoute>
           } 
         />
