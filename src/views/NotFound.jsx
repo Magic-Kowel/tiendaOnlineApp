@@ -4,18 +4,21 @@ import {
     Typography,
     Box
 } from "@mui/material";
+import MenuWithoutSection from "../components/menu/MenuWithoutSection";
 import ErrorIcon from '@mui/icons-material/Error';
+import Footer from "../components/Footer";
 function NotFound(){
     return(
         <>
             <Box
                 sx={{
-                    height: "100vh",
+                    height: "84vh",
                     margin:0,
                     padding:0,
                     background: 'linear-gradient(90deg, rgba(255,0,155,1) 0%, rgba(136,84,222,1) 45%, rgba(0,212,255,1) 100%);'
                 }}
             >
+                <MenuWithoutSection />
                 <Container maxWidth="xl">
                     <Grid
                         container
@@ -45,6 +48,7 @@ function NotFound(){
                     </Grid>
                 </Container>
             </Box>
+            <Footer />
         </>
     );
 }

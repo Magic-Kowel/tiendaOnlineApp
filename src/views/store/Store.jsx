@@ -54,6 +54,9 @@ function Store(){
         setIsOpen(!isOpen);
     }
     useEffect(()=>{
+        dispatch(clearImagensLists())
+    },[]);
+    useEffect(()=>{
         setSearchProduct(searchParams.get('nameProduct')||"")
         setDataFormSearch((prev) => ({
             ...prev,
@@ -72,7 +75,6 @@ function Store(){
         console.log(dataFormSearch);
     },[searchParams])
     useEffect(()=>{
-        dispatch(clearImagensLists())
         handleGetProducts();
         setDataFormSearch((prev)=>({
             ...prev,
@@ -119,6 +121,7 @@ function Store(){
                     >
                         <FormSearchProduct
                             page={page}
+                            setPage={setPage}
                             searchProduct={searchProduct}
                             setDataFormSearch={setDataFormSearch}
                             dataFormSearch={dataFormSearch}

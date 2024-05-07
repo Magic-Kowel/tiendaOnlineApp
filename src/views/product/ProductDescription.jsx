@@ -39,6 +39,7 @@ import productDescriptionSeo from '../../tools/seo/productDescriptionSeo';
 import TitlePage from '../../components/TitlePage';
 import ProductDescriptinInfo from '../../components/ProductDescriptinInfo';
 import WhatsAppButton from '../../components/WhatsAppButton';
+import ErrorIcon from '@mui/icons-material/Error';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function ProductDescription(){
     const theme = useTheme();
@@ -168,36 +169,40 @@ function ProductDescription(){
                                             )
                                         }
                                     </AutoPlaySwipeableViews>
-                                    <MobileStepper
-                                        steps={maxSteps || 0}
-                                        position="static"
-                                        activeStep={activeStep}
-                                        sx={{
-                                            '& .MuiMobileStepper-dotActive': {
-                                              backgroundColor: colors.primaryColor, // Cambia el color de fondo del punto activo
-                                            },
-                                        }}
-                                        nextButton={
-                                            <Button
-                                                size="small"
-                                                onClick={ handleNext}
-                                                disabled={activeStep === maxSteps - 1}
-                                                sx={{color:colors.primaryColor}}
-                                            >
-                                                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                                            </Button>
-                                        }
-                                        backButton={
-                                            <Button 
-                                                size="small" 
-                                                onClick={handleBack} 
-                                                disabled={activeStep === 0}
-                                                sx={{color:colors.primaryColor}}
-                                            >
-                                                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                                            </Button>
-                                        }
-                                    />
+                                    {
+                                        imagensProduct.length > 1 &&(
+                                            <MobileStepper
+                                                steps={maxSteps || 0}
+                                                position="static"
+                                                activeStep={activeStep}
+                                                sx={{
+                                                    '& .MuiMobileStepper-dotActive': {
+                                                      backgroundColor: colors.primaryColor, // Cambia el color de fondo del punto activo
+                                                    },
+                                                }}
+                                                nextButton={
+                                                    <Button
+                                                        size="small"
+                                                        onClick={ handleNext}
+                                                        disabled={activeStep === maxSteps - 1}
+                                                        sx={{color:colors.primaryColor}}
+                                                    >
+                                                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                                                    </Button>
+                                                }
+                                                backButton={
+                                                    <Button 
+                                                        size="small" 
+                                                        onClick={handleBack} 
+                                                        disabled={activeStep === 0}
+                                                        sx={{color:colors.primaryColor}}
+                                                    >
+                                                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                                                    </Button>
+                                                }
+                                            />
+                                        )
+                                    }
                                 </Box>
                             </Grid>
                             <Grid container item flexDirection="row" xs={12} sm={12} md={6} lg={6}>
@@ -213,173 +218,199 @@ function ProductDescription(){
                                     {
                                         !loadingProducts && (
                                             <>
-                                            
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={<DescriptionIcon />} label={t("description")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {product?.description}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip  icon={<FaTshirt />} label={t("category")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {product?.category}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={<FaTshirt />} label={t("clothes")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {product?.subcategory}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={<CheckroomIcon />} label={t("material")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {product?.material}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={ 
-                                                        product?.gender ==="Femenino" 
-                                                        ? <FemaleIcon />:
-                                                        <MaleIcon />
-                                                    } label={t("gender")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {product?.gender}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={ 
-                                                        sizes?.public ==="Infantil" 
-                                                        ? <ChildCareIcon />:
-                                                        <FaceIcon />
-                                                    } label={t("public")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {sizes?.public}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={<AttachMoneyIcon />} label={t("price")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {sizes?.price}
-                                                    </Typography>
-                                                </Stack>
-                                                <Stack 
-                                                    spacing={2}
-                                                    justifyContent="start"
-                                                    direction={{xs:"column", md:"colum"}}
-                                                >
-                                                    <Chip icon={<IoMdResize />} label={t("size-clothe")} />
-                                                    <Typography 
-                                                        variant="h6" 
-                                                        component="p"
-                                                        textAlign="center"
-                                                        sx={{textTransform:"capitalize"}}
-                                                    >
-                                                        {sizes?.namesize} {sizes?.minAge && sizes?.maxAge ? `${sizes?.minAge} - ${sizes?.maxAge}` : sizes?.size}
-                                                    </Typography>
-                                                </Stack>
+                                                {
+                                                    !products.length ? (
+                                                        <Box mt={20}
+                                                            sx={{
+                                                                textAlign:"center"
+                                                            }}
+                                                        >
+                                                            <ErrorIcon
+                                                                sx={{
+                                                                    fontSize:"10rem"
+                                                                }}
+                                                            />
+                                                            <Typography
+                                                                component="h1"
+                                                                fontSize="10rem"
+                                                            >
+                                                                404
+                                                            </Typography>
+                                                        </Box>
+                                                    ):(
+                                                        <>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={<DescriptionIcon />} label={t("description")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {product?.description}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip  icon={<FaTshirt />} label={t("category")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {product?.category}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={<FaTshirt />} label={t("clothes")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {product?.subcategory}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={<CheckroomIcon />} label={t("material")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {product?.material}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={ 
+                                                                    product?.gender ==="Femenino" 
+                                                                    ? <FemaleIcon />:
+                                                                    <MaleIcon />
+                                                                } label={t("gender")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {product?.gender}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={ 
+                                                                    sizes?.public ==="Infantil" 
+                                                                    ? <ChildCareIcon />:
+                                                                    <FaceIcon />
+                                                                } label={t("public")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {sizes?.public}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={<AttachMoneyIcon />} label={t("price")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {sizes?.price}
+                                                                </Typography>
+                                                            </Stack>
+                                                            <Stack 
+                                                                spacing={2}
+                                                                justifyContent="start"
+                                                                direction={{xs:"column", md:"colum"}}
+                                                            >
+                                                                <Chip icon={<IoMdResize />} label={t("size-clothe")} />
+                                                                <Typography 
+                                                                    variant="h6" 
+                                                                    component="p"
+                                                                    textAlign="center"
+                                                                    sx={{textTransform:"capitalize"}}
+                                                                >
+                                                                    {sizes?.namesize} {sizes?.minAge && sizes?.maxAge ? `${sizes?.minAge} - ${sizes?.maxAge}` : sizes?.size}
+                                                                </Typography>
+                                                            </Stack>
+                                                            {
+                                                                loadingProducts && (
+                                                                    <ProductDescriptinInfo />
+                                                                )
+                                                            }
+                                                        </>
+                                                    )
+                                                }
                                             </>
                                         )
                                     }
-                                    {
-                                        loadingProducts && (
-                                            <ProductDescriptinInfo />
-                                        )
-                                    }
                                 </Grid>
-                                <Grid container spacing={1} item mt={{xs:5, md:0}} xs={12} justifyContent="center">
-                                    {
-                                        products?.map((item,index)=>(
-                                            <Grid item key={index}>
-                                                <Button
-                                                    onClick={()=>handleChangeSize(item)}
-                                                    variant="outlined"
-                                                    sx={{
-                                                        color:colors.primaryColor,
-                                                        borderColor:colors.primaryColor,
-                                                        '&:hover':{
-                                                            borderColor:colors.primaryColor
-                                                        }
-                                                    }}
-                                                >   
-                                                    {`${item?.public} ${item.namesize}`}
-                                                </Button>
-                                            </Grid>
-                                        ))
-                                    }
-                                </Grid>
-                                <Grid container spacing={1} item mt={{xs:5, md:1}} xs={12} justifyContent="center">
-                                    <WhatsAppButton />
-                                </Grid>
+                                {!!products.length && (
+                                    <>
+                                        <Grid container spacing={1} item mt={{xs:5, md:0}} xs={12} justifyContent="center">
+                                            {
+                                                products?.map((item,index)=>(
+                                                    <Grid item key={index}>
+                                                        <Button
+                                                            onClick={()=>handleChangeSize(item)}
+                                                            variant="outlined"
+                                                            sx={{
+                                                                color:colors.primaryColor,
+                                                                borderColor:colors.primaryColor,
+                                                                '&:hover':{
+                                                                    borderColor:colors.primaryColor
+                                                                }
+                                                            }}
+                                                        >   
+                                                            {`${item?.public} ${item.namesize}`}
+                                                        </Button>
+                                                    </Grid>
+                                                ))
+                                            }
+                                        </Grid>
+                                        <Grid container spacing={1} item mt={{xs:5, md:1}} xs={12} justifyContent="center">
+                                            <WhatsAppButton />
+                                        </Grid>
+                                    </>
+                                )}
                             </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
-                
             </Container>
             <Footer />
         </>

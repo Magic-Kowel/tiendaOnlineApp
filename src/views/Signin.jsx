@@ -97,6 +97,9 @@ function Signin(){
                                             }}
                                             fullWidth
                                             label={t("email")}
+                                            InputLabelProps={{
+                                                shrink: !!user.email || undefined // Establecer shrink solo si user.email no está vacío
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item>

@@ -3,6 +3,7 @@ import {
     useMediaQuery,
     useTheme
 } from '@mui/material';
+import { useEffect } from 'react';
 import { colors } from '../stylesConfig';
 import PropTypes from 'prop-types';
 function PaginationBar({setPage,page,count=1}){
@@ -12,11 +13,16 @@ function PaginationBar({setPage,page,count=1}){
         setPage(value);
         // Aquí puedes realizar alguna acción cuando cambie la página, como cargar datos de la nueva página, etc.
     };
+    useEffect(()=>{
+        console.log("count",count);
+        console.log("page",page);
+        setPage(page>count ? 1:page)
+    },[count,page])
     return(
         <>
             <Pagination
                 count={count}
-                page={page}
+                page={page || 1}
                 onChange={handleChange}
                 shape="circular"
                 color="primary"
